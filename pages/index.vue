@@ -1,33 +1,17 @@
 <template>
-  <div>
-    <button
-      type="button"
-      name="button"
-      @click="getMsg"
-    >
-      RailsからAPIを取得する
-    </button>
-    <div
-      v-for="(msg, i) in msgs"
-      :key="i"
-    >
-      {{ msg }}
-    </div>
-  </div>
+  <v-app>
+    <header />
+      <v-sheet>
+          <v-container
+        fluid
+        :style="{ maxWidth: '1280px' }"
+      >
+        トップページ
+        </v-container>
+      </v-sheet>
+  </v-app>
 </template>
-
 <script>
 export default {
-  data () {
-    return {
-      msgs: []
-    }
-  },
-  methods: {
-    getMsg () {
-      this.$axios.$get('/api/v1/hello')
-        .then(res => this.msgs.push(res))
-    }
-  }
 }
 </script>

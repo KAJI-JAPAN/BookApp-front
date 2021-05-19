@@ -1,6 +1,10 @@
 <template>
   <v-app>
-    <nuxt />
+  <AppHeader />
+    <v-main>
+      <nuxt />
+    </v-main>
+   <AppFooter />
   </v-app>
 </template>
 <script>
