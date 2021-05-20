@@ -1,0 +1,9 @@
+{
+  "drawer": {
+		"home": "KOUDOKUとは？",
+    "signup": "会員登録",
+    "twitter": "Twitterでログイン",
+		"help": "アプリの使い方",
+		"gest": "ゲストでログイン"
+  }
+}
