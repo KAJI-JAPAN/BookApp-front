@@ -3,7 +3,7 @@
         app
         dense
         elevation="1"
-        color="blue-grey darken-2"
+        color="blue-grey darken-4"
         clipped
         clipped-right
       >
