@@ -15,7 +15,7 @@
           <v-icon
             color="primary"
             class="ma-2"
-            >
+          >
             mdi-twitter
           </v-icon>
           Twitterでログイン
@@ -31,7 +31,7 @@
       align-center
       cols="5"
       class="mt-15"
-      >
+    >
       <v-img
         :src="require('@/assets/images/home.png')"
         contain

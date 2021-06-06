@@ -1,33 +1,35 @@
 <template>
   <div>
-    <h1 class="text-center ma-5"> 習慣化サポート</h1>
-     <v-row
-      class="ma-5"
+    <h1 class="text-center ma-5">
+      習慣化サポート
+    </h1>
+    <v-row
       v-for="(suport, i) in suports"
       :key="`suport-${i}`"
-      >
+      class="ma-5"
+    >
       <v-col class="cols-5">
         <h2> {{ suport.title }} </h2>
-          <v-card-text class="ma-3">
-            {{ suport.text }}
-          </v-card-text>
+        <v-card-text class="ma-3">
+          {{ suport.text }}
+        </v-card-text>
         <v-chip
-        label
-        class="ma-5"
+          label
+          class="ma-5"
         >
-        <v-icon left>
-          mdi-label
-        </v-icon>
-           {{ suport.keyword }}
+          <v-icon left>
+            mdi-label
+          </v-icon>
+          {{ suport.keyword }}
         </v-chip>
       </v-col>
-       <v-col class="cols-5">
+      <v-col class="cols-5">
         <v-img
           :src="require(`~/assets/images/${suport.image}`)"
           width="500px"
         />
-    </v-col>
-      </v-row>
+      </v-col>
+    </v-row>
   </div>
 </template>
 <script>

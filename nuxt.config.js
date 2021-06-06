@@ -3,7 +3,8 @@ export default {
   ssr: false,
 
   publicRuntimeConfig: {
-    appName: process.env.APP_NAME
+    appName: process.env.APP_NAME,
+    apiKey: process.env.API_KEY
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -46,11 +47,13 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/auth',
     'nuxt-i18n'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+  },
 
   // Doc: https://nuxt-community.github.io/nuxt-i18n/basic-usage.html#nuxt-link
   i18n: {
@@ -62,6 +65,24 @@ export default {
       messages: {
         ja: require('./locales/ja.json'),
         en: require('./locales/en.json')
+      }
+    }
+  },
+
+  auth: {
+    redirect: {
+      login: '/users/login',
+      logout: '/login',
+      callback: false,
+      home: '/'
+    },
+    strategines: {
+      local: {
+        endpoints: {
+          login: { url: '/api/v1/auth/login', method: 'post', propertyName: 'false' },
+          logout: false,
+          user: false
+        }
       }
     }
   },
