@@ -2,23 +2,25 @@
   <v-footer class="justify-center">
     <div class="text-center text-body-2">
       <v-card-text>
-      <v-chip>管理者</v-chip>
-      <v-chip
-      class="ma-2"
-      color="primary"
-      outlined
-      pill
-      href="https://twitter.com/home"
-      target="_blank"
-    >
-      @HalationHm
-      <v-icon right>
-        mdi-twitter
-      </v-icon>
-    </v-chip>
-        </v-card-text>
-        &copy;{{ copyRightYear }}
-        {{appName}}
+        <v-chip disabled>
+          管理者
+        </v-chip>
+        <v-chip
+          class="ma-2"
+          color="primary"
+          outlined
+          pill
+          href="https://twitter.com/home"
+          target="_blank"
+        >
+          @HalationHm
+          <v-icon right>
+            mdi-twitter
+          </v-icon>
+        </v-chip>
+      </v-card-text>
+      &copy;{{ copyRightYear }}
+      {{ appName }}
     </div>
   </v-footer>
 </template>

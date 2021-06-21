@@ -34,8 +34,8 @@
         </v-toolbar>
 
         <v-list-item
-          v-for="hintText in hintTexts"
-          :key="hintText"
+          v-for="(hintText, index) in hintTexts"
+          :key="index"
           three-line
         >
           <v-list-item-content>

@@ -9,14 +9,13 @@
           class="rounded-xl pa-15 ma-auto"
           max-width="1200px"
         >
-        <!-- サービス紹介シート -->
+          <!-- サービス紹介シート -->
           <TopPageService />
           <v-divider class="pa-5" />
           <TopPageConcept />
           <v-divider class="pb-5" />
-        <!-- 習慣化サポート -->
+          <!-- 習慣化サポート -->
           <TopPageSaport />
-
         </v-sheet>
       </v-container>
     </div>

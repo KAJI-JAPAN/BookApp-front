@@ -2,7 +2,8 @@
   <div class="teal lighten-1 background pa-10">
     <v-sheet
       width="1100px"
-      class="mx-auto pa-5"
+      class="mx-auto pa-5 rounded-xl"
+      color="grey lighten-5"
     >
       <v-row justify="center">
         <div style="width: 700px;">
@@ -37,7 +38,7 @@
               <v-card
                 v-for="book in books"
                 :key="book.id"
-                class="mx-auto"
+                class="mx-auto rounded-xl"
                 max-width="600px"
                 @click="select(book)"
               >
@@ -88,7 +89,7 @@
               </v-btn>
             </v-col>
           </v-row>
-          <PostBooksMessages />
+          <BookPostText />
         </template>
       </v-card>
     </v-sheet>
@@ -100,19 +101,25 @@ import noImage from '~/assets/images/noImage.png'
 export default {
   data () {
     return {
-      books: [],
       keyword: '',
       dialog: false,
       url: 'https://www.googleapis.com/books/v1/volumes?q=',
-      selectedBook: null,
       disbled: false
+    }
+  },
+  computed: {
+    books () {
+      return this.$store.state.books
+    },
+    selectedBook () {
+      return this.$store.state.selectedBook
     }
   },
 
   methods: {
     // 本の選択
     select (book) {
-      this.selectedBook = book
+      this.$store.commit('setBook', book)
       this.dialog = false
     },
     // 本の選択の解除
@@ -121,11 +128,9 @@ export default {
     },
     get () {
       this.$axios.get(this.url + this.keyword + '&maxResults=15')
-        .then(this.setBooks).catch(this.setError)
-    },
-    // APIリクエスト後の処理
-    setBooks (res) {
-      this.books = res.data.items
+        .then((res) => {
+          this.$store.commit('getBooks', res)
+        })
     },
     // 取得した書籍データの設定
     title: valu => valu.volumeInfo.title ? valu.volumeInfo.title : 'No title',
@@ -134,6 +139,7 @@ export default {
   }
 }
 </script>
+
 <style lang="scss" scoped>
   .background {
     background-image: url('~/assets/images/tree.png');

@@ -1,7 +1,9 @@
 <template>
   <v-row>
     <v-col>
-      <h1 class="koudoku-app">行動×本  KOUDOKUでは本で学んだ知識の活用をサポートします。</h1>
+      <h1 class="koudoku-app">
+        行動×本  KOUDOKUでは本で学んだ知識の活用をサポートします。
+      </h1>
       <div class="mt-6">
         読んだ本の内容と、その後のアクションをみんなにシェアして知識を行動に移しましょう！
       </div>
@@ -24,7 +26,8 @@
           x-large
           rounded
         >
-          ゲストで使う</v-btn>
+          ゲストで使う
+        </v-btn>
       </v-col>
     </v-col>
     <v-col
