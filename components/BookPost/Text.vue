@@ -1,15 +1,17 @@
 <template>
-  <v-main
-    class="pa-5"
-  >
-    <v-divider />
+  <v-container>
+    <v-row class="ma-10">
+      <v-divider />
+    </v-row>
     <v-row
-      class="btn ma-4 mb-0"
+      v-show="hidden == false"
+      class="pa-10"
     >
       <v-chip
         color="pink"
         class="mx-auto"
         outlined
+        large
         @click="hidden=!hidden"
       >
         <v-icon>mdi-plus</v-icon>
@@ -53,36 +55,54 @@
             <UserKitHint />
           </v-col>
         </v-row>
-
-        <v-text-field
-          filled
-          label="習慣化1"
-          placeholder="(例) 運動は集中力を高めるので、いつもより10分早起きしてランニングをする"
-          auto-grow
-          color="pink lighten-3"
-        />
-        <v-text-field
-          filled
-          label="習慣化2"
-          auto-grow
-          placeholder="(例) 毎朝7時から瞑想を行う"
-          color="pink lighten-3"
-          clearable
-        />
-        <v-text-field
-          filled
-          label="習慣化3"
-          auto-grow
-        />
+        <div
+          v-for="(text,index) in texts"
+          :key="index"
+        >
+          <v-text-field
+            filled
+            :label="text.label"
+            :placeholder="text. placeholeder"
+            :color="text.color"
+            auto-grow
+          />
+        </div>
+        <div class="text-center">
+          <v-btn
+            small
+            color="primary"
+            outlined
+            @click="hidden=!hidden"
+          >
+            <v-icon dark>
+              mdi-minus
+            </v-icon>
+          </v-btn>
+        </div>
       </v-container>
     </v-expand-transition>
-  </v-main>
+  </v-container>
 </template>
 <script>
 export default {
   data () {
     return {
-      hidden: false
+      hidden: false,
+      texts: [
+        {
+          label: '習慣化1',
+          placeholeder: '(例) 運動は集中力を高めるので、いつもより10分早起きしてランニングをする',
+          color: 'pink lighten-3'
+        },
+        {
+          label: '習慣化2',
+          placeholeder: '(例) 毎朝7時から瞑想を行う',
+          color: 'pink lighten-3'
+        },
+        {
+          label: '習慣化3'
+        }
+      ]
     }
   }
 }

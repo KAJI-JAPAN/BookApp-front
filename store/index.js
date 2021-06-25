@@ -1,6 +1,6 @@
 export const state = () => ({
   books: [],
-  selectedBook: []
+  selectedBook: null
 })
 
 export const mutations = {
@@ -9,5 +9,8 @@ export const mutations = {
   },
   setBook (state, book) {
     state.selectedBook = book
+  },
+  clearBook (state) {
+    state.selectedBook = null
   }
 }
