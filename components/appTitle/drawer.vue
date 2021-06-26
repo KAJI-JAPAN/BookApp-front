@@ -1,11 +1,11 @@
 <template>
   <v-navigation-drawer
+    v-model="setDrawer"
     app
     mobile-breakpoint="960"
     clipped
     right
     class="drawer"
-    v-model="setDrawer"
   >
     <v-list>
       <!-- ナビメニュー -->
@@ -14,11 +14,10 @@
         :key="`nav-${i}`"
         :to="item.link"
       >
-        <v-list-item-icon
-        >
+        <v-list-item-icon>
           <v-icon
-          :color="item.color"
-          v-text="item.icon"
+            :color="item.color"
+            v-text="item.icon"
           />
         </v-list-item-icon>
 
@@ -31,8 +30,7 @@
       <!-- ナビメニュー -->
       <v-list-item
         target="_blank"
-      >
-      </v-list-item>
+      />
     </v-list>
   </v-navigation-drawer>
 </template>

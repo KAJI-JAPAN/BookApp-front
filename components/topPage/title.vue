@@ -2,7 +2,7 @@
   <v-row>
     <v-col>
       <h1 class="koudoku-app">
-        行動×本  KOUDOKUでは本で学んだ知識の活用をサポートします。
+        行動×本  {{ APP_NAME }}では本で学んだ知識の活用をサポートします。
       </h1>
       <div class="mt-6">
         読んだ本の内容と、その後のアクションをみんなにシェアして知識を行動に移しましょう！
@@ -45,6 +45,11 @@
 
 <script>
 export default {
+  data ({ $config: { APP_NAME } }) {
+    return {
+      APP_NAME
+    }
+  }
 }
 </script>
 

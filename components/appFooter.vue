@@ -20,15 +20,15 @@
         </v-chip>
       </v-card-text>
       &copy;{{ copyRightYear }}
-      {{ appName }}
+      {{ APP_NAME }}
     </div>
   </v-footer>
 </template>
 <script>
 export default {
-  data ({ $config: { appName } }) {
+  data ({ $config: { APP_NAME } }) {
     return {
-      appName
+      APP_NAME
     }
   },
 

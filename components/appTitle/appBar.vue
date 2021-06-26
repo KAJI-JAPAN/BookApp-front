@@ -1,21 +1,21 @@
 <template>
-   <v-app-bar
-        app
-        dense
-        elevation="1"
-        color="blue-grey darken-4"
-        clipped
-        clipped-right
-      >
+  <v-app-bar
+    app
+    dense
+    elevation="1"
+    color="blue-grey darken-4"
+    clipped
+    clipped-right
+  >
     <v-app-bar-title>
-    <nuxt-link
+      <nuxt-link
         to="/"
         class="text-decoration-none"
-    >
+      >
         <AppTitleLogo />
-    </nuxt-link>
+      </nuxt-link>
     </v-app-bar-title>
-      <v-spacer />
+    <v-spacer />
     <slot name="drawer-menu" />
   </v-app-bar>
 </template>

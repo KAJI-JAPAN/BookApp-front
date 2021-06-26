@@ -64,11 +64,11 @@ import bookInfo from '~/plugins/bookInfo.js'
 
 export default {
   mixins: [bookInfo],
-  data () {
+  data ({ $config: { BOOK_URL } }) {
     return {
       keyword: '',
       dialog: false,
-      url: 'https://www.googleapis.com/books/v1/volumes?q='
+      BOOK_URL
     }
   },
 
@@ -86,7 +86,7 @@ export default {
     },
 
     get () {
-      this.$axios.get(this.url + this.keyword + '&maxResults=15')
+      this.$axios.get(this.BOOK_URL + this.keyword + '&maxResults=15')
         .then((res) => {
           this.$store.commit('getBooks', res)
         })

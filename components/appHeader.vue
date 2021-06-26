@@ -2,10 +2,10 @@
   <div>
     <AppBar>
       <template #drawer-menu>
-         <v-app-bar-nav-icon
-        color="white"
-        @click="drawer = !drawer"
-       />
+        <v-app-bar-nav-icon
+          color="white"
+          @click="drawer = !drawer"
+        />
       </template>
     </AppBar>
     <AppTitleDrawer

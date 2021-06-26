@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row class="pa-5 pb-7">
-      <h1>KOUDOKUでは以下のサービスが利用できます</h1>
+      <h1>{{ APP_NAME }}では以下のサービスが利用できます</h1>
     </v-row>
     <v-row>
       <v-col
@@ -42,8 +42,9 @@
 
 <script>
 export default {
-  data () {
+  data ({ $config: { APP_NAME } }) {
     return {
+      APP_NAME,
       avatarSize: '200px',
       cardHeight: '350px',
       serviceCards: [

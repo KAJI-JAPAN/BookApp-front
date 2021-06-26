@@ -3,8 +3,7 @@
     :src="logoImg"
     alt="logoImg"
     width="200px"
-  >
-  </v-img>
+  />
 </template>
 
 <script>

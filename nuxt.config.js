@@ -3,8 +3,8 @@ export default {
   ssr: false,
 
   publicRuntimeConfig: {
-    appName: process.env.APP_NAME,
-    apiKey: process.env.API_KEY
+    APP_NAME: process.env.APP_NAME,
+    BOOK_URL: process.env.BOOK_URL
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
