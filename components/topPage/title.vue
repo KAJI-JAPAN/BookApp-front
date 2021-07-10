@@ -18,9 +18,9 @@
             color="primary"
             class="ma-2"
           >
-            mdi-twitter
+            <!-- mdi-twitter -->
           </v-icon>
-          Twitterでログイン
+          新規登録
         </v-btn>
         <v-btn
           x-large

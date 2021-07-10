@@ -18,7 +18,7 @@
             <v-col cols="4" class="pa-5">
               <v-card-title>{{ title(selectedBook) }}</v-card-title>
               <v-card-subtitle class="pa-3">
-                {{ authors(selectedBook) }}
+                {{ author(selectedBook) }}
               </v-card-subtitle>
             </v-col>
           </v-row>
@@ -35,12 +35,15 @@
         <v-btn
           color="success"
           class="ma-2"
+          :disabled="disabled"
+          @click="post"
         >
           登録する
         </v-btn>
         <v-btn
           class="ma-2"
           depressed
+          :disabled="disabled"
           @click="clearBook()"
         >
           やめる
@@ -51,12 +54,18 @@
 </template>
 <script>
 import bookInfo from '~/plugins/bookInfo.js'
-
 export default {
   mixins: [bookInfo],
+  data () {
+    return {
+    }
+  },
   computed: {
     selectedBook () {
       return this.$store.state.selectedBook
+    },
+    disabled () {
+      return this.selectedBook === null
     }
   },
 
@@ -64,6 +73,44 @@ export default {
     // 本の選択の解除
     clearBook () {
       this.$store.commit('clearBook')
+    },
+
+    post () {
+      const postAxios = this.$axios.$post
+      const url = '/api/v1/'
+
+      // ユーザーが選択した本をサーバーに送る
+      postAxios(url + 'posts', {
+        post: {
+          title: this.title(this.selectedBook),
+          author: this.author(this.selectedBook),
+          image: this.image(this.selectedBook)
+        }
+      })
+        .then((responsebook) => {
+          this.$store.commit('userBook', responsebook)
+        })
+
+      // ユーザーが入力したテキストをサーバーに送る
+      postAxios(url + 'posts_item', {
+        postotems: {
+          userText1: {
+            label: '',
+            text: ''
+          },
+          userText2: {
+            label: '',
+            text: ''
+          },
+          userText3: {
+            label: '',
+            text: ''
+          }
+        }
+      })
+        .then((responesText) => {
+          this.store.commit('getText', responesText)
+        })
     }
   }
 }

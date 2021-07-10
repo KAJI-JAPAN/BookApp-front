@@ -57,12 +57,13 @@
         </v-row>
         <div
           v-for="(text,index) in texts"
-          :key="index"
+          :key="index++"
         >
           <v-text-field
+            v-model="text['userText'+index]"
             filled
             :label="text.label"
-            :placeholder="text. placeholeder"
+            :placeholder="text.placeholeder"
             :color="text.color"
             auto-grow
           />
@@ -92,15 +93,20 @@ export default {
         {
           label: '習慣化1',
           placeholeder: '(例) 運動は集中力を高めるので、いつもより10分早起きしてランニングをする',
-          color: 'pink lighten-3'
+          color: 'pink lighten-3',
+          userText1: ''
+
         },
         {
           label: '習慣化2',
           placeholeder: '(例) 毎朝7時から瞑想を行う',
-          color: 'pink lighten-3'
+          color: 'pink lighten-3',
+          userText2: ''
+
         },
         {
-          label: '習慣化3'
+          label: '習慣化3',
+          userText3: ''
         }
       ]
     }

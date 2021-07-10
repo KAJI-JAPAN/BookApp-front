@@ -19,6 +19,8 @@
           icon
           x-large
           class="mt-12"
+          :disabled="disabled"
+          :valid="disabled"
           v-on="on"
           @click="get"
         >
@@ -40,7 +42,7 @@
               <img :src="image(book)">
               <div>
                 <v-card-title>{{ title(book) }}</v-card-title>
-                <v-card-subtitle>{{ authors(book) }}</v-card-subtitle>
+                <v-card-subtitle>{{ author(book) }}</v-card-subtitle>
               </div>
             </div>
           </v-card>
@@ -75,21 +77,26 @@ export default {
   computed: {
     books () {
       return this.$store.state.books
+    },
+    disabled () {
+      return this.keyword.length === 0
     }
   },
 
   methods: {
     // 本の選択
     select (book) {
-      this.$store.commit('setBook', book)
+      this.$store.commit('selectedBook', book)
       this.dialog = false
     },
 
     get () {
-      this.$axios.get(this.BOOK_URL + this.keyword + '&maxResults=15')
-        .then((res) => {
-          this.$store.commit('getBooks', res)
-        })
+      if (this.keyword.length !== 0) {
+        this.$axios.get(this.BOOK_URL + this.keyword + '&maxResults=15')
+          .then((response) => {
+            this.$store.commit('getBooks', response)
+          })
+      }
     }
   }
 }
