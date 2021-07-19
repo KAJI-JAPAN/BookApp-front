@@ -59,20 +59,53 @@
           filled
           readonly
           :value="todo.text"
+          class="ma-3"
+          auto-grow
         />
-        <v-btn @click="removeTodo(todo)">
-          削除
-        </v-btn>
+        <v-menu
+          top
+          rounded
+        >
+          <template #activator="{ on, attrs }">
+            <v-btn
+              v-bind="attrs"
+              icon
+              class="mt-6"
+              v-on="on"
+            >
+              <v-icon>
+                mdi-dots-vertical
+              </v-icon>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item
+              link
+            >
+              <v-list-item-title @click="toEdit(todo)">
+                <v-icon>mdi-pencil</v-icon>
+                編集
+              </v-list-item-title>
+            </v-list-item>
+          </v-list>
+          <v-list>
+            <v-list-item
+              link
+            >
+              <v-list-item-title @click="removeTodo(todo)">
+                <v-icon>mdi-delete</v-icon>
+                削除
+              </v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </v-row>
 
       <v-text-field
         v-model="itemText"
         filled
-        label="習慣化"
-        placeholder="(例) 運動は集中力を高めるので、いつもより10分早起きしてランニングをする"
         color="pink lighten-3"
         auto-grow
-        @keyup.enter="addTodo"
       />
       <v-btn
         :disabled="disabled"
@@ -97,12 +130,17 @@
   </v-container>
 </template>
 <script>
-import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
+      editIndex: false,
       hidden: false,
-      itemText: ''
+      itemText: '',
+      selectedTodo: [],
+      items: [
+        { title: '編集', icon: 'mdi-pencil' },
+        { title: '削除', icon: 'mdi-delete' }
+      ]
     }
   },
 
@@ -117,12 +155,22 @@ export default {
 
   methods: {
     addTodo () {
-      this.$store.commit('todos/add', this.itemText)
-      this.itemText = ''
+      if (this.editIndex === false) {
+        this.$store.commit('todos/add', this.itemText)
+        this.itemText = ''
+        console.log(this.todos)
+      } else {
+        this.$store.commit('todos/edit', { todo: this.selectedTodo, text: this.itemText })
+        this.itemText = ''
+        this.editIndex = false
+        console.log(this.todos)
+      }
     },
-    ...mapMutations({
-      toggle: 'todos/toggle'
-    }),
+    toEdit (todo) {
+      this.editIndex = true
+      this.selectedTodo = this.todo
+      this.itemText = todo.text
+    },
     removeTodo (todo) {
       this.$store.commit('todos/remove', todo)
     }

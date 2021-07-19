@@ -11,7 +11,13 @@ export const mutations = {
   remove (state, todo) {
     state.list.splice(state.list.indexOf(todo), 1)
   },
-  toggle (state, todo) {
-    todo.done = !todo.done
+  edit (state, { todo, text }) {
+    state.list.splice(state.list.indexOf(todo), 1, { text })
+  }
+}
+
+export const actions = {
+  editAction ({ commit }, { todo, text }) {
+    commit('edit', { todo, text })
   }
 }
