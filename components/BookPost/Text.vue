@@ -7,21 +7,6 @@
     <v-container
       v-show="hidden"
     >
-      <!-- <template #extension>
-        <v-fab-transition>
-          <v-btn
-            color="pink"
-            fab
-            dark
-            small
-            absolute
-            bottom
-            left
-          >
-            <v-icon>mdi-plus</v-icon>
-          </v-btn>
-        </v-fab-transition>
-      </template> -->
       <BookPostKitActionChip />
       <v-row v-for="(todo,index) in todos" :key="index">
         <v-text-field
@@ -31,7 +16,7 @@
           class="mr-2"
           auto-grow
         />
-        <div v-if="todo.done === true">
+        <div v-if="todo.status === true">
           <BookPostKitEditIcon />
         </div>
         <!-- <div v-else>
@@ -56,23 +41,14 @@
           </template>
           <v-list>
             <v-list-item
+              v-for="item in items"
+              :key="item.text"
               link
-              @click="toEdit(todo)"
+              @click="callAction(item.action, todo)"
             >
               <v-list-item-title>
-                <v-icon>mdi-pencil</v-icon>
-                編集
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
-          <v-list>
-            <v-list-item
-              link
-              @click="removeTodo(todo)"
-            >
-              <v-list-item-title>
-                <v-icon>mdi-delete</v-icon>
-                削除
+                <v-icon>{{ item.icon }}</v-icon>
+                {{ item.title }}
               </v-list-item-title>
             </v-list-item>
           </v-list>
@@ -96,11 +72,9 @@
             保存
           </v-btn>
         </v-col>
-        <v-co>
-          <v-btn @click="cancel">
-            キャンセル
-          </v-btn>
-        </v-co>
+        <v-btn @click="cancel">
+          キャンセル
+        </v-btn>
       </v-row>
       <BookPostKitTextRegistrationCloseBtn />
     </v-container>
@@ -113,10 +87,9 @@ export default {
       itemText: '',
       selectedTodo: [],
       items: [
-        { title: '編集', icon: 'mdi-pencil' },
-        { title: '削除', icon: 'mdi-delete' }
+        { title: '編集', icon: 'mdi-pencil', action: 'toEdit' },
+        { title: '削除', icon: 'mdi-delete', action: 'removeTodo' }
       ]
-
     }
   },
 
@@ -134,9 +107,11 @@ export default {
 
   methods: {
     addTodo () {
-      if (this.selectedTodo.done === false) {
-        this.$store.commit('todos/add', this.itemText)
+      // postTextAddでRailsに送る
+      if (this.selectedTodo.status === false) {
+        this.$store.dispatch('todos/postTextAdd', this.itemText)
         this.itemText = ''
+        console.log(this.todos)
       } else {
         this.$store.commit('todos/edit', { todo: this.selectedTodo, text: this.itemText })
         this.itemText = ''
@@ -150,6 +125,9 @@ export default {
     },
     removeTodo (todo) {
       this.$store.commit('todos/remove', todo)
+    },
+    callAction (action, todo) {
+      this[action](todo)
     },
     cancel () {
       this.$store.commit('todos/cancel', this.selectedTodo)

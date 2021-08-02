@@ -53,9 +53,9 @@
   </v-container>
 </template>
 <script>
-import bookInfo from '~/plugins/bookInfo.js'
+// import bookInfo from '~/plugins/bookInfo.js'
 export default {
-  mixins: [bookInfo],
+  // mixins: [bookInfo],
   data () {
     return {
     }
@@ -70,47 +70,36 @@ export default {
   },
 
   methods: {
+    title (value) {
+      return this.$title(value)
+    },
+    author (value) {
+      return this.$author(value)
+    },
+    image (value) {
+      return this.$image(value)
+    },
     // 本の選択の解除
     clearBook () {
       this.$store.commit('clearBook')
     },
 
     post () {
-      const postAxios = this.$axios.$post
-      const url = '/api/v1/'
+      this.$store.dispatch('post')
+      // const postAxios = this.$axios.$post
+      // const url = '/api/v1/'
 
-      // ユーザーが選択した本をサーバーに送る
-      postAxios(url + 'posts', {
-        post: {
-          title: this.title(this.selectedBook),
-          author: this.author(this.selectedBook),
-          image: this.image(this.selectedBook)
-        }
-      })
-        .then((responsebook) => {
-          this.$store.commit('userBook', responsebook)
-        })
-
-      // ユーザーが入力したテキストをサーバーに送る
-      postAxios(url + 'posts_item', {
-        postotems: {
-          userText1: {
-            label: '',
-            text: ''
-          },
-          userText2: {
-            label: '',
-            text: ''
-          },
-          userText3: {
-            label: '',
-            text: ''
-          }
-        }
-      })
-        .then((responesText) => {
-          this.store.commit('getText', responesText)
-        })
+      // // ユーザーが選択した本をサーバーに送る
+      // postAxios(url + 'posts', {
+      //   post: {
+      //     title: this.title(this.selectedBook),
+      //     author: this.author(this.selectedBook),
+      //     image: this.image(this.selectedBook)
+      //   }
+      // })
+      //   .then((responsebook) => {
+      //     this.$store.commit('userBook', responsebook)
+      //   })
     }
   }
 }

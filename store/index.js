@@ -22,3 +22,23 @@ export const mutations = {
     state.userBook = response
   }
 }
+
+export const actions = {
+  post () {
+    const postAxios = this.$axios.$post
+    const url = '/api/v1/'
+
+    // ユーザーが選択した本をサーバーに送る
+    postAxios(url + 'posts', {
+      post: {
+        title: this.$title(state.selectedBook),
+        author: this.$author(state.selectedBook),
+        image: this.$image(state.selectedBook)
+      }
+    })
+      .then((responsebook) => {
+        this.$store.commit('userBook', responsebook)
+      })
+  }
+
+}

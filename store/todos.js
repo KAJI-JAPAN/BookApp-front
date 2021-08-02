@@ -8,7 +8,7 @@ export const mutations = {
   add (state, text) {
     state.list.push({
       text,
-      done: false
+      status: false
     })
   },
 
@@ -24,13 +24,49 @@ export const mutations = {
 
   // 編集判断フラグ
   toggle (state, todo) {
-    todo.done = !todo.done
+    todo.status = !todo.status
   },
 
+  // 編集状態をキャンセル
   cancel (state, todo) {
-    todo.done = false
+    todo.status = false
   },
+
+  // アクション登録パネルフラグ
   switching (state) {
     state.hidden = !state.hidden
   }
+}
+
+export const actions = {
+
+  postTextAdd ({ commit }, content) {
+    const postAxios = this.$axios.$post
+    const url = '/api/v1/'
+
+    postAxios(url + 'posts', {
+      post: {
+        post_items: {
+          content,
+          status: false
+        }
+      }
+    })
+      .then((response) => {
+        commit('add', response)
+        console.log(response)
+      })
+  }
+
+  // postTextRemove ({ commit }, todo) {jn
+  //   this.$axios.$post(postAxios + url + 'delete', {
+  //     post: {
+  //       todo
+  //     }
+  //   })
+  //     .then(response =>
+  //       commit('remove', todo)
+  //     )
+  //   }
+  // }
 }
