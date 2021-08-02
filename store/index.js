@@ -23,21 +23,22 @@ export const mutations = {
   }
 }
 
+// plugin/bookInfo  title,author,image
 export const actions = {
-  post () {
+  post (context) {
     const postAxios = this.$axios.$post
     const url = '/api/v1/'
 
     // ユーザーが選択した本をサーバーに送る
     postAxios(url + 'posts', {
       post: {
-        title: this.$title(state.selectedBook),
-        author: this.$author(state.selectedBook),
-        image: this.$image(state.selectedBook)
+        title: this.$title(context.state.selectedBook),
+        author: this.$author(context.state.selectedBook),
+        image: this.$image(context.state.selectedBook)
       }
     })
       .then((responsebook) => {
-        this.$store.commit('userBook', responsebook)
+        context.commit('userBook', responsebook)
       })
   }
 

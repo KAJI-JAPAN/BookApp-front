@@ -62,10 +62,7 @@
   </v-row>
 </template>
 <script>
-import bookInfo from '~/plugins/bookInfo.js'
-
 export default {
-  mixins: [bookInfo],
   data ({ $config: { BOOK_URL } }) {
     return {
       keyword: '',
@@ -84,6 +81,17 @@ export default {
   },
 
   methods: {
+    // plugin/bookInfo  title,author,image
+    title (value) {
+      return this.$title(value)
+    },
+    author (value) {
+      return this.$author(value)
+    },
+    image (value) {
+      return this.$image(value)
+    },
+
     // 本の選択
     select (book) {
       this.$store.commit('selectedBook', book)

@@ -24,6 +24,7 @@
           </v-row>
         </template>
       </div>
+      <!-- 習慣化データの入力 -->
       <BookPostText />
       <v-divider
         class="ma-7"
@@ -68,7 +69,7 @@ export default {
       return this.selectedBook === null
     }
   },
-
+  // plugin/bookInfo  title,author,image
   methods: {
     title (value) {
       return this.$title(value)
@@ -79,27 +80,15 @@ export default {
     image (value) {
       return this.$image(value)
     },
-    // 本の選択の解除
+
+    // 書籍の選択の解除
     clearBook () {
       this.$store.commit('clearBook')
     },
 
+    // 書籍を送る
     post () {
       this.$store.dispatch('post')
-      // const postAxios = this.$axios.$post
-      // const url = '/api/v1/'
-
-      // // ユーザーが選択した本をサーバーに送る
-      // postAxios(url + 'posts', {
-      //   post: {
-      //     title: this.title(this.selectedBook),
-      //     author: this.author(this.selectedBook),
-      //     image: this.image(this.selectedBook)
-      //   }
-      // })
-      //   .then((responsebook) => {
-      //     this.$store.commit('userBook', responsebook)
-      //   })
     }
   }
 }
