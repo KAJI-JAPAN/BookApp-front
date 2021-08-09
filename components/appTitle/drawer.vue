@@ -45,7 +45,7 @@ export default {
   },
   data: () => ({
     items: [
-      { title: 'home', icon: 'mdi-home', color: 'green', link: '/concept' },
+      { title: 'home', icon: 'mdi-home', color: 'green', link: '/description' },
       { title: 'twitter', icon: 'mdi-twitter', color: 'cyan darken-2', link: '' },
       { title: 'gest', icon: 'mdi-account-circle', link: '' },
       { title: 'help', icon: 'mdi-help-circle', color: 'amber accent-4', link: '/help' }

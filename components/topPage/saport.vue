@@ -1,15 +1,15 @@
 <template>
   <div>
-    <h1 class="text-center ma-5">
+    <h2 class="text-center ma-5">
       習慣化サポート
-    </h1>
+    </h2>
     <v-row
       v-for="(suport, i) in suports"
       :key="`suport-${i}`"
       class="ma-5"
     >
       <v-col class="cols-5">
-        <h2> {{ suport.title }} </h2>
+        <h3> {{ suport.title }} </h3>
         <v-card-text class="ma-3">
           {{ suport.text }}
         </v-card-text>

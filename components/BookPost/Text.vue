@@ -12,7 +12,7 @@
         <v-text-field
           filled
           readonly
-          :value="todo.text"
+          :value="todo.content"
           class="mr-2"
           auto-grow
         />
@@ -108,23 +108,24 @@ export default {
   methods: {
     addTodo () {
       // postTextAddでRailsに送る
-      if (this.selectedTodo.status === false) {
-        this.$store.dispatch('todos/postTextAdd', this.itemText)
+      if (this.selectedTodo || this.selectedTodo.status === false) {
+        this.$store.dispatch('todos/post', this.itemText)
         this.itemText = ''
-        console.log(this.todos)
       } else {
-        this.$store.commit('todos/edit', { todo: this.selectedTodo, text: this.itemText })
+        this.$store.commit('todos/edit', { todo: this.selectedTodo, content: this.itemText })
         this.itemText = ''
         this.$store.commit('todos/toggle', this.selectedTodo)
+        console.log(this.selectedTodo)
       }
     },
     toEdit (todo) {
       this.selectedTodo = todo
-      this.itemText = todo.text
+      this.itemText = todo.content
       this.$store.commit('todos/toggle', todo)
     },
     removeTodo (todo) {
-      this.$store.commit('todos/remove', todo)
+      this.$store.dispatch('todos/remove', todo)
+      // console.log(todo.id)
     },
     callAction (action, todo) {
       this[action](todo)

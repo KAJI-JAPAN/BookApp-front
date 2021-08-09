@@ -54,9 +54,7 @@
   </v-container>
 </template>
 <script>
-// import bookInfo from '~/plugins/bookInfo.js'
 export default {
-  // mixins: [bookInfo],
   data () {
     return {
     }
