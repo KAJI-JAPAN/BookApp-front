@@ -108,14 +108,13 @@ export default {
   methods: {
     addTodo () {
       // postTextAddでRailsに送る
-      if (this.selectedTodo || this.selectedTodo.status === false) {
+      if (this.selectedTodo.length === 0 || this.selectedTodo.status === false) {
         this.$store.dispatch('todos/post', this.itemText)
         this.itemText = ''
       } else {
-        this.$store.commit('todos/edit', { todo: this.selectedTodo, content: this.itemText })
+        this.$store.dispatch('todos/edit', { todo: this.selectedTodo, text: this.itemText })
         this.itemText = ''
         this.$store.commit('todos/toggle', this.selectedTodo)
-        console.log(this.selectedTodo)
       }
     },
     toEdit (todo) {

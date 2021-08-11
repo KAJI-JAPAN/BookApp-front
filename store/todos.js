@@ -17,13 +17,14 @@ export const mutations = {
 
   // 削除
   remove (state, response) {
-    // state.list.splice(state.list.indexOf(todo), 1)
     state.list = response
   },
 
   // 編集を反映
-  edit (state, { todo, text }) {
-    state.list.splice(state.list.indexOf(todo), 1, { text })
+  edit (state, response) {
+    state.list = response
+    console.log(response)
+    // state.list = response
   },
 
   // 編集判断フラグ
@@ -66,6 +67,21 @@ export const actions = {
     })
       .then((response) => {
         commit('remove', response)
+      })
+  },
+
+  // 編集リクエスト
+  edit ({ commit }, { todo, text }) {
+    this.$axios.$patch(api.POST_ITEMS_API + 'posts/' + todo.id, {
+      post_items: {
+        id: todo.id,
+        content: text,
+        status: todo.status
+      }
+    })
+      .then((response) => {
+        commit('edit', response)
+        // console.log(response)
       })
   }
 }
