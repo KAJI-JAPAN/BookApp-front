@@ -1,3 +1,5 @@
+import * as url from './constants/url.js'
+
 export const state = () => ({
   // 選択した本
   books: [],
@@ -29,10 +31,8 @@ export const mutations = {
 export const actions = {
   // ユーザーが選択した本をサーバーに送る
   post (context) {
-    const postAxios = this.$axios.$post
-    const url = '/api/v1/'
     // plugin/bookInfo  title,author,image
-    postAxios(url + 'posts', {
+    this.$axios.$post(url.POST_ITEMS_API + 'posts', {
       post: {
         title: this.$title(context.state.selectedBook),
         author: this.$author(context.state.selectedBook),

@@ -10,3 +10,4 @@
 <script>
 export default {
 }
+</script>

@@ -1,4 +1,4 @@
-import * as api from './constants/url.js'
+import * as url from './constants/url.js'
 
 export const state = () => ({
   list: [],
@@ -47,7 +47,7 @@ export const actions = {
 
   // 追加リクエスト
   post ({ commit }, text) {
-    this.$axios.$post(api.POST_ITEMS_API + 'posts', {
+    this.$axios.$post(url.POST_ITEMS_API + 'posts', {
       post_items: {
         content: text,
         status: false
@@ -60,7 +60,7 @@ export const actions = {
 
   // 削除リクエスト
   remove ({ commit }, todo) {
-    this.$axios.$delete(api.POST_ITEMS_API + 'posts/' + todo.id, {
+    this.$axios.$delete(url.POST_ITEMS_API + 'posts/' + todo.id, {
       params: {
         content_id: todo.id
       }
@@ -72,7 +72,7 @@ export const actions = {
 
   // 編集リクエスト
   edit ({ commit }, { todo, text }) {
-    this.$axios.$patch(api.POST_ITEMS_API + 'posts/' + todo.id, {
+    this.$axios.$patch(url.POST_ITEMS_API + 'posts/' + todo.id, {
       post_items: {
         id: todo.id,
         content: text,

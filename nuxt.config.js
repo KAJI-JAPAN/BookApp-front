@@ -4,7 +4,8 @@ export default {
 
   publicRuntimeConfig: {
     APP_NAME: process.env.APP_NAME,
-    BOOK_URL: process.env.BOOK_URL
+    BOOK_URL: process.env.BOOK_URL,
+    AXIOS_POST: process.env.AXIOS_POST
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
