@@ -1,5 +1,3 @@
-import * as url from './constants/url.js'
-
 export const state = () => ({
   list: [],
   hidden: false
@@ -7,24 +5,21 @@ export const state = () => ({
 
 export const mutations = {
   // テキスト追加 編集状態じゃない場合は status: false
-  add (state, response) {
+  add (state, text) {
     state.list.push({
-      id: response.id,
-      content: response.content,
-      status: response.status
+      text,
+      done: false
     })
   },
 
   // 削除
-  remove (state, response) {
-    state.list = response
+  remove (state, todo) {
+    state.list.splice(state.list.indexOf(todo), 1)
   },
 
   // 編集を反映
-  edit (state, response) {
-    state.list = response
-    console.log(response)
-    // state.list = response
+  edit (state, { todo, text }) {
+    state.list.splice(state.list.indexOf(todo), 1, { text })
   },
 
   // 編集判断フラグ
@@ -43,45 +38,46 @@ export const mutations = {
   }
 }
 
-export const actions = {
+// export const actions = {
 
-  // 追加リクエスト
-  post ({ commit }, text) {
-    this.$axios.$post(url.POST_ITEMS_API + 'posts', {
-      post_items: {
-        content: text,
-        status: false
-      }
-    })
-      .then((response) => {
-        commit('add', response)
-      })
-  },
+//   // 追加リクエスト
+//   post ({ commit }, text) {
+//     this.$axios.$post(url.POST_ITEMS_API + 'posts', {
+//       post_items: {
+//         content: text,
+//         status: false,
+//         pose_id: text.id
+//       }
+//     })
+//       .then((response) => {
+//         commit('add', response)
+//       })
+//   },
 
-  // 削除リクエスト
-  remove ({ commit }, todo) {
-    this.$axios.$delete(url.POST_ITEMS_API + 'posts/' + todo.id, {
-      params: {
-        content_id: todo.id
-      }
-    })
-      .then((response) => {
-        commit('remove', response)
-      })
-  },
+//   // 削除リクエスト
+//   remove ({ commit }, todo) {
+//     this.$axios.$delete(url.POST_ITEMS_API + 'posts/' + todo.id, {
+//       params: {
+//         content_id: todo.id
+//       }
+//     })
+//       .then((response) => {
+//         commit('remove', response)
+//       })
+//   },
 
-  // 編集リクエスト
-  edit ({ commit }, { todo, text }) {
-    this.$axios.$patch(url.POST_ITEMS_API + 'posts/' + todo.id, {
-      post_items: {
-        id: todo.id,
-        content: text,
-        status: todo.status
-      }
-    })
-      .then((response) => {
-        commit('edit', response)
-        // console.log(response)
-      })
-  }
-}
+//   // 編集リクエスト
+//   edit ({ commit }, { todo, text }) {
+//     this.$axios.$patch(url.POST_ITEMS_API + 'posts/' + todo.id, {
+//       post_items: {
+//         id: todo.id,
+//         content: text,
+//         status: todo.status
+//       }
+//     })
+//       .then((response) => {
+//         commit('edit', response)
+//         // console.log(response)
+//       })
+//   }
+// }

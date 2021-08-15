@@ -73,7 +73,7 @@ export default {
 
   computed: {
     books () {
-      return this.$store.state.books
+      return this.$store.state.book.books
     },
     disabled () {
       return this.keyword.length === 0
@@ -94,7 +94,7 @@ export default {
 
     // 本の選択
     select (book) {
-      this.$store.commit('selectedBook', book)
+      this.$store.commit('book/selectedBook', book)
       this.dialog = false
     },
 
@@ -102,7 +102,7 @@ export default {
       if (this.keyword.length !== 0) {
         this.$axios.get(this.BOOK_URL + this.keyword + '&maxResults=15')
           .then((response) => {
-            this.$store.commit('getBooks', response)
+            this.$store.commit('book/getBooks', response)
           })
       }
     }

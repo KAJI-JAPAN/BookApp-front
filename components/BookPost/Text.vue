@@ -12,7 +12,7 @@
         <v-text-field
           filled
           readonly
-          :value="todo.content"
+          :value="todo.text"
           class="mr-2"
           auto-grow
         />
@@ -109,10 +109,10 @@ export default {
     addTodo () {
       // postTextAddでRailsに送る
       if (this.selectedTodo.length === 0 || this.selectedTodo.status === false) {
-        this.$store.dispatch('todos/post', this.itemText)
+        this.$store.commit('todos/add', this.itemText)
         this.itemText = ''
       } else {
-        this.$store.dispatch('todos/edit', { todo: this.selectedTodo, text: this.itemText })
+        this.$store.commit('todos/edit', { todo: this.selectedTodo, text: this.itemText })
         this.itemText = ''
         this.$store.commit('todos/toggle', this.selectedTodo)
       }
@@ -123,7 +123,7 @@ export default {
       this.$store.commit('todos/toggle', todo)
     },
     removeTodo (todo) {
-      this.$store.dispatch('todos/remove', todo)
+      this.$store.commit('todos/remove', todo)
       // console.log(todo.id)
     },
     callAction (action, todo) {

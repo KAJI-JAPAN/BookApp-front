@@ -61,7 +61,7 @@ export default {
   },
   computed: {
     selectedBook () {
-      return this.$store.state.selectedBook
+      return this.$store.state.book.selectedBook
     },
     disabled () {
       return this.selectedBook === null
@@ -81,7 +81,7 @@ export default {
 
     // 書籍の選択の解除
     clearBook () {
-      this.$store.commit('clearBook')
+      this.$store.commit('book/clearBook')
     },
 
     // 書籍を送る
