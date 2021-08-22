@@ -1,22 +1,36 @@
 import * as url from './constants/url'
+// import * as todos from './todos'
 
 export const actions = {
   // ユーザーが選択した本をサーバーに送る
   post (context) {
-    // plugin/bookInfo  title,author,image
-    this.$axios.$post(url.POST_ITEMS_API + 'posts', {
+    const list = context.state.todos.list
+    const selectedBook = context.state.book.selectedBook
+
+    // plugin/bookInfo  $title,$author,$image
+    this.$axios.$post(url.POST_API + 'posts', {
       post: {
-        title: this.$title(context.state.book.selectedBook),
-        author: this.$author(context.state.book.selectedBook),
-        image: this.$image(context.state.book.selectedBook),
-        post_item_attributes: {
-          content: this.state.todos.list,
-          status: false
-        }
+        title: this.$title(selectedBook),
+        author: this.$author(selectedBook),
+        image: this.$image(selectedBook),
+        post_items_attributes: [{
+          content: list[0].text,
+          status: list[0].status
+        }]
       }
     })
-      .then((responsebook) => {
-        context.commit('book/userBook', responsebook)
+      .then((responseBook) => {
+        context.commit('book/userBook', responseBook)
+        context.commit('book/clearBook')
+        context.commit('todos/clear')
+        // console.log(responseBook)
+      })
+  },
+  get (context) {
+    this.$axios.$get(url.POST_API + 'posts')
+      .then((response) => {
+        context.commit('registerdBook', response)
       })
   }
+
 }

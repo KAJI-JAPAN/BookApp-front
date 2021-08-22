@@ -33,10 +33,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-  .background {
-    background-image: url('~/assets/images/tree.png');
-    background-repeat: space repeat;
-  }
-</style>

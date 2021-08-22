@@ -8,7 +8,7 @@ export const mutations = {
   add (state, text) {
     state.list.push({
       text,
-      done: false
+      status: false
     })
   },
 
@@ -35,49 +35,9 @@ export const mutations = {
   // アクション登録パネルフラグ
   switching (state) {
     state.hidden = !state.hidden
+  },
+
+  clear (state) {
+    state.list = []
   }
 }
-
-// export const actions = {
-
-//   // 追加リクエスト
-//   post ({ commit }, text) {
-//     this.$axios.$post(url.POST_ITEMS_API + 'posts', {
-//       post_items: {
-//         content: text,
-//         status: false,
-//         pose_id: text.id
-//       }
-//     })
-//       .then((response) => {
-//         commit('add', response)
-//       })
-//   },
-
-//   // 削除リクエスト
-//   remove ({ commit }, todo) {
-//     this.$axios.$delete(url.POST_ITEMS_API + 'posts/' + todo.id, {
-//       params: {
-//         content_id: todo.id
-//       }
-//     })
-//       .then((response) => {
-//         commit('remove', response)
-//       })
-//   },
-
-//   // 編集リクエスト
-//   edit ({ commit }, { todo, text }) {
-//     this.$axios.$patch(url.POST_ITEMS_API + 'posts/' + todo.id, {
-//       post_items: {
-//         id: todo.id,
-//         content: text,
-//         status: todo.status
-//       }
-//     })
-//       .then((response) => {
-//         commit('edit', response)
-//         // console.log(response)
-//       })
-//   }
-// }

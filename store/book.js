@@ -6,7 +6,10 @@ export const state = () => ({
   selectedBook: null,
 
   // 登録する本
-  userBook: []
+  responseBook: [],
+
+  // 登録した本
+  registeredBook: []
 })
 
 export const mutations = {
@@ -24,6 +27,11 @@ export const mutations = {
   },
   // 登録する本
   userBook (state, response) {
-    state.userBook = response
+    state.responseBook = response
+  },
+
+  // 登録した本
+  registeredBook (state, response) {
+    state.registeredBook = response
   }
 }

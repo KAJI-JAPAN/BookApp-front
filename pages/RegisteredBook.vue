@@ -2,23 +2,19 @@
   <div
     class="back ma-3"
   >
-    <v-card
+    <v-sheet
       width="1100px"
+      min-height="200px"
       class="mx-auto"
-      color="light-green lighten-5"
+      tile
     >
       <RegisteredBookTitle />
       <v-divider />
       <RegisteredBookMain />
-    </v-card>
+    </v-sheet>
   </div>
 </template>
 <script>
 export default {
 }
 </script>
-<style lang="scss" scoped>
-// .back {
-//   background-color: #C8E6C9;
-// }
-</style>
