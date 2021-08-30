@@ -5,9 +5,9 @@ export const state = () => ({
 
 export const mutations = {
   // テキスト追加 編集状態じゃない場合は status: false
-  add (state, text) {
+  add (state, content) {
     state.list.push({
-      text,
+      content,
       status: false
     })
   },
@@ -18,8 +18,8 @@ export const mutations = {
   },
 
   // 編集を反映
-  edit (state, { todo, text }) {
-    state.list.splice(state.list.indexOf(todo), 1, { text })
+  edit (state, { todo, content }) {
+    state.list.splice(state.list.indexOf(todo), 1, { content })
   },
 
   // 編集判断フラグ
@@ -39,5 +39,9 @@ export const mutations = {
 
   clear (state) {
     state.list = []
+  },
+
+  regissterdListAdd (state, response) {
+    state.list = response
   }
 }

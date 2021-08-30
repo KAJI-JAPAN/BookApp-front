@@ -8,20 +8,17 @@
       v-show="hidden"
     >
       <BookPostKitActionChip />
-      <v-row v-for="(todo,index) in todos" :key="index">
+      <v-row v-for="(todo, index) in todos" :key="index">
         <v-text-field
           filled
           readonly
-          :value="todo.text"
+          :value="todo.content"
           class="mr-2"
           auto-grow
         />
         <div v-if="todo.status === true">
           <BookPostKitEditIcon />
         </div>
-        <!-- <div v-else>
-          <BookPostKitChangeTextBtn />
-        </div> -->
         <v-menu
           v-else
           top
@@ -92,7 +89,6 @@ export default {
       ]
     }
   },
-
   computed: {
     todos () {
       return this.$store.state.todos.list
@@ -107,28 +103,32 @@ export default {
 
   methods: {
     addTodo () {
-      // postTextAddでRailsに送る
+      // selectedTodoが空、もしくはselected.statusがtrueの場合は追加、どちらかがfalseの場合は編集で追加
       if (this.selectedTodo.length === 0 || this.selectedTodo.status === false) {
         this.$store.commit('todos/add', this.itemText)
         this.itemText = ''
       } else {
-        this.$store.commit('todos/edit', { todo: this.selectedTodo, text: this.itemText })
+        this.$store.commit('todos/edit', { todo: this.selectedTodo, content: this.itemText })
         this.itemText = ''
         this.$store.commit('todos/toggle', this.selectedTodo)
       }
     },
+    // 編集
     toEdit (todo) {
       this.selectedTodo = todo
       this.itemText = todo.content
       this.$store.commit('todos/toggle', todo)
+      console.log(this.selectedTodo)
     },
+    // 削除
     removeTodo (todo) {
       this.$store.commit('todos/remove', todo)
-      // console.log(todo.id)
     },
+    // v-onの繰り返し処理用
     callAction (action, todo) {
       this[action](todo)
     },
+    // キャンセルボタン
     cancel () {
       this.$store.commit('todos/cancel', this.selectedTodo)
       this.itemText = ''

@@ -14,24 +14,26 @@
           v-for="(book, index) in registeredBooks"
           :key="index"
           cols="12"
-          class="pa-1"
+          class="ma-1"
         >
-          <v-hover>
-            <v-card to="/book/:id">
-              <v-row>
-                <v-col class="ml-2">
-                  <img :src="book.image">
-                </v-col>
-                <div
-                  class="ma-3 mt-13"
-                  align="end"
-                >
-                  <v-card-title>{{ book.title }}</v-card-title>
-                  <v-card-subtitle>{{ book.author }}</v-card-subtitle>
-                </div>
-              </v-row>
-            </v-card>
-          </v-hover>
+          <v-card
+            :to="`/book/${book.id}`"
+            hover
+            class="ma-1"
+          >
+            <v-row>
+              <v-col class="ml-2">
+                <img :src="book.image">
+              </v-col>
+              <div
+                class="ma-3 mt-13"
+                align="end"
+              >
+                <v-card-title>{{ book.title }}</v-card-title>
+                <v-card-subtitle>{{ book.author }}</v-card-subtitle>
+              </div>
+            </v-row>
+          </v-card>
         </v-col>
       </v-row>
     </div>
@@ -40,6 +42,7 @@
 <script>
 import * as url from '@/store/constants/url'
 export default {
+
   // storeから登録した書籍情報の配列を取得
   computed: {
     registeredBooks () {

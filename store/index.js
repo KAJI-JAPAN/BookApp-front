@@ -14,7 +14,7 @@ export const actions = {
         author: this.$author(selectedBook),
         image: this.$image(selectedBook),
         post_items_attributes: [{
-          content: list[0].text,
+          content: list[0].content,
           status: list[0].status
         }]
       }
@@ -23,14 +23,12 @@ export const actions = {
         context.commit('book/userBook', responseBook)
         context.commit('book/clearBook')
         context.commit('todos/clear')
-        // console.log(responseBook)
       })
   },
-  get (context) {
+  get (commit) {
     this.$axios.$get(url.POST_API + 'posts')
       .then((response) => {
-        context.commit('registerdBook', response)
+        commit('registerdBook', response)
       })
   }
-
 }
