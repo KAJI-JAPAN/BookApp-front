@@ -102,23 +102,26 @@ export default {
   },
 
   methods: {
+
+    // 追加
     addTodo () {
       // selectedTodoが空、もしくはselected.statusがtrueの場合は追加、どちらかがfalseの場合は編集で追加
       if (this.selectedTodo.length === 0 || this.selectedTodo.status === false) {
         this.$store.commit('todos/add', this.itemText)
         this.itemText = ''
+        console.log(this.todos)
       } else {
         this.$store.commit('todos/edit', { todo: this.selectedTodo, content: this.itemText })
         this.itemText = ''
         this.$store.commit('todos/toggle', this.selectedTodo)
       }
     },
+
     // 編集
     toEdit (todo) {
       this.selectedTodo = todo
       this.itemText = todo.content
       this.$store.commit('todos/toggle', todo)
-      console.log(this.selectedTodo)
     },
     // 削除
     removeTodo (todo) {

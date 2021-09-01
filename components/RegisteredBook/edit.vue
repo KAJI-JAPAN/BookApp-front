@@ -2,12 +2,12 @@
   <v-container>
     <v-row style="text-align:center;">
       <v-col cols="6" class="pa-5">
-        <img :src="selectedRegisteredBook.image">
+        <img :src="selectedBook.image">
       </v-col>
       <v-col cols="4" class="pa-5">
-        <v-card-title>{{ selectedRegisteredBook.title }}</v-card-title>
+        <v-card-title>{{ selectedBook.title }}</v-card-title>
         <v-card-subtitle class="pa-3">
-          {{ selectedRegisteredBook.author }}
+          {{ selectedBook.author }}
         </v-card-subtitle>
       </v-col>
     </v-row>
@@ -20,11 +20,11 @@
   </v-container>
 </template>
 <script>
-// import * as url from '@/store/constants/url'
+
 export default {
   computed: {
-    selectedRegisteredBook () {
-      return this.$store.state.book.selectedRegisteredBook
+    selectedBook () {
+      return this.$store.state.book.selectedBook
     }
   }
 }

@@ -29,7 +29,13 @@
       <v-divider
         class="ma-7"
       />
-      <BookPostKitRegistrationBtn />
+      <v-row
+        justify="center"
+        class="ma-5"
+      >
+        <BookPostKitButtonRegistrationBtn />
+        <BookPostKitButtonRegistrationCancelBtn />
+      </v-row>
     </v-card>
   </v-container>
 </template>

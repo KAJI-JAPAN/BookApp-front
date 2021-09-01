@@ -33,11 +33,11 @@ export default {
   mounted () {
     this.$axios.$get(url.POST_API + 'posts/' + this.$route.params.id)
       .then((response) => {
-        this.$store.commit('book/selectedRegisteredBook', response.post)
+        this.$store.commit('book/selectedBook', response.post)
         this.$store.commit('todos/regissterdListAdd', response.content)
         // console.log(this.$store.state.todos.list)
         // console.log(response.content[0])
-        // console.log(response)
+        console.log(this.$store.state.book.selectedBook)
       })
   }
 }

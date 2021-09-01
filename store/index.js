@@ -7,16 +7,21 @@ export const actions = {
     const list = context.state.todos.list
     const selectedBook = context.state.book.selectedBook
 
+    // サーバーに送る配列を作成
+    const postItemsAttributes =
+      list.map((item) => {
+        return {
+          content: item.content,
+          status: item.status
+        }
+      })
     // plugin/bookInfo  $title,$author,$image
     this.$axios.$post(url.POST_API + 'posts', {
       post: {
         title: this.$title(selectedBook),
         author: this.$author(selectedBook),
         image: this.$image(selectedBook),
-        post_items_attributes: [{
-          content: list[0].content,
-          status: list[0].status
-        }]
+        post_items_attributes: postItemsAttributes
       }
     })
       .then((responseBook) => {

@@ -36,10 +36,10 @@ export const mutations = {
   // 登録した本
   registeredBook (state, response) {
     state.registeredBook = response
-  },
-
-  // 登録した本を選択
-  selectedRegisteredBook (state, book) {
-    state.selectedRegisteredBook = book
   }
+
+  // // 登録した本を選択
+  // selectedRegisteredBook (state, book) {
+  //   state.selectedRegisteredBook = book
+  // }
 }
