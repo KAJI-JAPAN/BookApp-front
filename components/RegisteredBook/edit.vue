@@ -16,7 +16,13 @@
     <v-divider
       class="ma-7"
     />
-    <BookPostKitRegistrationBtn />
+    <v-row
+      justify="center"
+      class="ma-5"
+    >
+      <BookPostKitButtonRegistrationBtn />
+      <BookPostKitButtonRegistrationDeleteBtn />
+    </v-row>
   </v-container>
 </template>
 <script>

@@ -1,7 +1,7 @@
 <template>
   <v-btn
     color="success"
-    class="ma-2"
+    class="ma-3"
     :disabled="disabled"
     @click="post"
   >

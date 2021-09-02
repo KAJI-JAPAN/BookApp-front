@@ -29,15 +29,12 @@ export default {
       return this.$store.state.book.selectedRegisteredBook
     }
   },
-  // 選択した本を表示
+  // Get selectedBook
   mounted () {
     this.$axios.$get(url.POST_API + 'posts/' + this.$route.params.id)
       .then((response) => {
         this.$store.commit('book/selectedBook', response.post)
         this.$store.commit('todos/regissterdListAdd', response.content)
-        // console.log(this.$store.state.todos.list)
-        // console.log(response.content[0])
-        console.log(this.$store.state.book.selectedBook)
       })
   }
 }

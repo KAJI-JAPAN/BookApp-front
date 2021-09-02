@@ -3,7 +3,7 @@
     <v-row class="ma-10">
       <v-divider />
     </v-row>
-    <BookPostKitTextRegistrationOpenBtn />
+    <BookPostKitButtonTextRegistrationOpenBtn />
     <v-container
       v-show="hidden"
     >
@@ -73,7 +73,7 @@
           キャンセル
         </v-btn>
       </v-row>
-      <BookPostKitTextRegistrationCloseBtn />
+      <BookPostKitButtonTextRegistrationCloseBtn />
     </v-container>
   </v-container>
 </template>

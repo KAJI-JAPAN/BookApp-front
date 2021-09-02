@@ -35,5 +35,9 @@ export const actions = {
       .then((response) => {
         commit('registerdBook', response)
       })
+  },
+  delete (context) {
+    const bookId = context.state.book.selectedBook.id
+    this.$axios.$delete(url.POST_API + 'posts/' + bookId)
   }
 }
