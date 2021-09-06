@@ -5,7 +5,7 @@
     dense
     class="alert"
   >
-    失敗しました。
+    登録に失敗しました
   </v-alert>
 </template>
 <script>

@@ -1,5 +1,4 @@
 import * as url from './constants/url'
-// import * as todos from './todos'
 
 export const actions = {
   // ユーザーが選択した本をサーバーに送る
@@ -15,6 +14,7 @@ export const actions = {
           status: item.status
         }
       })
+
     // plugin/bookInfo  $title,$author,$image
     this.$axios.$post(url.POST_API + 'posts', {
       post: {
@@ -36,8 +36,27 @@ export const actions = {
         commit('registerdBook', response)
       })
   },
+
+  // 本を削除
   delete (context) {
     const bookId = context.state.book.selectedBook.id
     this.$axios.$delete(url.POST_API + 'posts/' + bookId)
+  },
+
+  update (context) {
+    const list = context.state.todos.list
+    const bookId = context.state.book.selectedBook.id
+    const content =
+    list.map((item) => {
+      return {
+        content: item.content,
+        status: false
+      }
+    })
+    this.$axios.$patch(url.POST_API + 'posts/' + bookId, {
+      post: {
+        post_items_attributes: content
+      }
+    })
   }
 }

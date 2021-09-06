@@ -20,7 +20,7 @@
       justify="center"
       class="ma-5"
     >
-      <BookPostKitButtonRegistrationBtn />
+      <BookPostKitButtonSaveBtn />
       <BookPostKitButtonRegistrationDeleteBtn />
     </v-row>
   </v-container>

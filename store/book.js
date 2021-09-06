@@ -5,14 +5,11 @@ export const state = () => ({
   // 選択した本クリアフラグ
   selectedBook: null,
 
-  // 登録する本
+  // サーバーから受け取った本
   responseBook: [],
 
   // 登録した本
-  registeredBook: [],
-
-  // 書籍一覧画面で選択した本
-  selectedRegisteredBook: []
+  registeredBook: []
 })
 
 export const mutations = {
@@ -33,13 +30,13 @@ export const mutations = {
     state.responseBook = response
   },
 
+  // レスポンスされた本
+  responseBook (state, response) {
+    state.responseBook = response
+  },
+
   // 登録した本
   registeredBook (state, response) {
     state.registeredBook = response
   }
-
-  // // 登録した本を選択
-  // selectedRegisteredBook (state, book) {
-  //   state.selectedRegisteredBook = book
-  // }
 }

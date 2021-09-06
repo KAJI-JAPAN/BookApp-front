@@ -109,7 +109,6 @@ export default {
       if (this.selectedTodo.length === 0 || this.selectedTodo.status === false) {
         this.$store.commit('todos/add', this.itemText)
         this.itemText = ''
-        console.log(this.todos)
       } else {
         this.$store.commit('todos/edit', { todo: this.selectedTodo, content: this.itemText })
         this.itemText = ''

@@ -1,11 +1,11 @@
 <template>
   <v-alert
-    type="error"
+    type="success"
     :value="alert"
     dense
     class="alert"
   >
-    失敗しました。
+    登録しました。
   </v-alert>
 </template>
 <script>
@@ -21,7 +21,7 @@ export default {
     setTimeout(() => {
       this.alert = false
     }, 4000)
+    location.reload()
   }
-
 }
 </script>

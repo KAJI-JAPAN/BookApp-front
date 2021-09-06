@@ -1,11 +1,11 @@
 <template>
   <v-alert
-    type="success"
+    type="info"
     :value="alert"
     dense
     class="alert"
   >
-    登録しました。
+    削除しました。
   </v-alert>
 </template>
 <script>
