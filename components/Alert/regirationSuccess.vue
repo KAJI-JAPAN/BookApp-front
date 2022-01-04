@@ -20,8 +20,8 @@ export default {
   created () {
     setTimeout(() => {
       this.alert = false
-    }, 4000)
-    location.reload()
+      location.reload()
+    }, 3000)
   }
 }
 </script>

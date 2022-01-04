@@ -1,4 +1,5 @@
 export const state = () => ({
+  // 登録したテキスト
   list: [],
   hidden: false
 })
@@ -20,6 +21,7 @@ export const mutations = {
   // 編集を反映
   edit (state, { todo, content }) {
     state.list.splice(state.list.indexOf(todo), 1, { content })
+    console.log(state.list)
   },
 
   // 編集判断フラグ
@@ -37,10 +39,12 @@ export const mutations = {
     state.hidden = !state.hidden
   },
 
+  // リスト削除
   clear (state) {
     state.list = []
   },
 
+  // アラート用レスポンス
   regissterdListAdd (state, response) {
     state.list = response
   }

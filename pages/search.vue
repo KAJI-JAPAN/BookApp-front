@@ -3,10 +3,10 @@
     <div
       class="teal lighten-1 background pa-10"
     >
-      <div v-if="responseBook === 'OK'">
+      <div v-if="responseBook === 201 ">
         <AlertRegirationSuccess />
       </div>
-      <div v-else-if="responseBook === 'ERROR'">
+      <div v-else-if="responseBook === 500 ">
         <AlertRegirationError />
       </div>
       <v-sheet

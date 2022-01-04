@@ -105,14 +105,17 @@ export default {
 
     // 追加
     addTodo () {
-      // selectedTodoが空、もしくはselected.statusがtrueの場合は追加、どちらかがfalseの場合は編集で追加
-      if (this.selectedTodo.length === 0 || this.selectedTodo.status === false) {
+      // selectedTodoが空、もしくはselectedTodo.statusがtrueの場合は追加、どちらかがfalseの場合は編集で追加
+      if (this.selectedTodo.length === 0 || this.selectedTodo.status !== true) {
         this.$store.commit('todos/add', this.itemText)
         this.itemText = ''
       } else {
-        this.$store.commit('todos/edit', { todo: this.selectedTodo, content: this.itemText })
-        this.itemText = ''
+        // this.itemTextのみだとテキストのみ送られるので更新に必要なIDがなくなってしまう。
+        // this.selectedTodo.content = this.itemText
+        this.$store.commit('todos/edit', { todo: this.selectedTodo, content: this.itemText }) // this.itemText => selectedTodo?
         this.$store.commit('todos/toggle', this.selectedTodo)
+        this.itemText = ''
+        // console.log(this.itemText)
       }
     },
 

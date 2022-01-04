@@ -13,6 +13,7 @@ export default {
     // 書籍を送る
     update () {
       this.$store.dispatch('update')
+      // location.reload()
     }
   }
 }

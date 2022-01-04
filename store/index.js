@@ -1,7 +1,7 @@
 import * as url from './constants/url'
 
 export const actions = {
-  // ユーザーが選択した本をサーバーに送る
+  // 本と行動リストの登録/////////////////////////////////
   post (context) {
     const list = context.state.todos.list
     const selectedBook = context.state.book.selectedBook
@@ -11,7 +11,8 @@ export const actions = {
       list.map((item) => {
         return {
           content: item.content,
-          status: item.status
+          status: item.status,
+          post_id: selectedBook.id
         }
       })
 
@@ -24,12 +25,14 @@ export const actions = {
         post_items_attributes: postItemsAttributes
       }
     })
-      .then((responseBook) => {
-        context.commit('book/userBook', responseBook)
+      .then((response) => {
+        context.commit('book/responseBook', response)
         context.commit('book/clearBook')
         context.commit('todos/clear')
       })
   },
+  // /////////////////////////////////
+
   get (commit) {
     this.$axios.$get(url.POST_API + 'posts')
       .then((response) => {
@@ -43,20 +46,26 @@ export const actions = {
     this.$axios.$delete(url.POST_API + 'posts/' + bookId)
   },
 
+  // 更新
   update (context) {
     const list = context.state.todos.list
-    const bookId = context.state.book.selectedBook.id
-    const content =
+    const selectedBook = context.state.book.selectedBook
+    const postItemsAttributes =
     list.map((item) => {
       return {
+        id: item.id,
         content: item.content,
         status: false
       }
     })
-    this.$axios.$patch(url.POST_API + 'posts/' + bookId, {
+    console.log(postItemsAttributes)
+    this.$axios.$patch(url.POST_API + 'posts/' + selectedBook.id, {
       post: {
-        post_items_attributes: content
+        post_items_attributes: postItemsAttributes
       }
     })
+      .then((response) => {
+        context.commit('book/responseBook', response)
+      })
   }
 }
