@@ -32,13 +32,12 @@ export default {
     }
   },
 
-  // Get selectedBook
+  // 登録した本(selectedBook)と習慣化リストの取得
   mounted () {
     this.$axios.$get(url.POST_API + 'posts/' + this.$route.params.id)
       .then((response) => {
         this.$store.commit('book/selectedBook', response.post)
-        this.$store.commit('todos/regissterdListAdd', response.content)
-        console.log(this.$store.state.todos.list)
+        this.$store.commit('todos/regissterdList', response.content)
       })
   }
 }

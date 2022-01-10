@@ -1,7 +1,10 @@
+import * as url from './constants/url'
+
 export const state = () => ({
   // 登録したテキスト
   list: [],
-  hidden: false
+  hidden: false,
+  responseAlert: null
 })
 
 export const mutations = {
@@ -21,7 +24,6 @@ export const mutations = {
   // 編集を反映
   edit (state, { todo, content }) {
     state.list.splice(state.list.indexOf(todo), 1, { content })
-    console.log(state.list)
   },
 
   // 編集判断フラグ
@@ -45,7 +47,54 @@ export const mutations = {
   },
 
   // アラート用レスポンス
-  regissterdListAdd (state, response) {
+  responseAdd (state, response) {
+    state.responseAlert = response
+  },
+
+  // 登録済み習慣化リストをbook/_idで取得
+  regissterdList (state, response) {
     state.list = response
+  }
+}
+
+//  編集画面用TODO追加、編集
+export const actions = {
+  // 編集画面取得時にselectedBookは取得済みなのでIDは問題なし
+  // $axios.$postで送るとパスパラメーターにIDを含むためエラーになる。$patchで送って編集追加
+  // rootStateを経由するとstoreにある他のモジュールの値を参照可能
+  add ({ rootState, commit }, itemText) {
+    const selectedBook = rootState.book.selectedBook
+    this.$axios.$patch(url.POST_API + 'post_items/' + selectedBook.id, {
+      post: {
+        content: itemText,
+        status: false,
+        post_id: selectedBook.id
+      }
+    })
+      .then((response) => {
+        commit('responseAdd', response)
+      })
+  },
+  // 更新ようなので、selectedTodoで編集対象のIDを取得
+  update ({ rootState, commit }, { itemText, selectedTodo }) {
+    const selectedBook = rootState.book.selectedBook
+    this.$axios.$patch(url.POST_API + 'post_items/' + selectedBook.id, {
+      post: {
+        id: selectedTodo.id,
+        content: itemText,
+        status: false,
+        post_id: selectedBook.id
+      }
+    })
+      .then((response) => {
+        commit('responseAdd', response)
+      })
+  },
+  // 習慣化リストを削除
+  delete ({ commit }, id) {
+    this.$axios.$delete(url.POST_API + 'post_items/' + id)
+      .then((response) => {
+        commit('responseAdd', response)
+      })
   }
 }

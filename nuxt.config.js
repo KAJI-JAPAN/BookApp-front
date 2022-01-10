@@ -12,7 +12,7 @@ export default {
   head: {
     title: 'KOUDOKU',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'ja'
     },
     meta: [
       { charset: 'utf-8' },

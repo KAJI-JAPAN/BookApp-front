@@ -16,12 +16,12 @@ export default {
     return {
       alert: true
     }
-  },
-  created () {
-    setTimeout(() => {
-      this.alert = false
-      location.reload()
-    }, 3000)
   }
+  // created () {
+  //   setTimeout(() => {
+  //     this.alert = false
+  //     location.reload()
+  //   }, 3000)
+  // }
 }
 </script>

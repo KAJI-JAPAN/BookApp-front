@@ -11,8 +11,7 @@ export const actions = {
       list.map((item) => {
         return {
           content: item.content,
-          status: item.status,
-          post_id: selectedBook.id
+          status: item.status
         }
       })
 
@@ -32,19 +31,13 @@ export const actions = {
       })
   },
   // /////////////////////////////////
-
-  get (commit) {
-    this.$axios.$get(url.POST_API + 'posts')
-      .then((response) => {
-        commit('registerdBook', response)
-      })
-  },
-
-  // 本を削除
-  delete (context) {
-    const bookId = context.state.book.selectedBook.id
-    this.$axios.$delete(url.POST_API + 'posts/' + bookId)
-  },
+  // 不要？
+  // get (commit) {
+  //   this.$axios.$get(url.POST_API + 'posts')
+  //     .then((response) => {
+  //       commit('registerdBook', response)
+  //     })
+  // },
 
   // 更新
   update (context) {
@@ -58,7 +51,6 @@ export const actions = {
         status: false
       }
     })
-    console.log(postItemsAttributes)
     this.$axios.$patch(url.POST_API + 'posts/' + selectedBook.id, {
       post: {
         post_items_attributes: postItemsAttributes

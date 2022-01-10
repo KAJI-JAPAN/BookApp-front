@@ -12,7 +12,7 @@
       </v-col>
     </v-row>
     <!-- 習慣化データの入力 -->
-    <BookPostText />
+    <RegisteredBookUpdateText />
     <v-divider
       class="ma-7"
     />
@@ -20,7 +20,6 @@
       justify="center"
       class="ma-5"
     >
-      <BookPostKitButtonSaveBtn />
       <BookPostKitButtonRegistrationDeleteBtn />
     </v-row>
   </v-container>

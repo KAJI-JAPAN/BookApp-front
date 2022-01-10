@@ -103,19 +103,19 @@ export default {
 
   methods: {
 
-    // 追加
+    // 習慣化テキストを追加
     addTodo () {
       // selectedTodoが空、もしくはselectedTodo.statusがtrueの場合は追加、どちらかがfalseの場合は編集で追加
       if (this.selectedTodo.length === 0 || this.selectedTodo.status !== true) {
+        this.$store.dispatch('todos/add', this.itemText)
         this.$store.commit('todos/add', this.itemText)
         this.itemText = ''
       } else {
-        // this.itemTextのみだとテキストのみ送られるので更新に必要なIDがなくなってしまう。
-        // this.selectedTodo.content = this.itemText
+        // selectedTodoのIDを編集対象の習慣化テキストを把握するために使う
+        this.$store.dispatch('todos/update', { itemText: this.itemText, selectedTodo: this.selectedTodo })
         this.$store.commit('todos/edit', { todo: this.selectedTodo, content: this.itemText })
         this.$store.commit('todos/toggle', this.selectedTodo)
         this.itemText = ''
-        // console.log(this.itemText)
       }
     },
 
@@ -127,6 +127,7 @@ export default {
     },
     // 削除
     removeTodo (todo) {
+      this.$store.dispatch('todos/delete', todo.id)
       this.$store.commit('todos/remove', todo)
     },
     // v-onの繰り返し処理用

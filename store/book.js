@@ -1,3 +1,5 @@
+import * as url from './constants/url'
+
 export const state = () => ({
   // 選択した本
   books: [],
@@ -39,5 +41,13 @@ export const mutations = {
   // 登録した本
   registeredBook (state, response) {
     state.registeredBook = response
+  }
+}
+
+export const actions = {
+  // 本を削除
+  delete ({ state }) {
+    const bookId = state.selectedBook.id
+    this.$axios.$delete(url.POST_API + 'posts/' + bookId)
   }
 }

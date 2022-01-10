@@ -50,7 +50,7 @@ export default {
   methods: {
     // 書籍を削除する
     deleteBook () {
-      this.$store.dispatch('delete')
+      this.$store.dispatch('book/delete')
       this.dialog = false
       this.$router.push('/registeredBook')
     }
