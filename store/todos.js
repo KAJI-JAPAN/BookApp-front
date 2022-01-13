@@ -54,6 +54,10 @@ export const mutations = {
   // 登録済み習慣化リストをbook/_idで取得
   regissterdList (state, response) {
     state.list = response
+  },
+
+  editAdd (state, response) {
+    state.list.push(response)
   }
 }
 
@@ -72,7 +76,20 @@ export const actions = {
       }
     })
       .then((response) => {
-        commit('responseAdd', response)
+        // alertを追加。alertは共通処理なのでindex/jsで管理。第３引数にroot: trueでindex/jsのMutationsを利用
+        // レスポンスの値をeditAddで反映
+        commit('editAdd', response)
+        commit('alertSwitchEdit', true, { root: true })
+        setTimeout(() => {
+          commit('alertSwitchEdit', false, { root: true })
+        }, 3000)
+        console.log(response)
+      })
+      .catch(() => {
+        commit(' alertSwitchError', true, { root: true })
+        setTimeout(() => {
+          commit(' alertSwitchError', false, { root: true })
+        }, 3000)
       })
   },
   // 更新ようなので、selectedTodoで編集対象のIDを取得
@@ -87,14 +104,36 @@ export const actions = {
       }
     })
       .then((response) => {
-        commit('responseAdd', response)
+        commit('edit', { todo: this.selectedTodo, content: response.content })
+        commit('alertSwitchEdit', true, { root: true })
+        setTimeout(() => {
+          commit('alertSwitchEdit', false, { root: true })
+        }, 3000)
+      })
+      .catch(() => {
+        commit('alertSwitchError', true, { root: true })
+        setTimeout(() => {
+          commit('alertSwitchError', false, { root: true })
+        }, 3000)
       })
   },
   // 習慣化リストを削除
-  delete ({ commit }, id) {
-    this.$axios.$delete(url.POST_API + 'post_items/' + id)
+  // catchは編集用のエラーメッセージを流用
+  delete ({ commit }, todo) {
+    this.$axios.$delete(url.POST_API + 'post_items/' + todo.id)
       .then((response) => {
-        commit('responseAdd', response)
+        console.log(response)
+        commit('remove', todo)
+        commit('alertSwitchDelete', true, { root: true })
+        setTimeout(() => {
+          commit('alertSwitchDelete', false, { root: true })
+        }, 3000)
+      })
+      .catch(() => {
+        commit('alertSwitchError', true, { root: true })
+        setTimeout(() => {
+          commit('alertSwitchError', false, { root: true })
+        }, 3000)
       })
   }
 }

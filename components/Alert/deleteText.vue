@@ -1,27 +1,21 @@
 <template>
   <v-alert
-    type="error"
+    type="success"
     :value="alert"
     dense
     class="alert"
   >
-    登録に失敗しました
+    削除しました
   </v-alert>
 </template>
 <script>
 import '@/assets/css/alert.scss'
 
 export default {
-  data () {
-    return {
-      alert: true
+  computed: {
+    alert () {
+      return this.$store.state.alertDelete
     }
-  },
-  created () {
-    setTimeout(() => {
-      this.alert = false
-    }, 4000)
   }
-
 }
 </script>

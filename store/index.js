@@ -1,10 +1,35 @@
 import * as url from './constants/url'
 
+export const state = () => ({
+  alertError: false,
+  alertEdit: false,
+  alertDelete: false,
+  alertRegister: false
+})
+
+export const mutations = {
+  alertSwitchEdit (state, boolean) {
+    state.alertEdit = boolean
+  },
+
+  alertSwitchError (state, boolean) {
+    state.alertError = boolean
+  },
+
+  alertSwitchDelete (state, boolean) {
+    state.alertDelete = boolean
+  },
+
+  alertSwitchRegister (state, boolean) {
+    state.alertRegister = boolean
+  }
+}
+
 export const actions = {
   // 本と行動リストの登録/////////////////////////////////
-  post (context) {
-    const list = context.state.todos.list
-    const selectedBook = context.state.book.selectedBook
+  post ({ state, commit }) {
+    const list = state.todos.list
+    const selectedBook = state.book.selectedBook
 
     // サーバーに送る配列を作成
     const postItemsAttributes =
@@ -25,39 +50,41 @@ export const actions = {
       }
     })
       .then((response) => {
-        context.commit('book/responseBook', response)
-        context.commit('book/clearBook')
-        context.commit('todos/clear')
+        commit('alertSwitchRegister', true)
+        setTimeout(() => {
+          commit('alertSwitchRegister', false)
+        }, 3000)
+        commit('book/responseBook', response)
+        commit('book/clearBook')
+        commit('todos/clear')
       })
-  },
-  // /////////////////////////////////
-  // 不要？
-  // get (commit) {
-  //   this.$axios.$get(url.POST_API + 'posts')
-  //     .then((response) => {
-  //       commit('registerdBook', response)
-  //     })
-  // },
-
-  // 更新
-  update (context) {
-    const list = context.state.todos.list
-    const selectedBook = context.state.book.selectedBook
-    const postItemsAttributes =
-    list.map((item) => {
-      return {
-        id: item.id,
-        content: item.content,
-        status: false
-      }
-    })
-    this.$axios.$patch(url.POST_API + 'posts/' + selectedBook.id, {
-      post: {
-        post_items_attributes: postItemsAttributes
-      }
-    })
-      .then((response) => {
-        context.commit('book/responseBook', response)
+      .catch(() => {
+        commit('alertSwitchError', true)
+        setTimeout(() => {
+          commit('alertSwitchError', false)
+        }, 3000)
       })
   }
+
+  // 更新
+  // update (context) {
+  //   const list = context.state.todos.list
+  //   const selectedBook = context.state.book.selectedBook
+  //   const postItemsAttributes =
+  //   list.map((item) => {
+  //     return {
+  //       id: item.id,
+  //       content: item.content,
+  //       status: false
+  //     }
+  //   })
+  //   this.$axios.$patch(url.POST_API + 'posts/' + selectedBook.id, {
+  //     post: {
+  //       post_items_attributes: postItemsAttributes
+  //     }
+  //   })
+  //     .then((response) => {
+  //       context.commit('book/responseBook', response)
+  //     })
+  // }
 }

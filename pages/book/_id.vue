@@ -3,11 +3,14 @@
     <div
       class="teal lighten-1 background pa-10"
     >
-      <div v-if="responseBook === 'OK'">
-        <AlertSuccess />
+      <div class="alert-success">
+        <AlertEditSuccess />
       </div>
-      <div v-else-if="responseBook === 'ERROR'">
+      <div class="alert-error">
         <AlertError />
+      </div>
+      <div class="alert-delete">
+        <AlertDeleteText />
       </div>
       <v-sheet
         width="1100px"

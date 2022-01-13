@@ -3,11 +3,11 @@
     <div
       class="teal lighten-1 background pa-10"
     >
-      <div v-if="responseBook === 201 ">
+      <div class="alert-success">
         <AlertRegirationSuccess />
       </div>
-      <div v-else-if="responseBook === 500 ">
-        <AlertRegirationError />
+      <div class="alert-error">
+        <AlertError />
       </div>
       <v-sheet
         width="1100px"
