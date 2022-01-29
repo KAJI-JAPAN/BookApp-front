@@ -28,25 +28,7 @@
 import * as url from '@/store/constants/url'
 export default {
 
-  // // アラート用
-  // computed: {
-  //   responseBook () {
-  //     return this.$store.state.book.responseBook
-  //   }
-  // },
-
-  // 登録した本(selectedBook)と習慣化リストの取得
-  // mounted () {
-  //   this.$axios.$get(url.POST_API + 'posts/' + this.$route.params.id)
-  //     .then((response) => {
-  //       this.$store.commit('book/selectedBook', response.post)
-  //       this.$store.commit('todos/regissterdList', response.content)
-  //     })
-  // },
-
-  asyncData (context) {
-    console.log(context)
-  },
+  // 取得した本と習慣化テキストデータはRegisteredBookディレクトリ内のcomponentsで表示設定
   fetch ({ store, $axios, route }) {
     return $axios.$get(url.POST_API + 'posts/' + route.params.id)
       .then((response) => {
@@ -54,11 +36,5 @@ export default {
         store.commit('todos/regissterdList', response.content)
       })
   }
-
-  // async fetch ({ store, params }) {
-  //   const { data } = await axios.get(url.POST_API + 'posts/' + this.$route.params.id)
-  //   store.commit('book/selectedBook', data.post)
-  //   store.commit('todos/regissterdList', data.content)
-  // }
 }
 </script>

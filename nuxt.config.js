@@ -49,26 +49,11 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    '@nuxtjs/auth',
-    'nuxt-i18n'
+    '@nuxtjs/auth'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-  },
-
-  // Doc: https://nuxt-community.github.io/nuxt-i18n/basic-usage.html#nuxt-link
-  i18n: {
-    locales: ['ja', 'en'],
-    defaultLocale: 'ja',
-    vueI18n: {
-      fallbackLocale: 'ja',
-      silentFallbackWarn: true,
-      messages: {
-        ja: require('./locales/ja.json'),
-        en: require('./locales/en.json')
-      }
-    }
   },
 
   auth: {

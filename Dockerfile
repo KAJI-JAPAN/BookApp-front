@@ -1,4 +1,4 @@
-FROM node:14.4.0-alpine
+FROM node:14.15.5-alpine
 
 ARG WORKDIR
 ARG CONTAINER_PORT
@@ -11,7 +11,7 @@ ENV HOME=/${WORKDIR} \
     API_URL=${API_URL} \
     NPM_CONFIG_PRODUCTION=false
 
-# ENV check
+# ENV確認
 RUN echo ${HOME}
 RUN echo ${CONTAINER_PORT}
 RUN echo ${API_URL}

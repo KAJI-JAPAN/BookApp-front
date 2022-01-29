@@ -57,11 +57,16 @@
         filled
         color="pink lighten-3"
         auto-grow
-        label="習慣化"
+        label="入力してみよう！"
         placeholder="(例) 朝の運動は１日の集中力を上げる効果があるので毎朝10分早起きしてランニングをする"
       />
       <v-row>
         <v-col>
+          <v-btn @click="cancel">
+            キャンセル
+          </v-btn>
+        </v-col>
+        <v-col class="d-flex justify-end">
           <v-btn
             :disabled="disabled"
             @click="addTodo"
@@ -69,9 +74,6 @@
             保存
           </v-btn>
         </v-col>
-        <v-btn @click="cancel">
-          キャンセル
-        </v-btn>
       </v-row>
       <BookPostKitButtonTextRegistrationCloseBtn />
     </v-container>

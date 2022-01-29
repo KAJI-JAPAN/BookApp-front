@@ -7,7 +7,7 @@
         text-color="white"
         icon="mdi-fire"
       >
-        アクション
+        アクションを登録してみよう
         <v-icon>
           mdi-fire
         </v-icon>

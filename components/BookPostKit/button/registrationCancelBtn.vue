@@ -1,6 +1,6 @@
 <template>
   <v-btn
-    class="ma-2"
+    class="ma-3"
     depressed
     :disabled="disabled"
     @click="clearBook()"

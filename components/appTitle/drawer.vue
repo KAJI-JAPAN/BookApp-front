@@ -23,7 +23,7 @@
 
         <v-list-item-content>
           <v-list-item-title>
-            {{ $t(`drawer.${item.title}`) }}
+            {{ item.title }}
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
@@ -43,14 +43,19 @@ export default {
       default: null
     }
   },
-  data: () => ({
-    items: [
-      { title: 'home', icon: 'mdi-home', color: 'green', link: '/description' },
-      { title: 'twitter', icon: 'mdi-twitter', color: 'cyan darken-2', link: '' },
-      { title: 'gest', icon: 'mdi-account-circle', link: '' },
-      { title: 'help', icon: 'mdi-help-circle', color: 'amber accent-4', link: '/help' }
-    ]
-  }),
+  data () {
+    return {
+      items: [
+        { title: 'KODOKUとは', icon: 'mdi-home', color: 'green', link: '/description' },
+        { title: 'ログイン', icon: 'mdi-login', color: 'blue', link: '' },
+        { title: 'Twitterでログイン', icon: 'mdi-twitter', color: 'cyan darken-2', link: '' },
+        { title: 'ゲストでログイン', icon: 'mdi-account-circle', link: '' },
+        { title: 'アプリの使い方', icon: 'mdi-help-circle', color: 'amber accent-4', link: '/help' }
+      ]
+    }
+  },
+
+  // Vuetify ドロワー開閉用
   computed: {
     setDrawer: {
       get () { return this.drawer },
