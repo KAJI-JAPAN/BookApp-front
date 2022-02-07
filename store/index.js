@@ -65,26 +65,4 @@ export const actions = {
         }, 3000)
       })
   }
-
-  // 更新
-  // update (context) {
-  //   const list = context.state.todos.list
-  //   const selectedBook = context.state.book.selectedBook
-  //   const postItemsAttributes =
-  //   list.map((item) => {
-  //     return {
-  //       id: item.id,
-  //       content: item.content,
-  //       status: false
-  //     }
-  //   })
-  //   this.$axios.$patch(url.POST_API + 'posts/' + selectedBook.id, {
-  //     post: {
-  //       post_items_attributes: postItemsAttributes
-  //     }
-  //   })
-  //     .then((response) => {
-  //       context.commit('book/responseBook', response)
-  //     })
-  // }
 }

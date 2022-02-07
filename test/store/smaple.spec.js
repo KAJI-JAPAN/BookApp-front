@@ -1,12 +1,45 @@
-// import axios from 'axios'
-// import Books from
+import { shallowMount, createLocalVue } from '@vue/test-utils'
+import bookAction from '@/components/BookPostKit/button/registrationBtn'
+import Vuex from 'vuex'
 
-// jest.mock('axios')
+const localVue = createLocalVue()
 
-// test('', () => {
-//   const book = [{ title: 'test' }]
-//   const resp = [{ data: book }]
-//   axios.get.mockResolvedValue(resp)
+jest.mock('axios')
+localVue.use(Vuex)
 
-//   return Books.all().then(data => expect(data).toEqual(book))
-// })
+describe('index.js', () => {
+  let actions
+  let store
+
+  beforeEach(() => {
+    actions = {
+      post: jest.fn()
+    }
+
+    store = new Vuex.Store({
+      state: {},
+      actions
+    })
+  })
+
+  it('登録ボタンを押すとstore/indexのpostが呼び出されるか', () => {
+    const wrapper = shallowMount(bookAction, { store, localVue })
+    const button = wrapper.find('button')
+    button.trigger('click')
+    expect(actions.post).toHaveBeenCalled()
+  })
+
+  // it('dispatches "actionInput" when input event value is "input"', () => {
+  //   const wrapper = shallowMount(Actions, { store, localVue })
+  //   const input = wrapper.find('input')
+  //   input.element.value = 'input'
+  //   input.trigger('input')
+  //   expect(actions.actionInput).toHaveBeenCalled()
+  // })
+
+  // it('本が送られているか', () => {
+  //   const wrapper = shallowMount(bookAction)
+  //   wrapper.find('button').trigger('click')
+  //   expect(wrapper.vm.value).toBe('value')
+  // })
+})
