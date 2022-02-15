@@ -69,6 +69,7 @@
         <v-col class="d-flex justify-end">
           <v-btn
             :disabled="disabled"
+            class="updateTextBtn"
             @click="addTodo"
           >
             保存

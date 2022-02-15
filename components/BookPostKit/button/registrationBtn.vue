@@ -1,7 +1,7 @@
 <template>
   <v-btn
     color="success"
-    class="ma-3"
+    class="registrationBtn ma-3"
     :disabled="disabled"
     @click="post"
   >

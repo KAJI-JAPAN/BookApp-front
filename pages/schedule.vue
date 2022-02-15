@@ -8,12 +8,10 @@
           color="primary"
           type="week"
           :events="events"
-          :event-color="getEventColor"
           :event-ripple="false"
           locale="ja-jp"
           :day-format="(timestamp) => new Date(timestamp.date).getDate()"
           :month-format="(timestamp) => (new Date(timestamp.date).getMonth() + 1) + ' /'"
-          @change="getEvents"
           @mousedown:event="startDrag"
           @click:event="showEvent"
           @mousedown:time="startTime"
@@ -34,25 +32,28 @@
 
             <!-- イベントクリックした時の編集表示 -->
             <v-menu
-              v-model="selectedOpen"
-              :close-on-content-click="false"
+              :value="selectedOpen"
+              :close-on-content-click="true"
               :activator="selectedElement"
               offset-x
             >
               <v-card
-                color="grey lighten-2"
                 min-width="350px"
                 flat
               >
                 <v-toolbar>
-                  <v-btn icon>
-                    <v-icon>mdi-pencil</v-icon>
-                  </v-btn>
-                  <v-toolbar-title v-html="selectedEvent.name" />
+                  <v-icon>mdi-pencil</v-icon>
+                  <v-text-field
+                    v-model="eventName"
+                    solo
+                    label="アクションを入力..."
+                    flat
+                    autofocus
+                    class="mt-7"
+                  />
                   <v-spacer />
 
                   <!-- 色変更ボタン -->
-
                   <div class="text-center">
                     <v-menu offset-y>
                       <template #activator="{ on, attrs }">
@@ -84,20 +85,48 @@
                     </v-menu>
                   </div>
 
-                  <v-btn icon>
-                    <v-icon>mdi-dots-vertical</v-icon>
+                  <v-btn
+                    icon
+                    small
+                    class="mr-1"
+                    @click="deleteEvent"
+                  >
+                    <v-icon>mdi-delete</v-icon>
                   </v-btn>
                 </v-toolbar>
                 <v-card-text>
                   <span v-html="selectedEvent.details" />
+                  <v-list-item>
+                    <v-row align="center">
+                      <v-col cols="2">
+                        <v-list-item-title>
+                          <v-icon>mdi-clock-outline</v-icon>
+                        </v-list-item-title>
+                      </v-col>
+                      <v-col v-if="getYear(selectedEvent.start) === getYear(selectedEvent.end)" cols="5 text-center">
+                        <v-list-item-subtitle>
+                          {{ getYear(selectedEvent.start) }}
+                        </v-list-item-subtitle>
+                      </v-col>
+                      <v-col v-else cols="6" class="pl-0 pr-0">
+                        <v-list-item-subtitle>
+                          {{ getYear(selectedEvent.start) }} 〜 {{ getYear(selectedEvent.end) }}
+                        </v-list-item-subtitle>
+                      </v-col>
+                      <v-col class="pr-0">
+                        <v-list-item-subtitle>{{ convertTime(selectedEvent.start) }}〜{{ convertTime(selectedEvent.end) }}</v-list-item-subtitle>
+                      </v-col>
+                    </v-row>
+                  </v-list-item>
                 </v-card-text>
                 <v-card-actions>
+                  <v-spacer />
                   <v-btn
-                    text
-                    color="secondary"
-                    @click="selectedOpen = false"
+                    color="primary"
+                    small
+                    @click="newEvent"
                   >
-                    Cancel
+                    保存する
                   </v-btn>
                 </v-card-actions>
               </v-card>
@@ -110,12 +139,15 @@
   </v-row>
 </template>
 <script>
+
+import '@/assets/css/schedule.scss'
+
 export default {
+
   data: () => ({
     value: '',
     events: [],
     colors: ['#2196F3', '#3F51B5', '#673AB7', '#00BCD4', '#4CAF50', '#FF9800', '#757575'],
-    names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
     dragEvent: null,
     dragStart: null,
     createEvent: null,
@@ -124,8 +156,10 @@ export default {
     selectedElement: null,
     selectedOpen: false,
     selectedEvent: {},
-    menu: false
+    menu: false,
+    eventName: ''
   }),
+
   methods: {
     startDrag ({ event, timed }) {
       if (event && timed) {
@@ -144,7 +178,7 @@ export default {
       } else {
         this.createStart = this.roundTime(mouse)
         this.createEvent = {
-          // name: `Event #${this.events.length}`,
+          name: 'イベント',
           color: '#2196F3',
           start: this.createStart,
           end: this.createStart,
@@ -216,47 +250,16 @@ export default {
     toTime (tms) {
       return new Date(tms.year, tms.month - 1, tms.day, tms.hour, tms.minute).getTime()
     },
-    // getEventColor (event) {
-    //   const rgb = parseInt(event.color.substring(1), 16)
-    //   const r = (rgb >> 16) & 0xFF
-    //   const g = (rgb >> 8) & 0xFF
-    //   const b = (rgb >> 0) & 0xFF
 
-    //   return event === this.dragEvent
-    //     ? `rgba(${r}, ${g}, ${b}, 0.7)`
-    //     : event === this.createEvent
-    //       ? `rgba(${r}, ${g}, ${b}, 0.7)`
-    //       : event.color
-    // },
+    // 年を取得
+    getYear (tms) {
+      return new Date(tms).toLocaleString('ja-JP', { year: 'numeric', month: 'numeric', day: 'numeric' })
+    },
 
-    // 初期イベント表示のため？
-
-    // getEvents ({ start, end }) {
-    //   const events = []
-
-    //   const min = new Date(`${start.date}T00:00:00`).getTime()
-    //   const max = new Date(`${end.date}T23:59:59`).getTime()
-    //   const days = (max - min) / 86400000
-    //   const eventCount = this.rnd(days, days + 20)
-
-    //   for (let i = 0; i < eventCount; i++) {
-    //     const timed = this.rnd(0, 3) !== 0
-    //     const firstTimestamp = this.rnd(min, max)
-    //     const secondTimestamp = this.rnd(2, timed ? 8 : 288) * 900000
-    //     const start = firstTimestamp - (firstTimestamp % 900000)
-    //     const end = start + secondTimestamp
-
-    //     events.push({
-    //       name: this.rndElement(this.names),
-    //       color: this.rndElement(this.colors),
-    //       start,
-    //       end,
-    //       timed
-    //     })
-    //   }
-
-    //   this.events = events
-    // },
+    // ミリ秒を変換する
+    convertTime (tms) {
+      return new Date(tms).toLocaleString('ja-JP', { hour: 'numeric', minute: 'numeric' })
+    },
 
     // イベント編集
     showEvent ({ nativeEvent, event }) {
@@ -282,8 +285,18 @@ export default {
     rndElement (arr) {
       return arr[this.rnd(0, arr.length - 1)]
     },
+
     changeColor (color) {
       this.selectedEvent.color = color
+    },
+    newEvent () {
+      this.selectedEvent.name = this.eventName
+      this.selectedOpen = false
+      this.$store.dispatch('addEvent')
+    },
+    deleteEvent () {
+      this.selectedEvent = {}
+      this.selectedOpen = false
     }
   }
 }

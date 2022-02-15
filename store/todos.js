@@ -68,7 +68,7 @@ export const actions = {
   // rootStateを経由するとstoreにある他のモジュールの値を参照可能
   add ({ rootState, commit }, itemText) {
     const selectedBook = rootState.book.selectedBook
-    this.$axios.$patch(url.POST_API + 'post_items/' + selectedBook.id, {
+    this.$axios.$patch(url.POST_ITEMS_API + selectedBook.id, {
       post: {
         content: itemText,
         status: false,
@@ -83,7 +83,6 @@ export const actions = {
         setTimeout(() => {
           commit('alertSwitchEdit', false, { root: true })
         }, 3000)
-        console.log(response)
       })
       .catch(() => {
         commit(' alertSwitchError', true, { root: true })
@@ -95,7 +94,7 @@ export const actions = {
   // 更新ようなので、selectedTodoで編集対象のIDを取得
   update ({ rootState, commit }, { itemText, selectedTodo }) {
     const selectedBook = rootState.book.selectedBook
-    this.$axios.$patch(url.POST_API + 'post_items/' + selectedBook.id, {
+    this.$axios.$patch(url.POST_ITEMS_API + selectedBook.id, {
       post: {
         id: selectedTodo.id,
         content: itemText,
@@ -120,7 +119,7 @@ export const actions = {
   // 習慣化リストを削除
   // catchは編集用のエラーメッセージを流用
   delete ({ commit }, todo) {
-    this.$axios.$delete(url.POST_API + 'post_items/' + todo.id)
+    this.$axios.$delete(url.POST_ITEMS_API + todo.id)
       .then((response) => {
         console.log(response)
         commit('remove', todo)
