@@ -8,194 +8,202 @@
     </AlertDeleteText>
 
     <!-- 月カレンダー -->
-    <v-bottom-navigation>
-      <v-btn
-        icon
-        class="ma-2"
-        @click="$refs.calendar.prev()"
-      >
-        <v-icon>mdi-chevron-left</v-icon>
-      </v-btn>
-      <v-toolber-title
-        v-if="$refs.calendar"
-        class="ma-6"
-      >
-        {{ $refs.calendar.title }}
-      </v-toolber-title>
-      <v-btn
-        icon
-        class="ma-2"
-        @click="$refs.calendar.next()"
-      >
-        <v-icon>mdi-chevron-right</v-icon>
-      </v-btn>
-    </v-bottom-navigation>
-    <v-col class="pr-0">
-      <v-sheet height="300">
-        <v-calendar
-          ref="calendar"
-          v-model="value"
-          :events="events"
-          :event-overlap-mode="mode"
-          :event-overlap-threshold="30"
-          :event-color="getEventColor"
-          :day-format="(timestamp) => new Date(timestamp.date).getDate()"
-          :month-format="(timestamp) => (new Date(timestamp.date).getMonth() + 1) + ' /'"
-          locale="ja-jp"
-        />
-      </v-sheet>
-    </v-col>
-    <!--  -->
-    <v-col cols="9" class="pl-0">
-      <v-sheet height="600">
-        <v-calendar
-          ref="calendar"
-          v-model="value"
-          color="primary"
-          type="week"
-          :events="events"
-          :event-ripple="false"
-          locale="ja-jp"
-          :day-format="(timestamp) => new Date(timestamp.date).getDate()"
-          :month-format="(timestamp) => (new Date(timestamp.date).getMonth() + 1) + ' /'"
-          @mousedown:event="startDrag"
-          @click:event="showEvent"
-          @mousedown:time="startTime"
-          @mousemove:time="mouseMove"
-          @mouseup:event="endDrag"
-          @mouseleave.native="cancelDrag"
+    <v-col cols="12">
+      <v-app-bar>
+        <v-app-bar-title class="mr-8">習慣化カレンダー</v-app-bar-title>
+        <v-btn
+          class="ma-2"
+          outlined
+          @click="setToday"
         >
-          <template #event="{ event, timed, eventSummary }">
-            <div
-              class="v-event-draggable"
-              v-html="eventSummary()"
-            />
-            <div
-              v-if="timed"
-              class="v-event-drag-bottom"
-              @mousedown.stop="extendBottom(event)"
-            />
+          今日
+        </v-btn>
+        <v-btn
+          icon
+          class="ma-2"
+          @click="$refs.calendar.prev()"
+        >
+          <v-icon>mdi-chevron-left</v-icon>
+        </v-btn>
+        <v-appber-title
+          v-if="$refs.calendar"
+          class="ma-6"
+        >
+          {{ $refs.calendar.title }}
+        </v-appber-title>
+        <v-btn
+          icon
+          class="ma-2"
+          @click="$refs.calendar.next()"
+        >
+          <v-icon>mdi-chevron-right</v-icon>
+        </v-btn>
+      </v-app-bar>
+    </v-col>
+    <v-row>
+      <v-col class="pr-0 ml-5">
+        <v-sheet height="300">
+          <v-calendar
+            ref="calendar"
+            v-model="value"
+            :day-format="(timestamp) => new Date(timestamp.date).getDate()"
+            :month-format="(timestamp) => (new Date(timestamp.date).getMonth() + 1) + ' /'"
+            locale="ja-jp"
+          />
+        </v-sheet>
+      </v-col>
+      <!--  -->
+      <v-col cols="9" class="pl-0">
+        <v-sheet height="600">
+          <v-calendar
+            ref="calendar"
+            v-model="value"
+            color="primary"
+            type="week"
+            :events="events"
+            :event-ripple="false"
+            locale="ja-jp"
+            :day-format="(timestamp) => new Date(timestamp.date).getDate()"
+            :month-format="(timestamp) => (new Date(timestamp.date).getMonth() + 1) + ' /'"
+            @mousedown:event="startDrag"
+            @click:event="showEvent"
+            @mousedown:time="startTime"
+            @mousemove:time="mouseMove"
+            @mouseup:event="endDrag"
+            @mouseleave.native="cancelDrag"
+          >
+            <template #event="{ event, timed, eventSummary }">
+              <div
+                class="v-event-draggable"
+                v-html="eventSummary()"
+              />
+              <div
+                v-if="timed"
+                class="v-event-drag-bottom"
+                @mousedown.stop="extendBottom(event)"
+              />
 
-            <!-- イベントクリックした時の編集表示 -->
-            <!-- <v-menu
+              <!-- イベントクリックした時の編集表示 -->
+              <!-- <v-menu
               :value="selectedOpen"
               :close-on-content-click="false"
               :activator="selectedElement"
               offset-x
             > -->
-            <v-dialog
-              v-model="selectedOpen"
-              persistent
-              max-width="500px"
-              @click:outside="cancelEvent"
-            >
-              <v-card
-                min-width="350px"
-                flat
+              <v-dialog
+                v-model="selectedOpen"
+                persistent
+                max-width="500px"
+                @click:outside="cancelEvent"
               >
-                <v-toolbar>
-                  <v-icon>mdi-pencil</v-icon>
-                  <v-text-field
-                    v-model="eventName"
-                    solo
-                    label="アクションを入力..."
-                    flat
-                    autofocus
-                    class="mt-7"
-                  />
-                  <v-spacer />
+                <v-card
+                  min-width="350px"
+                  flat
+                >
+                  <v-toolbar>
+                    <v-icon>mdi-pencil</v-icon>
+                    <v-text-field
+                      v-model="eventName"
+                      solo
+                      label="アクションを入力..."
+                      flat
+                      autofocus
+                      class="mt-7"
+                    />
+                    <v-spacer />
 
-                  <!-- 色変更ボタン -->
-                  <div class="text-center">
-                    <v-menu offset-y>
-                      <template #activator="{ on, attrs }">
-                        <v-btn
-                          icon
-                          v-bind="attrs"
-                          v-on="on"
-                        >
-                          <v-icon
-                            :color="selectedEvent.color"
+                    <!-- 色変更ボタン -->
+                    <div class="text-center">
+                      <v-menu offset-y>
+                        <template #activator="{ on, attrs }">
+                          <v-btn
+                            icon
+                            v-bind="attrs"
+                            v-on="on"
                           >
-                            mdi-brightness-1
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <v-list>
-                        <v-list-item
-                          v-for="(color, index) in colors"
-                          :key="index"
-                        >
-                          <v-icon
-                            :color="color"
-                            @click="changeColor(color)"
+                            <v-icon
+                              :color="selectedEvent.color"
+                            >
+                              mdi-brightness-1
+                            </v-icon>
+                          </v-btn>
+                        </template>
+                        <v-list>
+                          <v-list-item
+                            v-for="(color, index) in colors"
+                            :key="index"
                           >
-                            mdi-brightness-1
-                          </v-icon>
-                        </v-list-item>
-                      </v-list>
-                    </v-menu>
-                  </div>
-                  <!-- 削除ボタン -->
-                  <v-btn
-                    v-if="selectedEvent.id"
-                    icon
-                    small
-                    class="mr-1"
-                    @click="deleteEvent"
-                  >
-                    <v-icon>mdi-delete</v-icon>
-                  </v-btn>
-                </v-toolbar>
-                <v-card-text>
-                  <!-- <span v-html="selectedEvent.details" /> -->
-                  <v-list-item>
-                    <v-row align="center">
-                      <v-col cols="2">
-                        <v-list-item-title>
-                          <v-icon>mdi-clock-outline</v-icon>
-                        </v-list-item-title>
-                      </v-col>
-                      <v-col v-if="getYear(selectedEvent.start) === getYear(selectedEvent.end)" cols="5 text-center">
-                        <v-list-item-subtitle>
-                          {{ getYear(selectedEvent.start) }}
-                        </v-list-item-subtitle>
-                      </v-col>
-                      <v-col v-else cols="6" class="pl-0 pr-0">
-                        <v-list-item-subtitle>
-                          {{ getYear(selectedEvent.start) }} 〜 {{ getYear(selectedEvent.end) }}
-                        </v-list-item-subtitle>
-                      </v-col>
-                      <v-col class="pr-0">
-                        <v-list-item-subtitle>{{ convertTime(selectedEvent.start) }}〜{{ convertTime(selectedEvent.end) }}</v-list-item-subtitle>
-                      </v-col>
-                    </v-row>
-                  </v-list-item>
-                </v-card-text>
-                <v-card-actions>
-                  <v-btn
-                    small
-                    @click="cancelEvent()"
-                  >
-                    閉じる
-                  </v-btn>
-                  <v-spacer />
-                  <v-btn
-                    color="primary"
-                    small
-                    @click="newEvent"
-                  >
-                    保存する
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
+                            <v-icon
+                              :color="color"
+                              @click="changeColor(color)"
+                            >
+                              mdi-brightness-1
+                            </v-icon>
+                          </v-list-item>
+                        </v-list>
+                      </v-menu>
+                    </div>
+                    <!-- 削除ボタン -->
+                    <v-btn
+                      v-if="selectedEvent.id"
+                      icon
+                      small
+                      class="mr-1"
+                      @click="deleteEvent"
+                    >
+                      <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                  </v-toolbar>
+                  <v-card-text>
+                    <!-- <span v-html="selectedEvent.details" /> -->
+                    <v-list-item>
+                      <v-row align="center">
+                        <v-col cols="2">
+                          <v-list-item-title>
+                            <v-icon>mdi-clock-outline</v-icon>
+                          </v-list-item-title>
+                        </v-col>
+                        <v-col v-if="getYear(selectedEvent.start) === getYear(selectedEvent.end)" cols="5 text-center">
+                          <v-list-item-subtitle>
+                            {{ getYear(selectedEvent.start) }}
+                          </v-list-item-subtitle>
+                        </v-col>
+                        <v-col v-else cols="6" class="pl-0 pr-0">
+                          <v-list-item-subtitle>
+                            {{ getYear(selectedEvent.start) }} 〜 {{ getYear(selectedEvent.end) }}
+                          </v-list-item-subtitle>
+                        </v-col>
+                        <v-col class="pr-0">
+                          <v-list-item-subtitle>{{ convertTime(selectedEvent.start) }}〜{{ convertTime(selectedEvent.end) }}</v-list-item-subtitle>
+                        </v-col>
+                      </v-row>
+                    </v-list-item>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn
+                      small
+                      @click="cancelEvent()"
+                    >
+                      閉じる
+                    </v-btn>
+                    <v-spacer />
+                    <v-btn
+                      color="primary"
+                      small
+                      @click="newEvent"
+                    >
+                      保存する
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
             <!-- </v-menu> -->
             <!--  -->
-          </template>
-        </v-calendar>
-      </v-sheet>
-    </v-col>
+            </template>
+          </v-calendar>
+        </v-sheet>
+      </v-col>
+    </v-row>
   </v-row>
 </template>
 <script>
@@ -280,6 +288,9 @@ export default {
     //   }))
     //   this.events.push(clone)
     // },
+    setToday () {
+      this.value = moment().format('yyyy-MM-DD')
+    },
 
     startDrag ({ event, timed }) {
       if (event && timed) {
