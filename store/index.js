@@ -4,13 +4,10 @@ export const state = () => ({
   alertError: false,
   alertEdit: false,
   alertDelete: false,
-  alertRegister: false
+  alertSuccess: false
 })
 
 export const mutations = {
-  alertSwitchEdit (state, boolean) {
-    state.alertEdit = boolean
-  },
 
   alertSwitchError (state, boolean) {
     state.alertError = boolean
@@ -20,8 +17,8 @@ export const mutations = {
     state.alertDelete = boolean
   },
 
-  alertSwitchRegister (state, boolean) {
-    state.alertRegister = boolean
+  alertSwitchSuccess (state, boolean) {
+    state.alertSuccess = boolean
   }
 }
 

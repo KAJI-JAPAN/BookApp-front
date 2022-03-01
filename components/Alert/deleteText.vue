@@ -5,7 +5,7 @@
     dense
     class="alert"
   >
-    削除しました
+    <slot />
   </v-alert>
 </template>
 <script>

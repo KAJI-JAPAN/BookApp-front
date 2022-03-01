@@ -4,10 +4,15 @@
       class="teal lighten-1 background pa-10"
     >
       <div class="alert-success">
-        <AlertRegirationSuccess />
+        <AlertSuccess>
+          登録しました
+        </AlertSuccess>
       </div>
       <div class="alert-error">
-        <AlertError />
+        <AlertError>
+          登録に失敗しました。再度時間を置いてからお試しください
+          <AlertError />
+        </alerterror>
       </div>
       <v-sheet
         width="1100px"

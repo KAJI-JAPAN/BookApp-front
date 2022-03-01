@@ -79,9 +79,9 @@ export const actions = {
         // alertを追加。alertは共通処理なのでindex/jsで管理。第３引数にroot: trueでindex/jsのMutationsを利用
         // レスポンスの値をeditAddで反映
         commit('editAdd', response)
-        commit('alertSwitchEdit', true, { root: true })
+        commit('alertSwitchSuccess', true, { root: true })
         setTimeout(() => {
-          commit('alertSwitchEdit', false, { root: true })
+          commit('alertSwitchSuccess', false, { root: true })
         }, 3000)
       })
       .catch(() => {
@@ -104,9 +104,9 @@ export const actions = {
     })
       .then((response) => {
         commit('edit', { todo: this.selectedTodo, content: response.content })
-        commit('alertSwitchEdit', true, { root: true })
+        commit('alertSwitchSuccess', true, { root: true })
         setTimeout(() => {
-          commit('alertSwitchEdit', false, { root: true })
+          commit('alertSwitchSuccess', false, { root: true })
         }, 3000)
       })
       .catch(() => {

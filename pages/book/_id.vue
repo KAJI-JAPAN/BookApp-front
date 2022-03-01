@@ -4,13 +4,19 @@
       class="teal lighten-1 background pa-10"
     >
       <div class="alert-success">
-        <AlertEditSuccess />
+        <AlertSuccess>
+          変更を保存しました
+        </AlertSuccess>
       </div>
       <div class="alert-error">
-        <AlertError />
+        <AlertError>
+          登録に失敗しました
+        </AlertError>
       </div>
       <div class="alert-delete">
-        <AlertDeleteText />
+        <AlertDeleteText>
+          削除しました
+        </AlertDeleteText>
       </div>
       <v-sheet
         width="1100px"

@@ -22,6 +22,7 @@ describe('updateText.vue', () => {
     store = new Vuex.Store({
       modules: {
         todos: {
+          namespaced: true,
           actions,
           state: {
             selectedBooks: ''
@@ -35,6 +36,6 @@ describe('updateText.vue', () => {
     const wrapper = shallowMount(updateText, { store, localVue, vuetify })
     const button = wrapper.find('.updateTextBtn')
     button.trigger('click')
-    expect(store.modules.todos.actions.add).toHaveBeenCalled()
+    expect(actions.add).toHaveBeenCalled()
   })
 })

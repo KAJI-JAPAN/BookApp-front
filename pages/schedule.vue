@@ -1,6 +1,52 @@
 <template>
   <v-row class="fill-height">
-    <v-col>
+    <AlertSuccess>
+      行動を保存しました
+    </AlertSuccess>
+    <AlertDeleteText>
+      行動を削除しました
+    </AlertDeleteText>
+
+    <!-- 月カレンダー -->
+    <v-bottom-navigation>
+      <v-btn
+        icon
+        class="ma-2"
+        @click="$refs.calendar.prev()"
+      >
+        <v-icon>mdi-chevron-left</v-icon>
+      </v-btn>
+      <v-toolber-title
+        v-if="$refs.calendar"
+        class="ma-6"
+      >
+        {{ $refs.calendar.title }}
+      </v-toolber-title>
+      <v-btn
+        icon
+        class="ma-2"
+        @click="$refs.calendar.next()"
+      >
+        <v-icon>mdi-chevron-right</v-icon>
+      </v-btn>
+    </v-bottom-navigation>
+    <v-col class="pr-0">
+      <v-sheet height="300">
+        <v-calendar
+          ref="calendar"
+          v-model="value"
+          :events="events"
+          :event-overlap-mode="mode"
+          :event-overlap-threshold="30"
+          :event-color="getEventColor"
+          :day-format="(timestamp) => new Date(timestamp.date).getDate()"
+          :month-format="(timestamp) => (new Date(timestamp.date).getMonth() + 1) + ' /'"
+          locale="ja-jp"
+        />
+      </v-sheet>
+    </v-col>
+    <!--  -->
+    <v-col cols="9" class="pl-0">
       <v-sheet height="600">
         <v-calendar
           ref="calendar"
@@ -16,7 +62,7 @@
           @click:event="showEvent"
           @mousedown:time="startTime"
           @mousemove:time="mouseMove"
-          @mouseup:time="endDrag"
+          @mouseup:event="endDrag"
           @mouseleave.native="cancelDrag"
         >
           <template #event="{ event, timed, eventSummary }">
@@ -31,11 +77,17 @@
             />
 
             <!-- イベントクリックした時の編集表示 -->
-            <v-menu
+            <!-- <v-menu
               :value="selectedOpen"
-              :close-on-content-click="true"
+              :close-on-content-click="false"
               :activator="selectedElement"
               offset-x
+            > -->
+            <v-dialog
+              v-model="selectedOpen"
+              persistent
+              max-width="500px"
+              @click:outside="cancelEvent"
             >
               <v-card
                 min-width="350px"
@@ -84,8 +136,9 @@
                       </v-list>
                     </v-menu>
                   </div>
-
+                  <!-- 削除ボタン -->
                   <v-btn
+                    v-if="selectedEvent.id"
                     icon
                     small
                     class="mr-1"
@@ -95,7 +148,7 @@
                   </v-btn>
                 </v-toolbar>
                 <v-card-text>
-                  <span v-html="selectedEvent.details" />
+                  <!-- <span v-html="selectedEvent.details" /> -->
                   <v-list-item>
                     <v-row align="center">
                       <v-col cols="2">
@@ -120,6 +173,12 @@
                   </v-list-item>
                 </v-card-text>
                 <v-card-actions>
+                  <v-btn
+                    small
+                    @click="cancelEvent()"
+                  >
+                    閉じる
+                  </v-btn>
                   <v-spacer />
                   <v-btn
                     color="primary"
@@ -130,7 +189,8 @@
                   </v-btn>
                 </v-card-actions>
               </v-card>
-            </v-menu>
+            </v-dialog>
+            <!-- </v-menu> -->
             <!--  -->
           </template>
         </v-calendar>
@@ -139,14 +199,16 @@
   </v-row>
 </template>
 <script>
-
+import * as url from '@/store/constants/url'
 import '@/assets/css/schedule.scss'
+import moment from 'moment'
+// import { mapState } from 'vuex'
 
 export default {
 
   data: () => ({
-    value: '',
     events: [],
+    value: '',
     colors: ['#2196F3', '#3F51B5', '#673AB7', '#00BCD4', '#4CAF50', '#FF9800', '#757575'],
     dragEvent: null,
     dragStart: null,
@@ -155,12 +217,70 @@ export default {
     extendOriginal: null,
     selectedElement: null,
     selectedOpen: false,
-    selectedEvent: {},
     menu: false,
-    eventName: ''
+    eventName: '',
+    selectedEvent: {},
+    dialog: false,
+    datevVlue: moment().format('yyyy-MM-DD')
   }),
 
+  computed: {
+
+    // storeからコピーして参照
+    // events () {
+    //   // return { ...this.$store.state.schedule.events }
+    //   return this.$store.state.schedule.events
+    // },
+
+    title () {
+      return moment(this.dateValue).format('yyyy年 M月')
+    },
+
+    // storeからコピーしたイベントを代入
+    cloneEvents () {
+      return {
+        methods: this.copyEvents(),
+        log: console.log(this.events)
+      }
+    }
+  },
+
+  mounted () {
+    this.$axios.$get(url.SCHEDULE_API + '.json')
+      .then((response) => {
+        // this.$store.commit('schedule/responseEvent', response)
+        let data
+        response.forEach((res) => {
+          data = {
+            id: res.id,
+            name: res.name,
+            color: res.color,
+            start: res.start,
+            end: res.end,
+            updated_at: res.created_at,
+            timed: res.timed
+          }
+          this.events.push(data)
+          // this.$store.commit('schedule/setEvent', data)
+          // console.log(this.cloneevent)
+        })
+      })
+  },
+
   methods: {
+    // store/schedsuleのeventsからデータを取得してschedule.vueのeventsに追加
+    // copyEvents () {
+    //   const storeEvents = this.$store.state.schedule.events
+    //   const clone = storeEvents.map(event => ({
+    //     id: event.id,
+    //     name: event.name,
+    //     color: event.color,
+    //     start: event.start,
+    //     end: event.end
+    //   }))
+    //   this.events.push(clone)
+    // },
+
     startDrag ({ event, timed }) {
       if (event && timed) {
         this.dragEvent = event
@@ -178,7 +298,7 @@ export default {
       } else {
         this.createStart = this.roundTime(mouse)
         this.createEvent = {
-          name: 'イベント',
+          name: '',
           color: '#2196F3',
           start: this.createStart,
           end: this.createStart,
@@ -186,6 +306,10 @@ export default {
         }
 
         this.events.push(this.createEvent)
+
+        // store用
+        // this.$store.commit('schedule/setEvent', this.createEvent)
+        // console.log(this.events)
       }
     },
     extendBottom (event) {
@@ -203,7 +327,6 @@ export default {
         const newStartTime = mouse - this.dragTime
         const newStart = this.roundTime(newStartTime)
         const newEnd = newStart + duration
-
         this.dragEvent.start = newStart
         this.dragEvent.end = newEnd
       } else if (this.createEvent && this.createStart !== null) {
@@ -215,12 +338,13 @@ export default {
         this.createEvent.end = max
       }
     },
-    endDrag () {
+    endDrag ({ nativeEvent, event }) {
       this.dragTime = null
       this.dragEvent = null
       this.createEvent = null
       this.createStart = null
       this.extendOriginal = null
+      this.showEvent({ nativeEvent, event })
     },
     cancelDrag () {
       if (this.createEvent) {
@@ -231,6 +355,9 @@ export default {
           if (i !== -1) {
             this.events.splice(i, 1)
           }
+
+          // stror用
+          // this.$store.commit('schedule/isCancelDragEvent', this.createEvent)
         }
       }
 
@@ -275,27 +402,27 @@ export default {
       } else {
         open()
       }
-
       nativeEvent.stopPropagation()
-    },
-
-    rnd (a, b) {
-      return Math.floor((b - a + 1) * Math.random()) + a
-    },
-    rndElement (arr) {
-      return arr[this.rnd(0, arr.length - 1)]
     },
 
     changeColor (color) {
       this.selectedEvent.color = color
     },
+
     newEvent () {
       this.selectedEvent.name = this.eventName
       this.selectedOpen = false
-      this.$store.dispatch('addEvent')
+      this.$store.dispatch('schedule/addEvent', this.selectedEvent)
     },
+
     deleteEvent () {
-      this.selectedEvent = {}
+      this.selectedOpen = false
+      this.$store.dispatch('schedule/deleteEvent', this.selectedEvent.id)
+    },
+
+    cancelEvent () {
+      // DBに登録していない要素は削除する
+      if (!this.selectedEvent.id) { this.events.pop() }
       this.selectedOpen = false
     }
   }

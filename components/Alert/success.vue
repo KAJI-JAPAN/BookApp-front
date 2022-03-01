@@ -5,7 +5,7 @@
     dense
     class="alert"
   >
-    登録しました。
+    <slot />
   </v-alert>
 </template>
 <script>
@@ -14,7 +14,7 @@ import '@/assets/css/alert.scss'
 export default {
   computed: {
     alert () {
-      return this.$store.state.alertRegister
+      return this.$store.state.alertSuccess
     }
   }
 }

@@ -5,7 +5,7 @@
     dense
     class="alert"
   >
-    登録に失敗しました。
+    <slot />
   </v-alert>
 </template>
 <script>
