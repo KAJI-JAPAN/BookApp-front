@@ -1,5 +1,6 @@
 <template>
   <v-row class="fill-height">
+    <!-- アラート -->
     <AlertSuccess>
       行動を保存しました
     </AlertSuccess>
@@ -7,10 +8,12 @@
       行動を削除しました
     </AlertDeleteText>
 
-    <!-- 月カレンダー -->
+    <!-- ヘッダー -->
     <v-col cols="12">
       <v-app-bar>
-        <v-app-bar-title class="mr-8">習慣化カレンダー</v-app-bar-title>
+        <v-app-bar-title class="mr-8">
+          習慣化カレンダー
+        </v-app-bar-title>
         <v-btn
           class="ma-2"
           outlined
@@ -25,12 +28,12 @@
         >
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
-        <v-appber-title
+        <v-app-bar-title
           v-if="$refs.calendar"
           class="ma-6"
         >
           {{ $refs.calendar.title }}
-        </v-appber-title>
+        </v-app-bar-title>
         <v-btn
           icon
           class="ma-2"
@@ -40,6 +43,8 @@
         </v-btn>
       </v-app-bar>
     </v-col>
+
+    <!-- 月カレンダー -->
     <v-row>
       <v-col class="pr-0 ml-5">
         <v-sheet height="300">
@@ -51,8 +56,231 @@
             locale="ja-jp"
           />
         </v-sheet>
+        <v-divider class="ma-8" />
+
+        <!-- 日付まとめて入力ボタン -->
+        <v-row justify="center">
+          <v-dialog
+            v-model="dialog"
+            persistent
+            max-width="600px"
+          >
+            <template #activator="{ on, attrs }">
+              <div class="text-center">
+                <v-btn
+                  rounded
+                  color="red"
+                  dark
+                  outlined
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  <v-icon>mdi-fire</v-icon>
+                  アクションをまとめて入力する
+                </v-btn>
+              </div>
+            </template>
+            <v-card>
+              <!-- タイトル -->
+              <v-card-title>
+                <v-col cols="10">
+                  <v-text-field
+                    v-model="eventName"
+                    solo
+                    label="アクションを入力..."
+                    flat
+                    autofocus
+                    class="mt-7"
+                    prepend-icon="mdi-pencil"
+                  />
+                </v-col>
+
+                <!-- 色変更ボタンー -->
+                <v-col>
+                  <v-menu offset-y>
+                    <template #activator="{ on, attrs }">
+                      <v-btn
+                        icon
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        <v-icon
+                          :color="selectedEvent.color"
+                        >
+                          mdi-brightness-1
+                        </v-icon>
+                      </v-btn>
+                    </template>
+                    <v-list>
+                      <v-list-item
+                        v-for="(color, index) in colors"
+                        :key="index"
+                      >
+                        <v-icon
+                          :color="color"
+                          @click="changeColor(color)"
+                        >
+                          mdi-brightness-1
+                        </v-icon>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                </v-col>
+              </v-card-title>
+
+              <!-- 開始日入力 -->
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="4">
+                      <v-menu
+                        v-model="inputMenu"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="auto"
+                      >
+                        <template #activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="date"
+                            label="開始日"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            v-bind="attrs"
+                            v-on="on"
+                          />
+                        </template>
+                        <v-date-picker
+                          v-model="date"
+                          no-title
+                          scrollable
+                          locale="jp-ja"
+                          :day-format="date => new Date(date).getDate()"
+                          @input="inputMenu = false"
+                        />
+                      </v-menu>
+                    </v-col>
+                    <!-- 開始時間入力 -->
+                    <v-col align-self="center" cols="3">
+                      <v-menu
+                        ref="menu"
+                        v-model="timePickerMenuStart"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        :return-value.sync="timePickerStart"
+                        transition="scale-transition"
+                        offset-y
+                        max-width="290px"
+                        min-width="290px"
+                      >
+                        <template #activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="timePickerStart"
+                            label="開始時間"
+                            prepend-icon="mdi-clock-time-four-outline"
+                            readonly
+                            v-bind="attrs"
+                            v-on="on"
+                          />
+                        </template>
+                        <v-time-picker
+                          v-if="timePickerMenuStart"
+                          v-model="timePickerStart"
+                          full-width
+                          format="24hr"
+                          @click:minute="$refs.menu.save(timePickerStart)"
+                        />
+                      </v-menu>
+                    </v-col>
+                    <!-- 終了時間 -->
+                    <v-col cols="3">
+                      <v-menu
+                        ref="menu"
+                        v-model="timePickerMenuEnd"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        :return-value.sync="timePickerEnd"
+                        transition="scale-transition"
+                        offset-y
+                        max-width="290px"
+                        min-width="290px"
+                      >
+                        <template #activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="timePickerEnd"
+                            label="終了時間"
+                            prepend-icon="mdi-clock-time-four-outline"
+                            readonly
+                            v-bind="attrs"
+                            v-on="on"
+                          />
+                        </template>
+                        <v-time-picker
+                          v-if="timePickerMenuEnd"
+                          v-model="timePickerEnd"
+                          full-width
+                          format="24hr"
+                          @click:minute="$refs.menu.save(timePickerEnd)"
+                        />
+                      </v-menu>
+                    </v-col>
+
+                    <v-col cols="12">
+                      <v-text-field
+                        label="Password*"
+                        type="password"
+                        required
+                      />
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      sm="6"
+                    >
+                      <v-select
+                        :items="['0-17', '18-29', '30-54', '54+']"
+                        label="Age*"
+                        required
+                      />
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      sm="6"
+                    >
+                      <v-autocomplete
+                        :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
+                        label="Interests"
+                        multiple
+                      />
+                    </v-col>
+                  </v-row>
+                </v-container>
+                <small>*indicates required field</small>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer />
+                <v-btn
+                  color="blue darken-1"
+                  text
+                  @click="dialog = false"
+                >
+                  閉じる
+                </v-btn>
+                <v-btn
+                  color="blue darken-1"
+                  text
+                  @click="dialog = false"
+                >
+                  保存する
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+        <ScheduleEventCustomEventForm />
       </v-col>
-      <!--  -->
+
+      <!-- 週カレンダー -->
       <v-col cols="9" class="pl-0">
         <v-sheet height="600">
           <v-calendar
@@ -82,14 +310,7 @@
                 class="v-event-drag-bottom"
                 @mousedown.stop="extendBottom(event)"
               />
-
-              <!-- イベントクリックした時の編集表示 -->
-              <!-- <v-menu
-              :value="selectedOpen"
-              :close-on-content-click="false"
-              :activator="selectedElement"
-              offset-x
-            > -->
+              <!-- イベント作成クリック時のダイアログ -->
               <v-dialog
                 v-model="selectedOpen"
                 persistent
@@ -101,7 +322,6 @@
                   flat
                 >
                   <v-toolbar>
-                    <v-icon>mdi-pencil</v-icon>
                     <v-text-field
                       v-model="eventName"
                       solo
@@ -109,6 +329,7 @@
                       flat
                       autofocus
                       class="mt-7"
+                      prepend-icon="mdi-pencil"
                     />
                     <v-spacer />
 
@@ -156,6 +377,7 @@
                   </v-toolbar>
                   <v-card-text>
                     <!-- <span v-html="selectedEvent.details" /> -->
+                    <!-- 登録した日付と時間を表示 -->
                     <v-list-item>
                       <v-row align="center">
                         <v-col cols="2">
@@ -197,7 +419,6 @@
                   </v-card-actions>
                 </v-card>
               </v-dialog>
-            <!-- </v-menu> -->
             <!--  -->
             </template>
           </v-calendar>
@@ -214,43 +435,56 @@ import moment from 'moment'
 
 export default {
 
-  data: () => ({
-    events: [],
-    value: '',
-    colors: ['#2196F3', '#3F51B5', '#673AB7', '#00BCD4', '#4CAF50', '#FF9800', '#757575'],
-    dragEvent: null,
-    dragStart: null,
-    createEvent: null,
-    createStart: null,
-    extendOriginal: null,
-    selectedElement: null,
-    selectedOpen: false,
-    menu: false,
-    eventName: '',
-    selectedEvent: {},
-    dialog: false,
-    datevVlue: moment().format('yyyy-MM-DD')
-  }),
+  data () {
+    return {
+    // カレンダー用
+      events: [],
+      value: '',
+      colors: ['#2196F3', '#3F51B5', '#673AB7', '#00BCD4', '#4CAF50', '#FF9800', '#757575'],
+      dragEvent: null,
+      dragStart: null,
+      createEvent: null,
+      createStart: null,
+      extendOriginal: null,
+      selectedElement: null,
+      selectedOpen: false,
+      menu: false,
+      eventName: '',
+      selectedEvent: {},
+      dialog: false,
+      datevVlue: moment().format('yyyy-MM-DD'),
+
+      // まとめて入力用
+      dateMenu: false,
+      date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+      modal: false,
+      inputMenu: false,
+      timeValue: '',
+      timePickerMenuStart: false,
+      timePickerMenuEnd: false,
+      timePickerStart: null,
+      timePickerEnd: null
+    }
+  },
 
   computed: {
 
     // storeからコピーして参照
     // events () {
     //   // return { ...this.$store.state.schedule.events }
-    //   return this.$store.state.schedule.events
-    // },
+    //   return JSON.parse(JSON.stringify(this.$store.state.schedule.events))
+    // }
 
-    title () {
-      return moment(this.dateValue).format('yyyy年 M月')
-    },
+    // ゲッターズから値を参照
+    // events () {
+    //   return this.$store.getters.schedule.events
+    // }
 
-    // storeからコピーしたイベントを代入
-    cloneEvents () {
-      return {
-        methods: this.copyEvents(),
-        log: console.log(this.events)
-      }
-    }
+    // createEvent () {
+    //   return JSON.parse(JSON.stringify(this.$store.state.schedule.createEvent))
+
+    // }
+
   },
 
   mounted () {
@@ -276,18 +510,6 @@ export default {
   },
 
   methods: {
-    // store/schedsuleのeventsからデータを取得してschedule.vueのeventsに追加
-    // copyEvents () {
-    //   const storeEvents = this.$store.state.schedule.events
-    //   const clone = storeEvents.map(event => ({
-    //     id: event.id,
-    //     name: event.name,
-    //     color: event.color,
-    //     start: event.start,
-    //     end: event.end
-    //   }))
-    //   this.events.push(clone)
-    // },
     setToday () {
       this.value = moment().format('yyyy-MM-DD')
     },
@@ -319,7 +541,7 @@ export default {
         this.events.push(this.createEvent)
 
         // store用
-        // this.$store.commit('schedule/setEvent', this.createEvent)
+        // this.$store.commit('schedule/pushCreateEvent', this.createEvent)
         // console.log(this.events)
       }
     },
