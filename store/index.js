@@ -47,9 +47,9 @@ export const actions = {
       }
     })
       .then((response) => {
-        commit('alertSwitchRegister', true)
+        commit('alertSwitchSuccess', true)
         setTimeout(() => {
-          commit('alertSwitchRegister', false)
+          commit('alertSwitchSuccess', false)
         }, 3000)
         commit('book/responseBook', response)
         commit('book/clearBook')

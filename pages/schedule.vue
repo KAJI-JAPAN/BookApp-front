@@ -277,6 +277,7 @@
             </v-card>
           </v-dialog>
         </v-row>
+
         <ScheduleEventCustomEventForm />
       </v-col>
 
@@ -438,12 +439,12 @@ export default {
   data () {
     return {
     // カレンダー用
-      events: [],
+      // events: [],
+      // createEvent: null,
       value: '',
       colors: ['#2196F3', '#3F51B5', '#673AB7', '#00BCD4', '#4CAF50', '#FF9800', '#757575'],
       dragEvent: null,
       dragStart: null,
-      createEvent: null,
       createStart: null,
       extendOriginal: null,
       selectedElement: null,
@@ -470,21 +471,16 @@ export default {
   computed: {
 
     // storeからコピーして参照
-    // events () {
-    //   // return { ...this.$store.state.schedule.events }
-    //   return JSON.parse(JSON.stringify(this.$store.state.schedule.events))
-    // }
+    events () {
+      // return { ...this.$store.state.schedule.events }
+      // return JSON.parse(JSON.stringify(this.$store.state.schedule.events))
+      return this.$store.state.schedule.events
+    },
 
-    // ゲッターズから値を参照
-    // events () {
-    //   return this.$store.getters.schedule.events
-    // }
-
-    // createEvent () {
-    //   return JSON.parse(JSON.stringify(this.$store.state.schedule.createEvent))
-
-    // }
-
+    createEvent () {
+      // return JSON.parse(JSON.stringify(this.$store.state.schedule.createEvent))
+      return this.$store.state.schedule.createEvent
+    }
   },
 
   mounted () {
@@ -499,11 +495,11 @@ export default {
             color: res.color,
             start: res.start,
             end: res.end,
-            updated_at: res.created_at,
-            timed: res.timed
+            updated_at: res.created_at
+            // timed: res.timed
           }
-          this.events.push(data)
-          // this.$store.commit('schedule/setEvent', data)
+          // this.events.push(data)
+          this.$store.commit('schedule/setEvent', data)
           // console.log(this.cloneevent)
         })
       })
@@ -530,23 +526,32 @@ export default {
         this.dragTime = mouse - start
       } else {
         this.createStart = this.roundTime(mouse)
-        this.createEvent = {
+        // this.createEvent = {
+        //   name: '',
+        //   color: '#2196F3',
+        //   start: this.createStart,
+        //   end: this.createStart,
+        //   timed: true
+        // }
+
+        // this.events.push(this.createEvent)
+
+        // store用
+        const event = {
           name: '',
           color: '#2196F3',
           start: this.createStart,
           end: this.createStart,
           timed: true
         }
-
-        this.events.push(this.createEvent)
-
-        // store用
-        // this.$store.commit('schedule/pushCreateEvent', this.createEvent)
-        // console.log(this.events)
+        this.$store.commit('schedule/setCreateEvent', event)
+        this.$store.commit('schedule/pushCreateEvent', this.createEvent)
       }
     },
     extendBottom (event) {
-      this.createEvent = event
+      // store用
+      this.$store.commit('schedule/setCreateEvent', event)
+      // this.createEvent = event
       this.createStart = event.start
       this.extendOriginal = event.end
     },
@@ -567,14 +572,18 @@ export default {
         const min = Math.min(mouseRounded, this.createStart)
         const max = Math.max(mouseRounded, this.createStart)
 
-        this.createEvent.start = min
-        this.createEvent.end = max
+        // this.createEvent.start = min
+        // this.createEvent.end = max
+        // store用
+        this.$store.commit('schedule/updateCreateEvent', { start: min, end: max })
       }
     },
     endDrag ({ nativeEvent, event }) {
+      // store用
+      this.$store.commit('schedule/setCreateEvent', null)
       this.dragTime = null
       this.dragEvent = null
-      this.createEvent = null
+      // this.createEvent = null
       this.createStart = null
       this.extendOriginal = null
       this.showEvent({ nativeEvent, event })
@@ -582,19 +591,20 @@ export default {
     cancelDrag () {
       if (this.createEvent) {
         if (this.extendOriginal) {
-          this.createEvent.end = this.extendOriginal
-        } else {
-          const i = this.events.indexOf(this.createEvent)
-          if (i !== -1) {
-            this.events.splice(i, 1)
-          }
+          // this.createEvent.end = this.extendOriginal
+        // } else {
+          // const i = this.events.indexOf(this.createEvent)
+          // if (i !== -1) {
+          //   this.events.splice(i, 1)
+          // }
 
           // stror用
-          // this.$store.commit('schedule/isCancelDragEvent', this.createEvent)
+          this.$store.commit('schedule/isCancelDragEvent')
         }
       }
 
-      this.createEvent = null
+      // this.createEvent = null
+      this.$store.commit('schedule/setCreateEvent', null)
       this.createStart = null
       this.dragTime = null
       this.dragEvent = null
@@ -621,7 +631,7 @@ export default {
       return new Date(tms).toLocaleString('ja-JP', { hour: 'numeric', minute: 'numeric' })
     },
 
-    // イベント編集
+    // イベント編集menuを表示
     showEvent ({ nativeEvent, event }) {
       const open = () => {
         this.selectedEvent = event
@@ -637,25 +647,25 @@ export default {
       }
       nativeEvent.stopPropagation()
     },
-
+    //  表示するイベントカラーを変更
     changeColor (color) {
       this.selectedEvent.color = color
     },
-
+    // イベント作成
     newEvent () {
       this.selectedEvent.name = this.eventName
       this.selectedOpen = false
       this.$store.dispatch('schedule/addEvent', this.selectedEvent)
     },
-
+    // 既存のイベントを削除
     deleteEvent () {
       this.selectedOpen = false
       this.$store.dispatch('schedule/deleteEvent', this.selectedEvent.id)
     },
 
+    // DBに登録していない要素は削除する
     cancelEvent () {
-      // DBに登録していない要素は削除する
-      if (!this.selectedEvent.id) { this.events.pop() }
+      if (!this.selectedEvent.id) { this.$store.commit('schedule/cancelEvent') }
       this.selectedOpen = false
     }
   }

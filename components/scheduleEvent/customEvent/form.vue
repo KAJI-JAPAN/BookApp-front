@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 <template>
   <!-- 日付まとめて入力ボタン -->
   <v-row justify="center">
@@ -98,6 +99,7 @@
                     scrollable
                     locale="jp-ja"
                     :day-format="date => new Date(date).getDate()"
+                    :allowed-dates="allowedDate"
                     @input="inputMenu = false"
                   />
                 </v-menu>
@@ -109,7 +111,6 @@
                   v-model="timePickerMenuStart"
                   :close-on-content-click="false"
                   :nudge-right="40"
-                  :return-value.sync="timePickerStart"
                   transition="scale-transition"
                   offset-y
                   max-width="290px"
@@ -130,7 +131,10 @@
                     v-model="timePickerStart"
                     full-width
                     format="24hr"
-                    @click:minute="$refs.menu.save(timePickerStart)"
+                    :allowed-hours="timePickerStartHours"
+                    :allowed-minutes="timePickerStartMnites"
+                    @change="startTimeSave(timePickerStart)"
+                    @click:hour="getHoursStart"
                   />
                 </v-menu>
               </v-col>
@@ -141,7 +145,6 @@
                   v-model="timePickerMenuEnd"
                   :close-on-content-click="false"
                   :nudge-right="40"
-                  :return-value.sync="timePickerEnd"
                   transition="scale-transition"
                   offset-y
                   max-width="290px"
@@ -162,43 +165,34 @@
                     v-model="timePickerEnd"
                     full-width
                     format="24hr"
-                    @click:minute="$refs.menu.save(timePickerEnd)"
+                    :allowed-hours="timePickerEndHours"
+                    :allowed-minutes="timePickerEndMnites"
+                    :disabled="disabled"
+                    @click:hour="getHoursEnd"
+                    @change="endTimeSave(timePickerEnd)"
                   />
                 </v-menu>
               </v-col>
-
-              <v-col cols="12">
-                <v-text-field
-                  label="Password*"
-                  type="password"
-                  required
-                />
-              </v-col>
+              <!-- 日数選択 -->
               <v-col
-                cols="12"
+                class="d-flex"
+                cols="3"
                 sm="6"
               >
                 <v-select
-                  :items="['0-17', '18-29', '30-54', '54+']"
-                  label="Age*"
-                  required
-                />
-              </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-              >
-                <v-autocomplete
-                  :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
-                  label="Interests"
-                  multiple
+                  v-model="selectData"
+                  :items="selectDateItems"
+                  label="続ける日数を選ぶ"
+                  dense
+                  single-line
+                  class="ml-5"
                 />
               </v-col>
             </v-row>
+            <small class="ml-5">習慣化おすすめは60日です。運動などは習慣化が難しいため250日をおすすめします。</small>
           </v-container>
-          <small>*indicates required field</small>
         </v-card-text>
-        <v-card-actions>
+        <v-card-actions class="pt-0">
           <v-spacer />
           <v-btn
             color="blue darken-1"
@@ -210,7 +204,7 @@
           <v-btn
             color="blue darken-1"
             text
-            @click="dialog = false"
+            @click="addEvent"
           >
             保存する
           </v-btn>
@@ -237,12 +231,114 @@ export default {
       timePickerMenuEnd: false,
       timePickerStart: null,
       timePickerEnd: null,
-      dialog: false
+      dialog: false,
+      getStartTime: null,
+      getEndtime: null,
+      disabled: true,
+      // 日数選択
+      selectDateItems: ['60日(約２ヶ月)', '250日(約８ヶ月)', '平日（月-金）'],
+      selectDate: ''
     }
   },
 
   methods: {
 
+    timeInterval (time) {
+      return time % 15 === 0
+    },
+    // 開始時間保存
+    startTimeSave (value) {
+      this.timePickerStart = value
+      this.timePickerMenuStart = false
+      this.disabled = false
+      console.log(this.date, this.timePickerStart)
+    },
+    // 終了時間保存
+    endTimeSave (value) {
+      this.timePickerEnd = value
+      this.timePickerMenuEnd = false
+      for (let i=0; i< 30; i++) {
+         const date = moment(`this.date`).add(i, "days")
+         const data = {
+         name: this.eventName,
+        //  start: Date.parse(`${date} ${this.timePickerStart}`),
+        //  end: Date.parse(`${date} ${this.timePickerEnd}` ),
+         time: true
+        }
+        //  console.log(`${date} ${this.timePickerEnd}`)
+      }
+    },
+    
+    // 選択「月」を制限
+    allowedDate (value) {
+      return value >= moment().format('YYYY-MM-DD')
+    },
+
+    // 開始時間選択「時間」を制限
+    timePickerStartHours (value) {
+    // return value !== new Date().getHours()
+      const today = moment().format('YYYY-MM-DD')
+      if (this.date === today) {
+        return value >= new Date().getHours()
+      } else {
+        return true
+      }
+    },
+
+    // 開始時間を取得
+    getHoursStart (value) {
+      this.getStartTime = value
+    },
+    // 開始時間選択「分」を制限
+    timePickerStartMnites (value) {
+      // const today = new Date().toISOString().substr(0, 10)
+      // console.log(this.getStartTime)
+      const todayHours = new Date().getHours()
+      if (todayHours === this.getStartTime) {
+        if (value >= new Date().getMinutes()) { return this.timeInterval(value) }
+        return false
+      } else {
+        return this.timeInterval(value)
+      }
+    },
+
+    // 終了時間選択「時間」を制限
+    timePickerEndHours (value) {
+      return value >= this.timePickerStart.substr(0, 2)
+    },
+
+    // 終了時間「時間」を取得
+    getHoursEnd (value) {
+      this.getEndtime = value
+    },
+
+    // 終了時間選択「分」を制限
+    timePickerEndMnites (value) {
+      const startTimeHours = this.timePickerStart.substr(0, 2)
+      const startTimeMinites = this.timePickerStart.substr(3, 4)
+      // eslint-disable-next-line eqeqeq
+      if (startTimeHours == this.getEndtime) {
+        if (value > startTimeMinites) { return this.timeInterval(value) }
+        return false
+      } else {
+        return this.timeInterval(value)
+      }
+    }
+    // ,
+
+    // addEvent () {
+    //     for (let i=0; i< 30; i++) {
+    //      const date = moment(`this.date`).add(i, "days")
+    //      const data = {
+    //      name: this.eventName,
+    //      start: Date.parse(`date ${this.timePickerStart}`),
+    //      end: Date.parse(`date ${this.timePickerEnd}` ),
+    //      time: true
+    //   }
+    //   送る用の関数
+    //  }
+    //   this.dialog = false
+    // }
   }
 }
 </script>

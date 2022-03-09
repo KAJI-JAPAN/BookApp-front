@@ -14,17 +14,12 @@
           x-large
           rounded
         >
-          <v-icon
-            color="primary"
-            class="ma-2"
-          >
-            <!-- mdi-twitter -->
-          </v-icon>
           新規登録
         </v-btn>
         <v-btn
           x-large
           rounded
+          class="pa-2"
         >
           ゲストで使う
         </v-btn>
