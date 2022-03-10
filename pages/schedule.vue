@@ -105,7 +105,7 @@
                         v-on="on"
                       >
                         <v-icon
-                          :color="selectedEvent.color"
+                          :color="pendingColor"
                         >
                           mdi-brightness-1
                         </v-icon>
@@ -278,7 +278,7 @@
           </v-dialog>
         </v-row>
 
-        <ScheduleEventCustomEventForm />
+        <!-- <ScheduleEventCustomEventForm /> -->
       </v-col>
 
       <!-- 週カレンダー -->
@@ -344,7 +344,7 @@
                             v-on="on"
                           >
                             <v-icon
-                              :color="selectedEvent.color"
+                              :color="pendingColor"
                             >
                               mdi-brightness-1
                             </v-icon>
@@ -439,8 +439,6 @@ export default {
   data () {
     return {
     // カレンダー用
-      // events: [],
-      // createEvent: null,
       value: '',
       colors: ['#2196F3', '#3F51B5', '#673AB7', '#00BCD4', '#4CAF50', '#FF9800', '#757575'],
       dragEvent: null,
@@ -454,6 +452,7 @@ export default {
       selectedEvent: {},
       dialog: false,
       datevVlue: moment().format('yyyy-MM-DD'),
+      pendingColor: '',
 
       // まとめて入力用
       dateMenu: false,
@@ -495,8 +494,8 @@ export default {
             color: res.color,
             start: res.start,
             end: res.end,
-            updated_at: res.created_at
-            // timed: res.timed
+            updated_at: res.created_at,
+            timed: res.timed
           }
           // this.events.push(data)
           this.$store.commit('schedule/setEvent', data)
@@ -647,14 +646,20 @@ export default {
       }
       nativeEvent.stopPropagation()
     },
-    //  表示するイベントカラーを変更
+
+    //  表示するイベントカラーを仮保存
     changeColor (color) {
+      // this.pendingColor = this.selectedEvent.color ?? ''
       this.selectedEvent.color = color
     },
     // イベント作成
     newEvent () {
       this.selectedEvent.name = this.eventName
       this.selectedOpen = false
+      // this.selectedEvent.start / 1000
+      // this.selectedEvent / 1000
+      console.log(this.selectedEvent.start / 1000)
+      // this.selectedEvent.color = this.pendingColor
       this.$store.dispatch('schedule/addEvent', this.selectedEvent)
     },
     // 既存のイベントを削除
@@ -667,6 +672,7 @@ export default {
     cancelEvent () {
       if (!this.selectedEvent.id) { this.$store.commit('schedule/cancelEvent') }
       this.selectedOpen = false
+      this.pendingColor = ''
     }
   }
 }

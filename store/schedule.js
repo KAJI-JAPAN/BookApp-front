@@ -53,11 +53,22 @@ export const actions = {
         start: selectedEvent.start,
         end: selectedEvent.end,
         color: selectedEvent.color
-        // bookId: ,
       }
     })
       .then((response) => {
-        commit('setEvent', response)
+        response.forEach((res) => {
+          data = {
+          id: res.id,
+          name: res.name,
+          color: res.color,
+          start: res.start,
+          end: res.end,
+          updated_at: res.created_at,
+          timed: res.timed
+          }
+          commit('setEvent', data)
+        })
+
         commit('alertSwitchSuccess', true, { root: true })
         setTimeout(() => {
           commit('alertSwitchSuccess', false, { root: true })
