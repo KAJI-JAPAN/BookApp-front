@@ -2,11 +2,16 @@ import * as url from './constants/url'
 
 export const state = () => ({
   events: [],
-  createEvent: null,
-  // createEvent: null
+  createEvent: null
 })
 
 export const mutations = {
+
+  // responseDataSet (state, payload) {
+  //   payload.forEach((res) => {
+  //     state.events.push(res)
+  //   })
+  // },
 
   updateCreateEvent (state, payload) {
     state.createEvent.start= payload.start
@@ -19,6 +24,7 @@ export const mutations = {
 
   setEvent (state, payload) {
     state.events.push(payload)
+    console.log(state.events)
   },
 
   pushCreateEvent (state) {
@@ -34,19 +40,19 @@ export const mutations = {
 
   cancelEvent (state) {
     state.events.pop()
+  },
+
+  deleteEvent(state, payload) {
+    // let index =  state.events.findIndex(val => val === payload )
+    state.events.splice(state.events.indexOf(payload), 1)
+    console.log(state.events)
   }
 }
 
-export const getters = {
-  events(state) {
-    return state.events
-  }
-}
 
 export const actions = {
-  addEvent ({ commit, state }, data) {
+  addEvent ({ commit }, data) {
     const selectedEvent = data
-
     this.$axios.$post(url.SCHEDULE_API, {
       post: {
         name: selectedEvent.name,
@@ -56,31 +62,28 @@ export const actions = {
       }
     })
       .then((response) => {
-        response.forEach((res) => {
-          data = {
-          id: res.id,
-          name: res.name,
-          color: res.color,
-          start: res.start,
-          end: res.end,
-          updated_at: res.created_at,
-          timed: res.timed
+        console.log(response)
+         let data = {
+            id: response.id,
+            name: response.name,
+            color: response.color,
+            start: parseInt(response.start),
+            end: parseInt(response.end),
+            updated_at: response.created_at,
+            timed: response.timed
           }
-          commit('setEvent', data)
-        })
-
+        commit('setEvent', data)
         commit('alertSwitchSuccess', true, { root: true })
         setTimeout(() => {
           commit('alertSwitchSuccess', false, { root: true })
         }, 3000)
       })
-      console.log(state.events)
   },
 
-  deleteEvent ({ state, commit }, eventId) {
-    this.$axios.$delete(`${url.SCHEDULE_API}/${eventId}`)
-      .then((response) => {
-        commit('setEvent', response)
+  deleteEvent ({ state, commit }, selectedEvent) {
+    this.$axios.$delete(`${url.SCHEDULE_API}/${selectedEvent.id}`)
+    .then((response) => {
+      commit('deleteEvent', selectedEvent)
         commit('alertSwitchDelete', true, { root: true })
         setTimeout(() => {
           commit('alertSwitchDelete', false, { root: true })

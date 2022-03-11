@@ -316,6 +316,7 @@
                 v-model="selectedOpen"
                 persistent
                 max-width="500px"
+                :retain-focus="false"
                 @click:outside="cancelEvent"
               >
                 <v-card
@@ -469,15 +470,11 @@ export default {
 
   computed: {
 
-    // storeからコピーして参照
     events () {
-      // return { ...this.$store.state.schedule.events }
-      // return JSON.parse(JSON.stringify(this.$store.state.schedule.events))
       return this.$store.state.schedule.events
     },
 
     createEvent () {
-      // return JSON.parse(JSON.stringify(this.$store.state.schedule.createEvent))
       return this.$store.state.schedule.createEvent
     }
   },
@@ -485,7 +482,6 @@ export default {
   mounted () {
     this.$axios.$get(url.SCHEDULE_API + '.json')
       .then((response) => {
-        // this.$store.commit('schedule/responseEvent', response)
         let data
         response.forEach((res) => {
           data = {
@@ -497,9 +493,7 @@ export default {
             updated_at: res.created_at,
             timed: res.timed
           }
-          // this.events.push(data)
           this.$store.commit('schedule/setEvent', data)
-          // console.log(this.cloneevent)
         })
       })
   },
@@ -525,16 +519,6 @@ export default {
         this.dragTime = mouse - start
       } else {
         this.createStart = this.roundTime(mouse)
-        // this.createEvent = {
-        //   name: '',
-        //   color: '#2196F3',
-        //   start: this.createStart,
-        //   end: this.createStart,
-        //   timed: true
-        // }
-
-        // this.events.push(this.createEvent)
-
         // store用
         const event = {
           name: '',
@@ -550,7 +534,6 @@ export default {
     extendBottom (event) {
       // store用
       this.$store.commit('schedule/setCreateEvent', event)
-      // this.createEvent = event
       this.createStart = event.start
       this.extendOriginal = event.end
     },
@@ -571,8 +554,6 @@ export default {
         const min = Math.min(mouseRounded, this.createStart)
         const max = Math.max(mouseRounded, this.createStart)
 
-        // this.createEvent.start = min
-        // this.createEvent.end = max
         // store用
         this.$store.commit('schedule/updateCreateEvent', { start: min, end: max })
       }
@@ -582,7 +563,6 @@ export default {
       this.$store.commit('schedule/setCreateEvent', null)
       this.dragTime = null
       this.dragEvent = null
-      // this.createEvent = null
       this.createStart = null
       this.extendOriginal = null
       this.showEvent({ nativeEvent, event })
@@ -590,19 +570,11 @@ export default {
     cancelDrag () {
       if (this.createEvent) {
         if (this.extendOriginal) {
-          // this.createEvent.end = this.extendOriginal
-        // } else {
-          // const i = this.events.indexOf(this.createEvent)
-          // if (i !== -1) {
-          //   this.events.splice(i, 1)
-          // }
-
           // stror用
           this.$store.commit('schedule/isCancelDragEvent')
         }
       }
 
-      // this.createEvent = null
       this.$store.commit('schedule/setCreateEvent', null)
       this.createStart = null
       this.dragTime = null
@@ -656,16 +628,13 @@ export default {
     newEvent () {
       this.selectedEvent.name = this.eventName
       this.selectedOpen = false
-      // this.selectedEvent.start / 1000
-      // this.selectedEvent / 1000
-      console.log(this.selectedEvent.start / 1000)
       // this.selectedEvent.color = this.pendingColor
       this.$store.dispatch('schedule/addEvent', this.selectedEvent)
     },
     // 既存のイベントを削除
     deleteEvent () {
       this.selectedOpen = false
-      this.$store.dispatch('schedule/deleteEvent', this.selectedEvent.id)
+      this.$store.dispatch('schedule/deleteEvent', this.selectedEvent)
     },
 
     // DBに登録していない要素は削除する
