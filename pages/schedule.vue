@@ -30,7 +30,7 @@
         </v-btn>
         <v-app-bar-title
           v-if="$refs.calendar"
-          class="ma-6"
+          class="ma-6 pa-3"
         >
           {{ $refs.calendar.title }}
         </v-app-bar-title>
@@ -450,7 +450,7 @@ export default {
       selectedOpen: false,
       menu: false,
       eventName: '',
-      selectedEvent: {},
+      // selectedEvent: {},
       dialog: false,
       datevVlue: moment().format('yyyy-MM-DD'),
       pendingColor: '',
@@ -476,6 +476,10 @@ export default {
 
     createEvent () {
       return this.$store.state.schedule.createEvent
+    },
+
+    selectedEvent () {
+      return this.$store.state.schedule.selectedEvent
     }
   },
 
@@ -605,7 +609,9 @@ export default {
     // イベント編集menuを表示
     showEvent ({ nativeEvent, event }) {
       const open = () => {
-        this.selectedEvent = event
+        // this.selectedEvent = event
+        // store
+        this.$store.commit('schedule/setSelectedEvent', event)
         this.selectedElement = nativeEvent.target
         requestAnimationFrame(() => requestAnimationFrame(() => { this.selectedOpen = true }))
       }
@@ -621,14 +627,16 @@ export default {
 
     //  表示するイベントカラーを仮保存
     changeColor (color) {
-      // this.pendingColor = this.selectedEvent.color ?? ''
-      this.selectedEvent.color = color
+      this.pendingColor = this.selectedEvent.color ?? ''
+      // this.selectedEvent.color = color
     },
     // イベント作成
     newEvent () {
-      this.selectedEvent.name = this.eventName
       this.selectedOpen = false
+      // this.selectedEvent.name = this.eventName
       // this.selectedEvent.color = this.pendingColor
+      this.$store.commit('schedule/setSelectedEventName', this.eventName)
+      this.$store.commit('schedule/setSelectedEventColor', this.pendingColor)
       this.$store.dispatch('schedule/addEvent', this.selectedEvent)
     },
     // 既存のイベントを削除

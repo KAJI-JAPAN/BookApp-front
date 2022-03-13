@@ -2,17 +2,27 @@ import * as url from './constants/url'
 
 export const state = () => ({
   events: [],
-  createEvent: null
+  createEvent: null,
+  selectedEvent: {}
 })
 
 export const mutations = {
 
-  // responseDataSet (state, payload) {
-  //   payload.forEach((res) => {
-  //     state.events.push(res)
-  //   })
-  // },
+  // selectedEvent
 
+  setSelectedEvent (state, payload) {
+    state.selectedEvent = payload
+  },
+
+  setSelectedEventColor (state, payload) {
+    state.selectedEvent.color = payload
+  },
+
+  setSelectedEventName (state, payload) {
+    state.selectedEvent.name = payload
+  },
+  
+  //  createEvent
   updateCreateEvent (state, payload) {
     state.createEvent.start= payload.start
     state.createEvent.end= payload.end
@@ -22,6 +32,7 @@ export const mutations = {
     state.createEvent = payload
   },
 
+  // events
   setEvent (state, payload) {
     state.events.push(payload)
     console.log(state.events)
