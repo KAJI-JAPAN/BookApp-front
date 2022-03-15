@@ -73,6 +73,8 @@ export const mutations = {
 
 
 export const actions = {
+
+  // イベント追加
   addEvent ({ commit }, selectedEvent) {
     this.$axios.$post(url.SCHEDULE_API, {
       post: {
@@ -101,6 +103,7 @@ export const actions = {
       })
   },
 
+  // イベント編集
   updateEvent ({ state, commit }, selectedEvent ) {
     this.$axios.$patch(`${url.SCHEDULE_API}/${selectedEvent.id}`, {
       post:  {
@@ -132,6 +135,7 @@ export const actions = {
     })
   },
 
+  // イベント削除
   deleteEvent ({ state, commit }, selectedEvent) {
     this.$axios.$delete(`${url.SCHEDULE_API}/${selectedEvent.id}`)
     .then((response) => {

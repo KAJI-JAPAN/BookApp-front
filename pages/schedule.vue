@@ -15,32 +15,38 @@
           習慣化カレンダー
         </v-app-bar-title>
         <v-btn
-          class="ma-2"
           outlined
+          class="mr-4"
+          color="grey darken-2"
           @click="setToday"
         >
           今日
         </v-btn>
         <v-btn
-          icon
-          class="ma-2"
+          fab
+          text
+          small
+          color="grey darken-2"
           @click="$refs.calendar.prev()"
         >
-          <v-icon>mdi-chevron-left</v-icon>
+          <v-icon small>
+            mdi-chevron-left
+          </v-icon>
         </v-btn>
-        <v-app-bar-title
-          v-if="$refs.calendar"
-          class="ma-6 pa-3"
-        >
-          {{ $refs.calendar.title }}
-        </v-app-bar-title>
         <v-btn
-          icon
-          class="ma-2"
+          fab
+          text
+          small
+          color="grey darken-2"
           @click="$refs.calendar.next()"
         >
-          <v-icon>mdi-chevron-right</v-icon>
+          <v-icon small>
+            mdi-chevron-right
+          </v-icon>
         </v-btn>
+        <v-toolbar-title v-if="$refs.calendar">
+          {{ $refs.calendar.title }}
+        </v-toolbar-title>
       </v-app-bar>
     </v-col>
 
