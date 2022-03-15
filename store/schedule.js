@@ -14,10 +14,12 @@ export const mutations = {
     state.selectedEvent = payload
   },
 
+  // イベントカラーを代入
   setSelectedEventColor (state, payload) {
     state.selectedEvent.color = payload
   },
 
+  // イベントネームを代入
   setSelectedEventName (state, payload) {
     state.selectedEvent.name = payload
   },
@@ -32,10 +34,12 @@ export const mutations = {
     state.createEvent = payload
   },
 
+
   // events
+
+  // イベント追加
   setEvent (state, payload) {
     state.events.push(payload)
-    console.log(state.events)
   },
 
   pushCreateEvent (state) {
@@ -49,20 +53,27 @@ export const mutations = {
     }
   },
 
+  // イベントキャンセル時削除
   cancelEvent (state) {
     state.events.pop()
   },
 
+  // イベントを指定削除
   deleteEvent(state, payload) {
     state.events.splice(state.events.indexOf(payload), 1)
+    console.log(state.events)
+  },
+
+  // イベント編集
+  updateEvent(state, { payload, updateEvent }) {
+    state.events.splice(state.events.indexOf(payload),1, updateEvent )
     console.log(state.events)
   }
 }
 
 
 export const actions = {
-  addEvent ({ commit }, data) {
-    const selectedEvent = data
+  addEvent ({ commit }, selectedEvent) {
     this.$axios.$post(url.SCHEDULE_API, {
       post: {
         name: selectedEvent.name,
@@ -90,6 +101,37 @@ export const actions = {
       })
   },
 
+  updateEvent ({ state, commit }, selectedEvent ) {
+    this.$axios.$patch(`${url.SCHEDULE_API}/${selectedEvent.id}`, {
+      post:  {
+        id: selectedEvent.id,
+        name: selectedEvent.name,
+        color: selectedEvent.color,
+        start: selectedEvent.start,
+        end: selectedEvent.end
+        // time: true
+      }
+    })
+    .then((response) => {
+      console.log(response)
+      let data = {
+        id: response.id,
+        name: response.name,
+        color: response.color,
+        start: parseInt(response.start),
+        end: parseInt(response.end),
+        // updated_at: response.created_at,
+        timed: true
+      }
+      console.log(data)
+      commit('updateEvent', { payload: selectedEvent, updateEvent: data })
+      commit('alertSwitchSuccess', true, { root: true })
+      setTimeout(() => {
+        commit('alertSwitchSuccess', false, { root: true })
+      }, 3000)
+    })
+  },
+
   deleteEvent ({ state, commit }, selectedEvent) {
     this.$axios.$delete(`${url.SCHEDULE_API}/${selectedEvent.id}`)
     .then((response) => {
@@ -99,6 +141,5 @@ export const actions = {
           commit('alertSwitchDelete', false, { root: true })
         }, 3000)
       })
-      console.log(state.events)
   }
 }

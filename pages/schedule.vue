@@ -628,24 +628,21 @@ export default {
 
     //  表示するイベントカラーを仮保存
     changeColor (color) {
-      // if (this.selectedEvent.id) {
-      //   this.pendingColor = this.selectedEvent.color
-      //   this.$store.commit('schedule/setSelectedEventColor', color)
-      // } else {
-      //   this.$store.commit('schedule/setSelectedEventColor', color)
-      // }
       this.pendingColor = this.selectedEvent.color
       this.$store.commit('schedule/setSelectedEventColor', color)
     },
 
-    // イベント作成
+    // イベント作成と編集
     newEvent () {
-      this.selectedOpen = false
-      // this.selectedEvent.name = this.eventName
-      // this.selectedEvent.color = this.pendingColor
-      this.$store.commit('schedule/setSelectedEventName', this.eventName)
-      this.$store.dispatch('schedule/addEvent', this.selectedEvent)
+      if (!this.selectedEvent.id) {
+        this.$store.commit('schedule/setSelectedEventName', this.eventName)
+        this.$store.dispatch('schedule/addEvent', this.selectedEvent)
+      } else {
+        this.$store.commit('schedule/setSelectedEventName', this.eventName)
+        this.$store.dispatch('schedule/updateEvent', this.selectedEvent)
+      }
       this.eventName = ''
+      this.selectedOpen = false
     },
     // 既存のイベントを削除
     deleteEvent () {
