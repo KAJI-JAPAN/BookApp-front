@@ -345,7 +345,7 @@
                             v-on="on"
                           >
                             <v-icon
-                              :color="pendingColor"
+                              :color="selectedEvent.color"
                             >
                               mdi-brightness-1
                             </v-icon>
@@ -614,6 +614,7 @@ export default {
         this.$store.commit('schedule/setSelectedEvent', event)
         this.selectedElement = nativeEvent.target
         requestAnimationFrame(() => requestAnimationFrame(() => { this.selectedOpen = true }))
+        this.eventName = this.selectedEvent.name
       }
 
       if (this.selectedOpen) {
@@ -627,17 +628,24 @@ export default {
 
     //  表示するイベントカラーを仮保存
     changeColor (color) {
-      this.pendingColor = this.selectedEvent.color ?? ''
-      // this.selectedEvent.color = color
+      // if (this.selectedEvent.id) {
+      //   this.pendingColor = this.selectedEvent.color
+      //   this.$store.commit('schedule/setSelectedEventColor', color)
+      // } else {
+      //   this.$store.commit('schedule/setSelectedEventColor', color)
+      // }
+      this.pendingColor = this.selectedEvent.color
+      this.$store.commit('schedule/setSelectedEventColor', color)
     },
+
     // イベント作成
     newEvent () {
       this.selectedOpen = false
       // this.selectedEvent.name = this.eventName
       // this.selectedEvent.color = this.pendingColor
       this.$store.commit('schedule/setSelectedEventName', this.eventName)
-      this.$store.commit('schedule/setSelectedEventColor', this.pendingColor)
       this.$store.dispatch('schedule/addEvent', this.selectedEvent)
+      this.eventName = ''
     },
     // 既存のイベントを削除
     deleteEvent () {
@@ -649,7 +657,7 @@ export default {
     cancelEvent () {
       if (!this.selectedEvent.id) { this.$store.commit('schedule/cancelEvent') }
       this.selectedOpen = false
-      this.pendingColor = ''
+      this.$store.commit('schedule/setSelectedEventColor', this.pendingColor)
     }
   }
 }

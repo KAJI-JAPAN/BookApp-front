@@ -54,7 +54,6 @@ export const mutations = {
   },
 
   deleteEvent(state, payload) {
-    // let index =  state.events.findIndex(val => val === payload )
     state.events.splice(state.events.indexOf(payload), 1)
     console.log(state.events)
   }
