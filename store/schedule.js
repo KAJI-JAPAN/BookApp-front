@@ -96,6 +96,7 @@ export const actions = {
             timed: response.timed
           }
         commit('setEvent', data)
+        // if (response >= 60 ) { location.reload() } 
         commit('alertSwitchSuccess', true, { root: true })
         setTimeout(() => {
           commit('alertSwitchSuccess', false, { root: true })

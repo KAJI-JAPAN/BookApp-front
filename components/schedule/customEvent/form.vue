@@ -47,7 +47,7 @@
                   v-on="on"
                 >
                   <v-icon
-                    :color="selectedEvent.color"
+                    :color="selectedColor"
                   >
                     mdi-brightness-1
                   </v-icon>
@@ -180,8 +180,10 @@
                 sm="6"
               >
                 <v-select
-                  v-model="selectData"
+                  v-model="selectDate"
                   :items="selectDateItems"
+                  item-text="state"
+                  item-value="id"
                   label="続ける日数を選ぶ"
                   dense
                   single-line
@@ -206,6 +208,7 @@
             text
             @click="addEvent"
           >
+          <!-- addEvent追加 -->
             保存する
           </v-btn>
         </v-card-actions>
@@ -221,6 +224,7 @@ export default {
       colors: ['#2196F3', '#3F51B5', '#673AB7', '#00BCD4', '#4CAF50', '#FF9800', '#757575'],
       eventName: '',
       selectedEvent: {},
+      selectedColor: '#2196F3',
       datevVlue: moment().format('yyyy-MM-DD'),
       dateMenu: false,
       date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
@@ -236,7 +240,10 @@ export default {
       getEndtime: null,
       disabled: true,
       // 日数選択
-      selectDateItems: ['60日(約２ヶ月)', '250日(約８ヶ月)', '平日（月-金）'],
+      selectDateItems: [
+        { id:1, state: '60日(約２ヶ月)'}, 
+        { id:2, state : '250日(約８ヶ月)' }, 
+      ],
       selectDate: ''
     }
   },
@@ -251,7 +258,6 @@ export default {
       this.timePickerStart = value
       this.timePickerMenuStart = false
       this.disabled = false
-      console.log(this.date, this.timePickerStart)
     },
     // 終了時間保存
     endTimeSave (value) {
@@ -316,29 +322,57 @@ export default {
     timePickerEndMnites (value) {
       const startTimeHours = this.timePickerStart.substr(0, 2)
       const startTimeMinites = this.timePickerStart.substr(3, 4)
-      // eslint-disable-next-line eqeqeq
       if (startTimeHours == this.getEndtime) {
         if (value > startTimeMinites) { return this.timeInterval(value) }
         return false
       } else {
         return this.timeInterval(value)
       }
-    }
-    // ,
+    },
 
-    // addEvent () {
-    //     for (let i=0; i< 30; i++) {
-    //      const date = moment(`this.date`).add(i, "days")
-    //      const data = {
-    //      name: this.eventName,
-    //      start: Date.parse(`date ${this.timePickerStart}`),
-    //      end: Date.parse(`date ${this.timePickerEnd}` ),
-    //      time: true
-    //   }
-    //   送る用の関数
-    //  }
-    //   this.dialog = false
-    // }
+    addEvent () {
+      const selectDate = this.selectDate
+      console.log(selectDate)
+
+      if (selectDate == 1) {
+        for (let i=0; i < 60; i++) {
+          const date = moment(`${this.date}`).add(i, 'd').format('YYYY-MM-DD')
+          const dateTimeStart = `${date} ${this.timePickerStart}`
+          const dateTimeEnd = `${date} ${this.timePickerEnd}` 
+          const data = {
+            name: this.eventName,
+            color: this.selectedColor,
+            start: Date.parse(dateTimeStart), 
+            end: Date.parse(dateTimeEnd),
+            time: true
+          }
+          this.$store.dispatch('schedule/addEvent', data)
+        }
+      }
+
+      if (selectDate == 2) {
+        for (let i=0; i < 250; i++) {
+          const date = moment(`${this.date}`).add(i, 'd').format('YYYY-MM-DD')
+          const dateTimeStart = `${date} ${this.timePickerStart}`
+          const dateTimeEnd = `${date} ${this.timePickerEnd}` 
+          const data = {
+            name: this.eventName,
+            color: this.selectedColor,
+            start: Date.parse(dateTimeStart),
+            end: Date.parse(dateTimeEnd),
+            time: true
+          }
+          this.$store.dispatch('schedule/addEvent', data)
+        }
+      }
+      this.dialog = false
+
+    },
+
+    changeColor (color) {
+      this.selectedColor = color
+    },
+
   }
 }
 </script>
