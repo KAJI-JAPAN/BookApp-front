@@ -152,16 +152,87 @@
                         </v-list>
                       </v-menu>
                     </div>
+                    <div />
                     <!-- 削除ボタン -->
-                    <v-btn
-                      v-if="selectedEvent.id"
-                      icon
-                      small
-                      class="mr-1"
-                      @click="deleteEvent"
-                    >
-                      <v-icon>mdi-delete</v-icon>
-                    </v-btn>
+                    <div v-if="selectedEvent.id && !selectedEvent.long_time">
+                      <v-btn
+                        icon
+                        small
+                        class="mr-1"
+                        @click="deleteEvent"
+                      >
+                        <v-icon>mdi-delete</v-icon>
+                      </v-btn>
+                    </div>
+                    <!-- まとめて入力用 -->
+                    <!-- 削除ダイアログ -->
+                    <div v-else-if="selectedEvent.id && selectedEvent.long_time">
+                      <v-row justify="center">
+                        <v-dialog
+                          v-model="deleteDialog"
+                          persistent
+                          max-width="290"
+                          :retain-focus="false"
+                          @click:outside="deleteDialog=false"
+                        >
+                          <template #activator="{ on, attrs }">
+                            <v-btn
+                              icon
+                              small
+                              class="ma-3"
+                              v-bind="attrs"
+                              v-on="on"
+                            >
+                              <v-icon>mdi-delete</v-icon>
+                            </v-btn>
+                          </template>
+                          <v-card>
+                            <v-container
+                              class="px-0"
+                              fluid
+                            >
+                              <v-card-title>まとめて予定の削除</v-card-title>
+                              <v-container fluid>
+                                <v-radio-group
+                                  v-model="radios"
+                                  mandatory
+                                >
+                                  <v-radio
+                                    label="今回の予定を削除する"
+                                    value="delete"
+                                    color="red"
+                                  />
+                                  <v-radio
+                                    label="全ての予定を削除する"
+                                    value="allDelete"
+                                    color="red"
+                                  />
+                                </v-radio-group>
+                              </v-container>
+                              <v-card-actions>
+                                <v-spacer />
+
+                                <v-btn
+                                  color="grey darken-1"
+                                  text
+                                  @click="deleteDialog = false"
+                                >
+                                  キャンセル
+                                </v-btn>
+
+                                <v-btn
+                                  color="primary"
+                                  text
+                                  @click="dialog = false"
+                                >
+                                  OK
+                                </v-btn>
+                              </v-card-actions>
+                            </v-container>
+                          </v-card>
+                        </v-dialog>
+                      </v-row>
+                    </div>
                   </v-toolbar>
                   <v-card-text>
                     <!-- <span v-html="selectedEvent.details" /> -->
@@ -236,21 +307,11 @@ export default {
       selectedOpen: false,
       menu: false,
       eventName: '',
-      // selectedEvent: {},
       dialog: false,
       datevVlue: moment().format('yyyy-MM-DD'),
       pendingColor: '',
-
-      // まとめて入力用
-      dateMenu: false,
-      date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-      modal: false,
-      inputMenu: false,
-      timeValue: '',
-      timePickerMenuStart: false,
-      timePickerMenuEnd: false,
-      timePickerStart: null,
-      timePickerEnd: null
+      radios: null,
+      deleteDialog: false
     }
   },
 
@@ -270,7 +331,7 @@ export default {
   },
 
   mounted () {
-    this.$axios.$get(url.SCHEDULE_API + '.json')
+    this.$axios.$get(url.SCHEDULE_API)
       .then((response) => {
         let data
         response.forEach((res) => {
@@ -282,8 +343,10 @@ export default {
             end: res.end,
             updated_at: res.created_at,
             timed: res.timed
+            // long_time: res.long_time
           }
           this.$store.commit('schedule/setEvent', data)
+          console.log()
         })
       })
   },
@@ -410,6 +473,7 @@ export default {
         open()
       }
       nativeEvent.stopPropagation()
+      console.log(this.selectedEvent.color)
     },
 
     //  表示するイベントカラーを仮保存
@@ -420,6 +484,7 @@ export default {
 
     // イベント作成と編集
     newEvent () {
+      this.$store.commit('schedule/setCreateEvent', null)
       if (!this.selectedEvent.id) {
         this.$store.commit('schedule/setSelectedEventName', this.eventName)
         this.$store.dispatch('schedule/addEvent', this.selectedEvent)
@@ -427,6 +492,7 @@ export default {
         this.$store.commit('schedule/setSelectedEventName', this.eventName)
         this.$store.dispatch('schedule/updateEvent', this.selectedEvent)
       }
+      this.$store.commit('schedule/cancelEvent')
       this.eventName = ''
       this.selectedOpen = false
     },
@@ -439,8 +505,8 @@ export default {
     // DBに登録していない要素は削除する
     cancelEvent () {
       if (!this.selectedEvent.id) { this.$store.commit('schedule/cancelEvent') }
+      if (this.pendingColor) { this.$store.commit('schedule/setSelectedEventColor', this.pendingColor) }
       this.selectedOpen = false
-      this.$store.commit('schedule/setSelectedEventColor', this.pendingColor)
     }
   }
 }

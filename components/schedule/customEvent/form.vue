@@ -6,6 +6,7 @@
       v-model="dialog"
       persistent
       max-width="600px"
+      @click:outsaide="cancelForm"
     >
       <template #activator="{ on, attrs }">
         <div class="text-center">
@@ -73,6 +74,7 @@
         <!-- 開始日入力 -->
         <v-card-text>
           <v-container>
+          <v-form ref="date_form">
             <v-row>
               <v-col cols="4">
                 <v-menu
@@ -124,6 +126,7 @@
                       readonly
                       v-bind="attrs"
                       v-on="on"
+                      :rules="rulesTime"
                     />
                   </template>
                   <v-time-picker
@@ -158,6 +161,7 @@
                       readonly
                       v-bind="attrs"
                       v-on="on"
+                      :rules="rulesTime"
                     />
                   </template>
                   <v-time-picker
@@ -188,10 +192,12 @@
                   dense
                   single-line
                   class="ml-5"
+                  :rules="rulesDate"
                 />
               </v-col>
             </v-row>
             <small class="ml-5">習慣化おすすめは60日です。運動などは習慣化が難しいため250日をおすすめします。</small>
+          </v-form>
           </v-container>
         </v-card-text>
         <v-card-actions class="pt-0">
@@ -199,7 +205,7 @@
           <v-btn
             color="blue darken-1"
             text
-            @click="dialog = false"
+            @click="cancelForm"
           >
             閉じる
           </v-btn>
@@ -244,7 +250,9 @@ export default {
         { id:1, state: '60日(約２ヶ月)'}, 
         { id:2, state : '250日(約８ヶ月)' }, 
       ],
-      selectDate: ''
+      selectDate: '',
+      rulesTime: [value => value || '時間を選択してください' ],
+      rulesDate:[value => value || '日数を選択してください']
     }
   },
 
@@ -263,16 +271,6 @@ export default {
     endTimeSave (value) {
       this.timePickerEnd = value
       this.timePickerMenuEnd = false
-      for (let i=0; i< 30; i++) {
-         const date = moment(`this.date`).add(i, "days")
-         const data = {
-         name: this.eventName,
-        //  start: Date.parse(`${date} ${this.timePickerStart}`),
-        //  end: Date.parse(`${date} ${this.timePickerEnd}` ),
-         time: true
-        }
-        //  console.log(`${date} ${this.timePickerEnd}`)
-      }
     },
     
     // 選択「月」を制限
@@ -329,43 +327,31 @@ export default {
         return this.timeInterval(value)
       }
     },
-
+    // イベント追加
     addEvent () {
-      const selectDate = this.selectDate
-      console.log(selectDate)
-
-      if (selectDate == 1) {
-        for (let i=0; i < 60; i++) {
-          const date = moment(`${this.date}`).add(i, 'd').format('YYYY-MM-DD')
-          const dateTimeStart = `${date} ${this.timePickerStart}`
-          const dateTimeEnd = `${date} ${this.timePickerEnd}` 
-          const data = {
-            name: this.eventName,
-            color: this.selectedColor,
-            start: Date.parse(dateTimeStart), 
-            end: Date.parse(dateTimeEnd),
-            time: true
+      if(this.$refs.date_form.validate()) {
+        const selectDate = this.selectDate
+        const selectDateIdMap = {1: 60, 2: 250}
+        let arrayEventJson =[]
+        
+          for (let i=0; i < selectDateIdMap[selectDate]; i++) {
+            const date = moment(`${this.date}`).add(i, 'd').format('YYYY-MM-DD')
+            const dateTimeStart = `${date} ${this.timePickerStart}`
+            const dateTimeEnd = `${date} ${this.timePickerEnd}`
+            const data = {
+              name: this.eventName,
+              color: this.selectedColor,
+              start: Date.parse(dateTimeStart), 
+              end: Date.parse(dateTimeEnd),
+              timed: true,
+              long_time: true
+            }
+            // arrayEventJson.push(JSON.stringify(data))
+            // console.log(JSON.stringify(data))
+            this.$store.dispatch('schedule/addEvent', JSON.stringify(data))
+             this.dialog = false
           }
-          this.$store.dispatch('schedule/addEvent', data)
-        }
       }
-
-      if (selectDate == 2) {
-        for (let i=0; i < 250; i++) {
-          const date = moment(`${this.date}`).add(i, 'd').format('YYYY-MM-DD')
-          const dateTimeStart = `${date} ${this.timePickerStart}`
-          const dateTimeEnd = `${date} ${this.timePickerEnd}` 
-          const data = {
-            name: this.eventName,
-            color: this.selectedColor,
-            start: Date.parse(dateTimeStart),
-            end: Date.parse(dateTimeEnd),
-            time: true
-          }
-          this.$store.dispatch('schedule/addEvent', data)
-        }
-      }
-      this.dialog = false
 
     },
 
@@ -373,6 +359,10 @@ export default {
       this.selectedColor = color
     },
 
+    cancelForm () {
+      this.dialog = false
+      this.$refs.date_form.reset()
+    }
   }
 }
 </script>

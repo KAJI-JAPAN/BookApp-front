@@ -28,7 +28,7 @@ export const mutations = {
   updateCreateEvent (state, payload) {
     state.createEvent.start= payload.start
     state.createEvent.end= payload.end
-  }, 
+  },
 
   setCreateEvent (state, payload) {
     state.createEvent = payload
@@ -81,7 +81,9 @@ export const actions = {
         name: selectedEvent.name,
         start: selectedEvent.start,
         end: selectedEvent.end,
-        color: selectedEvent.color
+        color: selectedEvent.color,
+        timed: selectedEvent.timed,
+        long_time:  selectedEvent.long_time ? true : false
       }
     })
       .then((response) => {
@@ -90,13 +92,13 @@ export const actions = {
             id: response.id,
             name: response.name,
             color: response.color,
-            start: parseInt(response.start),
-            end: parseInt(response.end),
+            start: response.start,
+            end: response.end,
             updated_at: response.created_at,
-            timed: response.timed
+            timed: response.timed,
+            long_time: response.long_time
           }
         commit('setEvent', data)
-        // if (response >= 60 ) { location.reload() } 
         commit('alertSwitchSuccess', true, { root: true })
         setTimeout(() => {
           commit('alertSwitchSuccess', false, { root: true })
@@ -112,27 +114,24 @@ export const actions = {
         name: selectedEvent.name,
         color: selectedEvent.color,
         start: selectedEvent.start,
-        end: selectedEvent.end
-        // time: true
+        end: selectedEvent.end,
+        timed: true
       }
     })
     .then((response) => {
-      console.log(response)
       let data = {
         id: response.id,
         name: response.name,
         color: response.color,
         start: parseInt(response.start),
         end: parseInt(response.end),
-        // updated_at: response.created_at,
         timed: true
       }
-      console.log(data)
       commit('updateEvent', { payload: selectedEvent, updateEvent: data })
       commit('alertSwitchSuccess', true, { root: true })
       setTimeout(() => {
         commit('alertSwitchSuccess', false, { root: true })
-      }, 3000)
+      }, 2000)
     })
   },
 
@@ -144,7 +143,7 @@ export const actions = {
         commit('alertSwitchDelete', true, { root: true })
         setTimeout(() => {
           commit('alertSwitchDelete', false, { root: true })
-        }, 3000)
+        }, 2000)
       })
   }
 }
