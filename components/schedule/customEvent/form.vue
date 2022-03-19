@@ -6,7 +6,7 @@
       v-model="dialog"
       persistent
       max-width="600px"
-      @click:outsaide="cancelForm"
+      @click:outside="cancelForm"
     >
       <template #activator="{ on, attrs }">
         <div class="text-center">
@@ -93,6 +93,7 @@
                       readonly
                       v-bind="attrs"
                       v-on="on"
+                      :rules="rulesDate"
                     />
                   </template>
                   <v-date-picker
@@ -192,7 +193,7 @@
                   dense
                   single-line
                   class="ml-5"
-                  :rules="rulesDate"
+                  :rules="rulesLongDate"
                 />
               </v-col>
             </v-row>
@@ -233,7 +234,7 @@ export default {
       selectedColor: '#2196F3',
       datevVlue: moment().format('yyyy-MM-DD'),
       dateMenu: false,
-      date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+      date: '',
       modal: false,
       inputMenu: false,
       timeValue: '',
@@ -252,7 +253,8 @@ export default {
       ],
       selectDate: '',
       rulesTime: [value => value || '時間を選択してください' ],
-      rulesDate:[value => value || '日数を選択してください']
+      rulesLongDate:[value => value || '日数を選択してください'],
+      rulesDate:[value => value || '日付を選択してください']
     }
   },
 
@@ -360,6 +362,7 @@ export default {
     },
 
     cancelForm () {
+      console.log(this.date)
       this.dialog = false
       this.$refs.date_form.reset()
     }
