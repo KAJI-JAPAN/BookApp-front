@@ -36,7 +36,7 @@ export default {
 
   // 取得した本と習慣化テキストデータはRegisteredBookディレクトリ内のcomponentsで表示設定
   fetch ({ store, $axios, route }) {
-    return $axios.$get(url.POST_API + 'posts/' + route.params.id)
+    return $axios.$get(`${url.POST_API}posts/${route.params.id}`)
       .then((response) => {
         store.commit('book/selectedBook', response.post)
         store.commit('todos/regissterdList', response.content)

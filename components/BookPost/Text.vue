@@ -8,7 +8,7 @@
       v-show="hidden"
     >
       <BookPostKitActionChip />
-      <v-row v-for="(todo, index) in todos" :key="index">
+      <v-row v-for="(todo, index) in list" :key="index">
         <v-text-field
           filled
           readonly
@@ -80,6 +80,7 @@
   </v-container>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
   data () {
     return {
@@ -87,20 +88,13 @@ export default {
       selectedTodo: [],
       items: [
         { title: '編集', icon: 'mdi-pencil', action: 'toEdit' },
-        { title: '削除', icon: 'mdi-delete', action: 'removeTodo' }
+        { title: '削除', icon: 'mdi-delete', action: 'removeTodo' },
+        { title: 'カレンダーに登録する', icon: 'mdi-calendar', action: 'moveSchedule' }
       ]
     }
   },
   computed: {
-    todos () {
-      return this.$store.state.todos.list
-    },
-    disabled () {
-      return this.itemText.length === 0
-    },
-    hidden () {
-      return this.$store.state.todos.hidden
-    }
+    ...mapState('todos', ['list', 'disabled', 'hidden'])
   },
 
   methods: {
@@ -112,12 +106,9 @@ export default {
         this.$store.commit('todos/add', this.itemText)
         this.itemText = ''
       } else {
-        // this.itemTextのみだとテキストのみ送られるので更新に必要なIDがなくなってしまう。
-        // this.selectedTodo.content = this.itemText
         this.$store.commit('todos/edit', { todo: this.selectedTodo, content: this.itemText })
         this.$store.commit('todos/toggle', this.selectedTodo)
         this.itemText = ''
-        // console.log(this.itemText)
       }
     },
 

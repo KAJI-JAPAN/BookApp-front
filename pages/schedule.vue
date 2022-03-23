@@ -234,32 +234,66 @@
                       </v-row>
                     </div>
                   </v-toolbar>
-                  <v-card-text>
-                    <!-- <span v-html="selectedEvent.details" /> -->
-                    <!-- 登録した日付と時間を表示 -->
-                    <v-list-item>
-                      <v-row align="center">
-                        <v-col cols="2">
-                          <v-list-item-title>
-                            <v-icon>mdi-clock-outline</v-icon>
-                          </v-list-item-title>
-                        </v-col>
-                        <v-col v-if="getYear(selectedEvent.start) === getYear(selectedEvent.end)" cols="5 text-center">
-                          <v-list-item-subtitle>
-                            {{ getYear(selectedEvent.start) }}
-                          </v-list-item-subtitle>
-                        </v-col>
-                        <v-col v-else cols="6" class="pl-0 pr-0">
-                          <v-list-item-subtitle>
-                            {{ getYear(selectedEvent.start) }} 〜 {{ getYear(selectedEvent.end) }}
-                          </v-list-item-subtitle>
-                        </v-col>
-                        <v-col class="pr-0">
-                          <v-list-item-subtitle>{{ convertTime(selectedEvent.start) }}〜{{ convertTime(selectedEvent.end) }}</v-list-item-subtitle>
-                        </v-col>
+                  <v-container>
+                    <v-card-text>
+                      <!-- <span v-html="selectedEvent.details" /> -->
+                      <!-- 登録した日付と時間を表示 -->
+                      <v-list-item>
+                        <v-row align="center">
+                          <v-col cols="2">
+                            <v-list-item-title>
+                              <v-icon>mdi-clock-outline</v-icon>
+                            </v-list-item-title>
+                          </v-col>
+                          <v-col v-if="getYear(selectedEvent.start) === getYear(selectedEvent.end)" cols="5 text-center">
+                            <v-list-item-subtitle>
+                              {{ getYear(selectedEvent.start) }}
+                            </v-list-item-subtitle>
+                          </v-col>
+                          <v-col v-else cols="6" class="pl-0 pr-0">
+                            <v-list-item-subtitle>
+                              {{ getYear(selectedEvent.start) }} 〜 {{ getYear(selectedEvent.end) }}
+                            </v-list-item-subtitle>
+                          </v-col>
+                          <v-col class="pr-0">
+                            <v-list-item-subtitle>{{ convertTime(selectedEvent.start) }}〜{{ convertTime(selectedEvent.end) }}</v-list-item-subtitle>
+                          </v-col>
+                        </v-row>
+                      <!-- 登録した本を表示 -->
+                      </v-list-item>
+                    </v-card-text>
+                    <div class="selected_book">
+                      <div v-if="selectedBook">
+                        <v-row class="ma-5">
+                          <v-col>
+                            <img :src="selectedBook.image">
+                          </v-col>
+                          <v-col cols="" class="pa-5">
+                            <v-card-text>{{ selectedBook.title }}</v-card-text>
+                            <v-card-subtitle class="pa-5">
+                              {{ selectedBook.author }}
+                            </v-card-subtitle>
+                          </v-col>
+                        </v-row>
+                      </div>
+                      <v-row
+                        v-else
+                        justify="center"
+                        class="ma-4"
+                      >
+                        <v-chip
+                          class="ma-5 pa-8"
+                          x-large
+                          color="grey lighten-3"
+                        >
+                          <v-icon class="ma-1">
+                            mdi-plus
+                          </v-icon>
+                          本を登録する
+                        </v-chip>
                       </v-row>
-                    </v-list-item>
-                  </v-card-text>
+                    </div>
+                  </v-container>
                   <v-card-actions>
                     <v-btn
                       small
@@ -290,13 +324,12 @@
 import * as url from '@/store/constants/url'
 import '@/assets/css/schedule.scss'
 import moment from 'moment'
-// import { mapState } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
 
   data () {
     return {
-    // カレンダー用
       value: '',
       colors: ['#2196F3', '#3F51B5', '#673AB7', '#00BCD4', '#4CAF50', '#FF9800', '#757575'],
       dragEvent: null,
@@ -316,23 +349,23 @@ export default {
   },
 
   computed: {
-
-    events () {
-      return this.$store.state.schedule.events
-    },
+    ...mapState('schedule', ['events', 'selectedEvent']),
 
     createEvent () {
       return this.$store.state.schedule.createEvent
     },
-
-    selectedEvent () {
-      return this.$store.state.schedule.selectedEvent
+    selectedTodo () {
+      return this.$store.state.todos.selectedTodo
+    },
+    selectedBook () {
+      return this.$store.state.book.selectedBook
     }
   },
 
   mounted () {
     this.$axios.$get(url.SCHEDULE_API)
       .then((response) => {
+        console.log(response)
         let data
         response.forEach((res) => {
           data = {
@@ -342,11 +375,12 @@ export default {
             start: res.start,
             end: res.end,
             updated_at: res.created_at,
-            timed: res.timed
-            // long_time: res.long_time
+            timed: res.timed,
+            long_time: res.long_time,
+            post_id: res.post_id,
+            post_item_id: res.post_item_id
           }
           this.$store.commit('schedule/setEvent', data)
-          console.log()
         })
       })
   },
@@ -372,13 +406,14 @@ export default {
         this.dragTime = mouse - start
       } else {
         this.createStart = this.roundTime(mouse)
-        // store用
         const event = {
           name: '',
           color: '#2196F3',
           start: this.createStart,
           end: this.createStart,
-          timed: true
+          timed: true,
+          post_id: this.selectedBook ? this.selectedBook.id : null,
+          post_item_id: this.selectedTodo ? this.selectedTodo.id : null
         }
         this.$store.commit('schedule/setCreateEvent', event)
         this.$store.commit('schedule/pushCreateEvent', this.createEvent)
@@ -407,12 +442,10 @@ export default {
         const min = Math.min(mouseRounded, this.createStart)
         const max = Math.max(mouseRounded, this.createStart)
 
-        // store用
         this.$store.commit('schedule/updateCreateEvent', { start: min, end: max })
       }
     },
     endDrag ({ nativeEvent, event }) {
-      // store用
       this.$store.commit('schedule/setCreateEvent', null)
       this.dragTime = null
       this.dragEvent = null
@@ -423,7 +456,6 @@ export default {
     cancelDrag () {
       if (this.createEvent) {
         if (this.extendOriginal) {
-          // stror用
           this.$store.commit('schedule/isCancelDragEvent')
         }
       }
@@ -458,12 +490,11 @@ export default {
     // イベント編集menuを表示
     showEvent ({ nativeEvent, event }) {
       const open = () => {
-        // this.selectedEvent = event
-        // store
-        this.$store.commit('schedule/setSelectedEvent', event)
+        // 登録済みの場合はDBからデータを取得する
+        this.selectedEvent.id ? this.$store.dispatch('schedule/showEvent', event) : this.$store.commit('schedule/setSelectedEvent', event)
         this.selectedElement = nativeEvent.target
         requestAnimationFrame(() => requestAnimationFrame(() => { this.selectedOpen = true }))
-        this.eventName = this.selectedEvent.name
+        this.eventName = this.selectedEvent.name || this.selectedTodo.content
       }
 
       if (this.selectedOpen) {
@@ -473,7 +504,6 @@ export default {
         open()
       }
       nativeEvent.stopPropagation()
-      console.log(this.selectedEvent.color)
     },
 
     //  表示するイベントカラーを仮保存
@@ -506,6 +536,8 @@ export default {
     cancelEvent () {
       if (!this.selectedEvent.id) { this.$store.commit('schedule/cancelEvent') }
       if (this.pendingColor) { this.$store.commit('schedule/setSelectedEventColor', this.pendingColor) }
+      this.$store.commit('book/clearBook')
+      this.$store.commit('schedule/deleteSelectedEvent')
       this.selectedOpen = false
     }
   }

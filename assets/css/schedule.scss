@@ -32,6 +32,12 @@
     display: block;
   }
 }
+
 .v-dialog {
   box-shadow: none ;
+}
+
+.selected_book {
+  margin : 10px;
+  border : dashed 4px rgb(193, 193, 193);
 }

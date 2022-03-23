@@ -9,9 +9,14 @@ export const state = () => ({
 export const mutations = {
 
   // selectedEvent
-
+  // selectedEventに追加
   setSelectedEvent (state, payload) {
     state.selectedEvent = payload
+  },
+
+  // selectedEvent削除
+  deleteSelectedEvent (state) {
+    state.selectedEvent = {}
   },
 
   // イベントカラーを代入
@@ -75,15 +80,24 @@ export const mutations = {
 export const actions = {
 
   // イベント追加
-  addEvent ({ commit }, selectedEvent) {
-    this.$axios.$post(url.SCHEDULE_API, {
+  addEvent ({ commit }, event) {
+    console.log(selectedEvent)
+    this.$axios.$post(url.SCHEDULE_API,
+      // {post: selectedEvent}, {
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   }
+    // })
+    {
       post: {
-        name: selectedEvent.name,
-        start: selectedEvent.start,
-        end: selectedEvent.end,
-        color: selectedEvent.color,
-        timed: selectedEvent.timed,
-        long_time:  selectedEvent.long_time ? true : false
+        name: event.name,
+        start: event.start,
+        end: event.end,
+        color: event.color,
+        timed: event.timed,
+        long_time:  event.long_time ? true : false,
+        post_id: event.post_id,
+        post_item_id: event.post_item_id
       }
     })
       .then((response) => {
@@ -96,9 +110,13 @@ export const actions = {
             end: response.end,
             updated_at: response.created_at,
             timed: response.timed,
-            long_time: response.long_time
+            long_time: response.long_time,
+            post_id: response.post_id,
+            post_item_id: response.post_item_id
           }
         commit('setEvent', data)
+        commit('deleteSelectedEvent')
+        commit('book/clearBook', { root: true })
         commit('alertSwitchSuccess', true, { root: true })
         setTimeout(() => {
           commit('alertSwitchSuccess', false, { root: true })
@@ -107,14 +125,14 @@ export const actions = {
   },
 
   // イベント編集
-  updateEvent ({ state, commit }, selectedEvent ) {
-    this.$axios.$patch(`${url.SCHEDULE_API}/${selectedEvent.id}`, {
+  updateEvent ({ commit }, event ) {
+    this.$axios.$patch(`${url.SCHEDULE_API}/${event.id}`, {
       post:  {
-        id: selectedEvent.id,
-        name: selectedEvent.name,
-        color: selectedEvent.color,
-        start: selectedEvent.start,
-        end: selectedEvent.end,
+        id: event.id,
+        name: event.name,
+        color: event.color,
+        start: event.start,
+        end: event.end,
         timed: true
       }
     })
@@ -128,19 +146,32 @@ export const actions = {
         timed: true
       }
       commit('updateEvent', { payload: selectedEvent, updateEvent: data })
+      commit('deleteSelectedEvent')
       commit('alertSwitchSuccess', true, { root: true })
+      commit('book/clearBook', { root: true })
       setTimeout(() => {
         commit('alertSwitchSuccess', false, { root: true })
       }, 2000)
     })
   },
 
-  // イベント削除
-  deleteEvent ({ state, commit }, selectedEvent) {
-    this.$axios.$delete(`${url.SCHEDULE_API}/${selectedEvent.id}`)
+  showEvent ({ commit }, event) {
+    this.$axios.$get(`${url.SCHEDULE_API}/${event.id}`)
     .then((response) => {
-      commit('deleteEvent', selectedEvent)
-        commit('alertSwitchDelete', true, { root: true })
+      commit('setSelectedEvent', response.schedule)
+      commit('book/selectedBook', response.post, { root: true })
+      console.log(response)
+    })
+  },
+
+  // イベント削除
+  deleteEvent ({ commit }, event) {
+    this.$axios.$delete(`${url.SCHEDULE_API}/${event.id}`)
+    .then(() => {
+      commit('deleteEvent', event)
+      commit('deleteSelectedEvent')
+      commit('book/clearBook', { root: true })
+      commit('alertSwitchDelete', true, { root: true })
         setTimeout(() => {
           commit('alertSwitchDelete', false, { root: true })
         }, 2000)

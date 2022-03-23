@@ -38,7 +38,7 @@ export const actions = {
       })
 
     // plugin/bookInfo  $title,$author,$image
-    this.$axios.$post(url.POST_API + 'posts', {
+    this.$axios.$post(`${url.POST_API}posts`, {
       post: {
         title: this.$title(selectedBook),
         author: this.$author(selectedBook),

@@ -8,7 +8,7 @@
       v-show="hidden"
     >
       <BookPostKitActionChip />
-      <v-row v-for="(todo, index) in todos" :key="index">
+      <v-row v-for="(todo, index) in list" :key="index">
         <v-text-field
           filled
           readonly
@@ -81,27 +81,20 @@
   </v-container>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
   data () {
     return {
       itemText: '',
-      selectedTodo: [],
       items: [
         { title: '編集', icon: 'mdi-pencil', action: 'toEdit' },
-        { title: '削除', icon: 'mdi-delete', action: 'removeTodo' }
+        { title: '削除', icon: 'mdi-delete', action: 'removeTodo' },
+        { title: 'カレンダーに登録する', icon: 'mdi-calendar', action: 'moveSchedule' }
       ]
     }
   },
   computed: {
-    todos () {
-      return this.$store.state.todos.list
-    },
-    disabled () {
-      return this.itemText.length === 0
-    },
-    hidden () {
-      return this.$store.state.todos.hidden
-    }
+    ...mapState('todos', ['list', 'disabled', 'hidden', 'selectedTodo'])
   },
 
   methods: {
@@ -122,7 +115,7 @@ export default {
 
     // 編集
     toEdit (todo) {
-      this.selectedTodo = todo
+      this.$store.commit('todos/setSelectedTodo', todo)
       this.itemText = todo.content
       this.$store.commit('todos/toggle', todo)
     },
@@ -138,6 +131,10 @@ export default {
     cancel () {
       this.$store.commit('todos/cancel', this.selectedTodo)
       this.itemText = ''
+    },
+    moveSchedule (todo) {
+      this.$router.push('/schedule')
+      this.$store.commit('todos/setSelectedTodo', todo)
     }
   }
 }

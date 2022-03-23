@@ -4,10 +4,12 @@ export const state = () => ({
   // 登録したテキスト
   list: [],
   hidden: false,
-  responseAlert: null
+  responseAlert: null,
+  selectedTodo: []
 })
 
 export const mutations = {
+  // list
   // テキスト追加 編集状態じゃない場合は status: false
   add (state, content) {
     state.list.push({
@@ -16,9 +18,17 @@ export const mutations = {
     })
   },
 
+  // 登録済み習慣化リストをbook/_idで取得
+  regissterdList (state, response) {
+    state.list = response
+  },
+  editAdd (state, payload) {
+    state.list.push(payload)
+  },
+
   // 削除
-  remove (state, todo) {
-    state.list.splice(state.list.indexOf(todo), 1)
+  remove (state, payload) {
+    state.list.splice(state.list.indexOf(payload), 1)
   },
 
   // 編集を反映
@@ -26,38 +36,36 @@ export const mutations = {
     state.list.splice(state.list.indexOf(todo), 1, { content })
   },
 
-  // 編集判断フラグ
-  toggle (state, todo) {
-    todo.status = !todo.status
-  },
-
-  // 編集状態をキャンセル
-  cancel (state, todo) {
-    todo.status = false
-  },
-
-  // アクション登録パネルフラグ
-  switching (state) {
-    state.hidden = !state.hidden
-  },
-
   // リスト削除
   clear (state) {
     state.list = []
   },
 
+  // 編集判断フラグ
+  toggle (state, payload) {
+    payload.status = !payload.status
+  },
+
+  // 編集状態をキャンセル
+  cancel (state, payload) {
+    payload.status = false
+  },
+
+  // hidden
+  // アクション登録パネルフラグ
+  switching (state) {
+    state.hidden = !state.hidden
+  },
+
   // アラート用レスポンス
-  responseAdd (state, response) {
-    state.responseAlert = response
+  responseAdd (state, payload) {
+    state.responseAlert = payload
   },
 
-  // 登録済み習慣化リストをbook/_idで取得
-  regissterdList (state, response) {
-    state.list = response
-  },
-
-  editAdd (state, response) {
-    state.list.push(response)
+  // selectedTodo
+  // 選択したtodoを取得
+  setSelectedTodo (state, payload) {
+    state.selectedTodo = payload
   }
 }
 
@@ -68,7 +76,7 @@ export const actions = {
   // rootStateを経由するとstoreにある他のモジュールの値を参照可能
   add ({ rootState, commit }, itemText) {
     const selectedBook = rootState.book.selectedBook
-    this.$axios.$patch(url.POST_ITEMS_API + selectedBook.id, {
+    this.$axios.$patch(`${url.POST_ITEMS_API}${selectedBook.id}`, {
       post: {
         content: itemText,
         status: false,
@@ -94,7 +102,7 @@ export const actions = {
   // 更新ようなので、selectedTodoで編集対象のIDを取得
   update ({ rootState, commit }, { itemText, selectedTodo }) {
     const selectedBook = rootState.book.selectedBook
-    this.$axios.$patch(url.POST_ITEMS_API + selectedBook.id, {
+    this.$axios.$patch(`${url.POST_ITEMS_API}${selectedBook.id}`, {
       post: {
         id: selectedTodo.id,
         content: itemText,
@@ -119,9 +127,8 @@ export const actions = {
   // 習慣化リストを削除
   // catchは編集用のエラーメッセージを流用
   delete ({ commit }, todo) {
-    this.$axios.$delete(url.POST_ITEMS_API + todo.id)
-      .then((response) => {
-        console.log(response)
+    this.$axios.$delete(`${url.POST_ITEMS_API}${todo.id}`)
+      .then(() => {
         commit('remove', todo)
         commit('alertSwitchDelete', true, { root: true })
         setTimeout(() => {

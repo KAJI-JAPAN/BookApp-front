@@ -76,7 +76,7 @@
           <v-container>
           <v-form ref="date_form">
             <v-row>
-              <v-col cols="4">
+              <v-col cols="5">
                 <v-menu
                   v-model="inputMenu"
                   :close-on-content-click="false"
@@ -252,9 +252,9 @@ export default {
         { id:2, state : '250日(約８ヶ月)' }, 
       ],
       selectDate: '',
-      rulesTime: [value => value || '時間を選択してください' ],
-      rulesLongDate:[value => value || '日数を選択してください'],
-      rulesDate:[value => value || '日付を選択してください']
+      rulesTime: [value => !!value || '時間を選択してください' ],
+      rulesLongDate:[value => !!value || '日数を選択してください'],
+      rulesDate:[value => !!value || '日付を選択してください']
     }
   },
 
@@ -333,7 +333,8 @@ export default {
     addEvent () {
       if(this.$refs.date_form.validate()) {
         const selectDate = this.selectDate
-        const selectDateIdMap = {1: 60, 2: 250}
+        // const selectDateIdMap = {1: 60, 2: 250}
+        const selectDateIdMap = {1: 5, 2: 250}
         let arrayEventJson =[]
         
           for (let i=0; i < selectDateIdMap[selectDate]; i++) {
@@ -348,11 +349,14 @@ export default {
               timed: true,
               long_time: true
             }
-            // arrayEventJson.push(JSON.stringify(data))
-            // console.log(JSON.stringify(data))
-            this.$store.dispatch('schedule/addEvent', JSON.stringify(data))
-             this.dialog = false
+            // arrayEventJson = JSON.stringify(data)
+            arrayEventJson.push(JSON.stringify(data))
+            // this.$store.dispatch('schedule/addEvent', JSON.stringify(data))
           }
+        this.$store.dispatch('schedule/addEvent', arrayEventJson)
+        // this.dialog = false
+        console.log(arrayEventJson)
+
       }
 
     },

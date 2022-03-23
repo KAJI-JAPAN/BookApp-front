@@ -16,13 +16,13 @@ export const state = () => ({
 
 export const mutations = {
   // 本情報
-  getBooks (state, res) {
-    state.books = res.data.items
+  getBooks (state, payload) {
+    state.books = payload.data.items
   },
 
   // 選択した本
-  selectedBook (state, book) {
-    state.selectedBook = book
+  selectedBook (state, payload) {
+    state.selectedBook = payload
   },
   // 選択解除
   clearBook (state) {
@@ -30,8 +30,8 @@ export const mutations = {
   },
 
   // レスポンスされた本
-  responseBook (state, response) {
-    state.responseBook = response
+  responseBook (state, payload) {
+    state.responseBook = payload
   },
   // responseBook削除
   removeResponseBook (state) {
@@ -39,8 +39,8 @@ export const mutations = {
   },
 
   // 登録した本
-  registeredBook (state, response) {
-    state.registeredBook = response
+  registeredBook (state, payload) {
+    state.registeredBook = payload
   }
 }
 
@@ -48,6 +48,6 @@ export const actions = {
   // 本を削除
   delete ({ state }) {
     const bookId = state.selectedBook.id
-    this.$axios.$delete(url.POST_API + 'posts/' + bookId)
+    this.$axios.$delete(`${url.POST_API}posts/${bookId}`)
   }
 }
