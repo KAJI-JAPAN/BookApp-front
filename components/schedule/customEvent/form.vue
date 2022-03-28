@@ -335,7 +335,7 @@ export default {
         const selectDate = this.selectDate
         // const selectDateIdMap = {1: 60, 2: 250}
         const selectDateIdMap = {1: 5, 2: 250}
-        let arrayEventJson =[]
+        let arrayEvent = [] 
         
           for (let i=0; i < selectDateIdMap[selectDate]; i++) {
             const date = moment(`${this.date}`).add(i, 'd').format('YYYY-MM-DD')
@@ -350,12 +350,12 @@ export default {
               long_time: true
             }
             // arrayEventJson = JSON.stringify(data)
-            arrayEventJson.push(JSON.stringify(data))
+            arrayEvent.push(data)
             // this.$store.dispatch('schedule/addEvent', JSON.stringify(data))
           }
-        this.$store.dispatch('schedule/addEvent', arrayEventJson)
-        // this.dialog = false
-        console.log(arrayEventJson)
+        this.$store.dispatch('schedule/addEvent', arrayEvent)
+        this.dialog = false
+        // console.log(arrayEvent)
 
       }
 

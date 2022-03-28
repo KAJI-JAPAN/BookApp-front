@@ -40,6 +40,7 @@ export default {
       .then((response) => {
         store.commit('book/selectedBook', response.post)
         store.commit('todos/regissterdList', response.content)
+        store.commit('book/setScheduleBook', response.post)
       })
   }
 }

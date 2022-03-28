@@ -94,7 +94,11 @@ export default {
     }
   },
   computed: {
-    ...mapState('todos', ['list', 'disabled', 'hidden', 'selectedTodo'])
+    ...mapState('todos', ['list', 'disabled', 'hidden', 'selectedTodo']),
+
+    selectedBook () {
+      return this.$store.state.book.selectedBook
+    }
   },
 
   methods: {
@@ -135,6 +139,7 @@ export default {
     moveSchedule (todo) {
       this.$router.push('/schedule')
       this.$store.commit('todos/setSelectedTodo', todo)
+      this.$store.commit('book/setScheduleBook', this.selectedBook)
     }
   }
 }

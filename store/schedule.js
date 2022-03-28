@@ -1,9 +1,20 @@
 import * as url from './constants/url'
 
 export const state = () => ({
+  // イベント管理
   events: [],
+
+  // ドラッグ&ドロップ用
   createEvent: null,
-  selectedEvent: {}
+
+  // 選択したイベント
+  selectedEvent: {},
+
+  // イベント画面から本を選択する時のダイアログ
+  bookSelectedSchedule: false,
+
+  // イベントバックアップ
+  backupEvent: {}
 })
 
 export const mutations = {
@@ -28,8 +39,15 @@ export const mutations = {
   setSelectedEventName (state, payload) {
     state.selectedEvent.name = payload
   },
+
+  // 更新時の時間変更用
+  updateSelectedEvent (state, payload) {
+    state.selectedEvent.start= payload.start
+    state.selectedEvent.end= payload.end
+  },
   
   //  createEvent
+  // 保存済みイベントの時間変更
   updateCreateEvent (state, payload) {
     state.createEvent.start= payload.start
     state.createEvent.end= payload.end
@@ -39,9 +57,20 @@ export const mutations = {
     state.createEvent = payload
   },
 
+  setIdEvent (state, payload) {
+    state.selectedEvent.post_id = payload.post
+    state.selectedEvent.post_item_id = payload.post_id
+  },
+
+  // backupEvent
+  // イベントのバックアップを保存
+  // setBackupEvent (state, payload) {
+  //   state.backupEvent = payload
+  //   console.log(state.backupEvent)
+  // },
+
 
   // events
-
   // イベント追加
   setEvent (state, payload) {
     state.events.push(payload)
@@ -73,6 +102,11 @@ export const mutations = {
   updateEvent(state, { payload, updateEvent }) {
     state.events.splice(state.events.indexOf(payload),1, updateEvent )
     console.log(state.events)
+  },
+
+// bookSelectedSchedule
+  switchBookSelectedSchedule (state) {
+    state.bookSelectedSchedule = !state.bookSelectedSchedule
   }
 }
 
@@ -81,13 +115,9 @@ export const actions = {
 
   // イベント追加
   addEvent ({ commit }, event) {
-    console.log(selectedEvent)
+    
     this.$axios.$post(url.SCHEDULE_API,
-      // {post: selectedEvent}, {
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   }
-    // })
+      // { post: event })
     {
       post: {
         name: event.name,
@@ -116,7 +146,7 @@ export const actions = {
           }
         commit('setEvent', data)
         commit('deleteSelectedEvent')
-        commit('book/clearBook', { root: true })
+        commit('book/clearScheduleBook', { root: true })
         commit('alertSwitchSuccess', true, { root: true })
         setTimeout(() => {
           commit('alertSwitchSuccess', false, { root: true })
@@ -126,6 +156,7 @@ export const actions = {
 
   // イベント編集
   updateEvent ({ commit }, event ) {
+    console.log()
     this.$axios.$patch(`${url.SCHEDULE_API}/${event.id}`, {
       post:  {
         id: event.id,
@@ -133,7 +164,10 @@ export const actions = {
         color: event.color,
         start: event.start,
         end: event.end,
-        timed: true
+        timed: true,
+        long_time: event.long_time,
+        post_id: event.post_id,
+        post_item_id: event.post_item_id
       }
     })
     .then((response) => {
@@ -141,25 +175,37 @@ export const actions = {
         id: response.id,
         name: response.name,
         color: response.color,
-        start: parseInt(response.start),
-        end: parseInt(response.end),
-        timed: true
+        start: response.start,
+        end: response.end,
+        timed: true,
+        long_time: response.long_time,
+        post_id: response.post_id,
+        post_item_id: response.post_item_id
+
       }
-      commit('updateEvent', { payload: selectedEvent, updateEvent: data })
+      commit('updateEvent', { payload: event, updateEvent: data })
       commit('deleteSelectedEvent')
       commit('alertSwitchSuccess', true, { root: true })
-      commit('book/clearBook', { root: true })
+      if (data.post_id)  { commit('book/clearScheduleBook', { root: true }) }
       setTimeout(() => {
         commit('alertSwitchSuccess', false, { root: true })
       }, 2000)
     })
   },
 
-  showEvent ({ commit }, event) {
-    this.$axios.$get(`${url.SCHEDULE_API}/${event.id}`)
+  showEvent ({ commit }, value) {
+    this.$axios.$get(`${url.SCHEDULE_API}/${value.event.id}`)
     .then((response) => {
-      commit('setSelectedEvent', response.schedule)
-      commit('book/selectedBook', response.post, { root: true })
+      // commit('setBackupEvent', value.event)
+      const newStart = value.min
+      const newEnd = value.max
+      if (newStart === null &&  newEnd === null) {
+        commit('setSelectedEvent', response.schedule)
+      } else {
+        commit('setSelectedEvent', response.schedule)
+        commit('updateSelectedEvent', { start: newStart, end: newEnd })
+      }
+      commit('book/setScheduleBook', response.post, { root: true })
       console.log(response)
     })
   },
@@ -170,7 +216,7 @@ export const actions = {
     .then(() => {
       commit('deleteEvent', event)
       commit('deleteSelectedEvent')
-      commit('book/clearBook', { root: true })
+      commit('book/clearScheduleBook', { root: true })
       commit('alertSwitchDelete', true, { root: true })
         setTimeout(() => {
           commit('alertSwitchDelete', false, { root: true })

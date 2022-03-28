@@ -55,6 +55,7 @@ export const mutations = {
   // アクション登録パネルフラグ
   switching (state) {
     state.hidden = !state.hidden
+    console.log(state.hidden)
   },
 
   // アラート用レスポンス

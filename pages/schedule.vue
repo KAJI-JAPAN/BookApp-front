@@ -259,39 +259,51 @@
                             <v-list-item-subtitle>{{ convertTime(selectedEvent.start) }}〜{{ convertTime(selectedEvent.end) }}</v-list-item-subtitle>
                           </v-col>
                         </v-row>
-                      <!-- 登録した本を表示 -->
                       </v-list-item>
                     </v-card-text>
+                    <!-- 登録した本を表示 -->
                     <div class="selected_book">
-                      <div v-if="selectedBook">
-                        <v-row class="ma-5">
-                          <v-col>
-                            <img :src="selectedBook.image">
-                          </v-col>
-                          <v-col cols="" class="pa-5">
-                            <v-card-text>{{ selectedBook.title }}</v-card-text>
-                            <v-card-subtitle class="pa-5">
-                              {{ selectedBook.author }}
-                            </v-card-subtitle>
-                          </v-col>
-                        </v-row>
-                      </div>
-                      <v-row
-                        v-else
-                        justify="center"
-                        class="ma-4"
-                      >
-                        <v-chip
-                          class="ma-5 pa-8"
-                          x-large
-                          color="grey lighten-3"
+                      <div v-if="scheduleBook">
+                        <nuxt-link
+                          :to="`/book/${scheduleBook.id}`"
+                          class="link"
                         >
-                          <v-icon class="ma-1">
-                            mdi-plus
-                          </v-icon>
-                          本を登録する
-                        </v-chip>
-                      </v-row>
+                          <v-row class="ma-5">
+                            <v-col>
+                              <img :src="scheduleBook.image">
+                            </v-col>
+                            <v-col cols="" class="pa-5">
+                              <v-card-text>{{ scheduleBook.title }}</v-card-text>
+                              <v-card-subtitle class="pa-5">
+                                {{ scheduleBook.author }}
+                              </v-card-subtitle>
+                            </v-col>
+                          </v-row>
+                        </nuxt-link>
+                      </div>
+                      <div v-else>
+                        <nuxt-link
+                          to="/registeredBook"
+                          class="link"
+                        >
+                          <v-row
+                            justify="center"
+                            class="ma-4"
+                            @click="getBook"
+                          >
+                            <v-chip
+                              class="ma-5 pa-8"
+                              x-large
+                              color="grey lighten-3"
+                            >
+                              <v-icon class="ma-1">
+                                mdi-plus
+                              </v-icon>
+                              本を登録する
+                            </v-chip>
+                          </v-row>
+                        </nuxt-link>
+                      </div>
                     </div>
                   </v-container>
                   <v-card-actions>
@@ -344,12 +356,14 @@ export default {
       datevVlue: moment().format('yyyy-MM-DD'),
       pendingColor: '',
       radios: null,
-      deleteDialog: false
+      deleteDialog: false,
+      min: null,
+      max: null
     }
   },
 
   computed: {
-    ...mapState('schedule', ['events', 'selectedEvent']),
+    ...mapState('schedule', ['events', 'selectedEvent', 'bookSelectedSchedule', 'backupEvent']),
 
     createEvent () {
       return this.$store.state.schedule.createEvent
@@ -357,15 +371,14 @@ export default {
     selectedTodo () {
       return this.$store.state.todos.selectedTodo
     },
-    selectedBook () {
-      return this.$store.state.book.selectedBook
+    scheduleBook () {
+      return this.$store.state.book.scheduleBook
     }
   },
 
   mounted () {
     this.$axios.$get(url.SCHEDULE_API)
       .then((response) => {
-        console.log(response)
         let data
         response.forEach((res) => {
           data = {
@@ -382,6 +395,10 @@ export default {
           }
           this.$store.commit('schedule/setEvent', data)
         })
+        if (this.bookSelectedSchedule) {
+          this.eventName ||= this.selectedTodo.content
+          this.selectedOpen = true
+        }
       })
   },
 
@@ -391,10 +408,13 @@ export default {
     },
 
     startDrag ({ event, timed }) {
-      if (event && timed) {
-        this.dragEvent = event
-        this.dragTime = null
-        this.extendOriginal = null
+      // this.$store.commit('schedule/setBackupEvent', event)
+      if (this.events) {
+        if (event && timed) {
+          this.dragEvent = event
+          this.dragTime = null
+          this.extendOriginal = null
+        }
       }
     },
     startTime (tms) {
@@ -412,7 +432,7 @@ export default {
           start: this.createStart,
           end: this.createStart,
           timed: true,
-          post_id: this.selectedBook ? this.selectedBook.id : null,
+          post_id: this.scheduleBook ? this.scheduleBook.id : null,
           post_item_id: this.selectedTodo ? this.selectedTodo.id : null
         }
         this.$store.commit('schedule/setCreateEvent', event)
@@ -420,7 +440,6 @@ export default {
       }
     },
     extendBottom (event) {
-      // store用
       this.$store.commit('schedule/setCreateEvent', event)
       this.createStart = event.start
       this.extendOriginal = event.end
@@ -441,10 +460,14 @@ export default {
         const mouseRounded = this.roundTime(mouse, false)
         const min = Math.min(mouseRounded, this.createStart)
         const max = Math.max(mouseRounded, this.createStart)
+        // バックアップ用
+        this.min = min
+        this.max = max
 
         this.$store.commit('schedule/updateCreateEvent', { start: min, end: max })
       }
     },
+
     endDrag ({ nativeEvent, event }) {
       this.$store.commit('schedule/setCreateEvent', null)
       this.dragTime = null
@@ -491,7 +514,15 @@ export default {
     showEvent ({ nativeEvent, event }) {
       const open = () => {
         // 登録済みの場合はDBからデータを取得する
-        this.selectedEvent.id ? this.$store.dispatch('schedule/showEvent', event) : this.$store.commit('schedule/setSelectedEvent', event)
+        // this.selectedEvent.id ? this.$store.dispatch('schedule/showEvent', event) : this.$store.commit('schedule/setSelectedEvent', event)
+        if (this.selectedEvent.id) {
+          this.$store.commit('schedule/setSelectedEvent', event)
+          this.$store.dispatch('schedule/showEvent', { event, min: this.min, max: this.max })
+          this.min = null
+          this.max = null
+        } else {
+          this.$store.commit('schedule/setSelectedEvent', event)
+        }
         this.selectedElement = nativeEvent.target
         requestAnimationFrame(() => requestAnimationFrame(() => { this.selectedOpen = true }))
         this.eventName = this.selectedEvent.name || this.selectedTodo.content
@@ -520,7 +551,9 @@ export default {
         this.$store.dispatch('schedule/addEvent', this.selectedEvent)
       } else {
         this.$store.commit('schedule/setSelectedEventName', this.eventName)
+        this.$store.commit('schedule/setIdEvent', { post: this.scheduleBook.id, post_item: this.selectedTodo.id })
         this.$store.dispatch('schedule/updateEvent', this.selectedEvent)
+        console.log(this.selectedEvent)
       }
       this.$store.commit('schedule/cancelEvent')
       this.eventName = ''
@@ -534,11 +567,46 @@ export default {
 
     // DBに登録していない要素は削除する
     cancelEvent () {
+      // console.log(this.backupEvent)
+      // this.$store.commit('schedule/deleteEvent', this.selectedEvent)
+      // this.$store.commit('schedule/setEvent', this.backupEvent)
       if (!this.selectedEvent.id) { this.$store.commit('schedule/cancelEvent') }
       if (this.pendingColor) { this.$store.commit('schedule/setSelectedEventColor', this.pendingColor) }
-      this.$store.commit('book/clearBook')
+      // if (this.backupEvent) { this.$store.commit('schedule/setSelectedEvent', this.backupEvent) }
+      this.$store.commit('book/clearScheduleBook')
       this.$store.commit('schedule/deleteSelectedEvent')
+      this.$store.commit('schedule/switchBookSelectedSchedule')
+      // this.$store.commit('schedule/setBackupEvent', {})
+      // 一旦リロードしてリセットする
+      // location.reload()
+      // 全てを削除してデータを取ってくる
+      // this.$axios.$get(url.SCHEDULE_API)
+      //   .then((response) => {
+      //     let data
+      //     response.forEach((res) => {
+      //       data = {
+      //         id: res.id,
+      //         name: res.name,
+      //         color: res.color,
+      //         start: res.start,
+      //         end: res.end,
+      //         updated_at: res.created_at,
+      //         timed: res.timed,
+      //         long_time: res.long_time,
+      //         post_id: res.post_id,
+      //         post_item_id: res.post_item_id
+      //       }
+      //       this.$store.commit('schedule/setEvent', data)
+      //     })
+      //   })
+
       this.selectedOpen = false
+    },
+
+    getBook () {
+      this.$store.commit('schedule/cancelEvent')
+      this.$store.commit('schedule/switchBookSelectedSchedule')
+      this.$router.push('/registeredBook')
     }
   }
 }

@@ -11,15 +11,20 @@ export const state = () => ({
   responseBook: [],
 
   // 登録した本
-  registeredBook: []
+  registeredBook: [],
+
+  // カレンダー表示用
+  scheduleBook: null
 })
 
 export const mutations = {
+  // books
   // 本情報
   getBooks (state, payload) {
     state.books = payload.data.items
   },
 
+  // selectedBook
   // 選択した本
   selectedBook (state, payload) {
     state.selectedBook = payload
@@ -29,6 +34,7 @@ export const mutations = {
     state.selectedBook = null
   },
 
+  //responseBook
   // レスポンスされた本
   responseBook (state, payload) {
     state.responseBook = payload
@@ -38,9 +44,19 @@ export const mutations = {
     state.responseBook = []
   },
 
+  // registeredBook 
   // 登録した本
   registeredBook (state, payload) {
     state.registeredBook = payload
+  },
+
+  // scheduleBook
+  setScheduleBook (state, payload) {
+    state.scheduleBook = payload
+  },
+  // scheduleBook削除
+  clearScheduleBook () {
+    state.scheduleBook = null
   }
 }
 
