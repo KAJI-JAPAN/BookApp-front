@@ -13,6 +13,9 @@ export const state = () => ({
   // イベント画面から本を選択する時のダイアログ
   bookSelectedSchedule: false,
 
+  // まとめて入力画面から本を選択する時
+  summarizeBookSelectedSchedule: false,
+
   // イベントバックアップ
   backupEvent: {}
 })
@@ -92,6 +95,10 @@ export const mutations = {
     state.events.pop()
   },
 
+  resetEvent (state) {
+    state.events = []
+  },
+
   // イベントを指定削除
   deleteEvent(state, payload) {
     state.events.splice(state.events.indexOf(payload), 1)
@@ -104,15 +111,17 @@ export const mutations = {
     console.log(state.events)
   },
 
-// bookSelectedSchedule
-  switchBookSelectedSchedule (state) {
-    state.bookSelectedSchedule = !state.bookSelectedSchedule
+  // bookSelectedSchedule
+  switchBookSelectedSchedule (state, payload) {
+    state.bookSelectedSchedule = payload
+    state.bookSelectedSchedule
   },
 
-// longTermIndex
-  count (state) {
-    state.longTermIndex = state.longTermIndex++
-  } 
+  // summarizeBookSelectedSchedul
+  switchSummarizeBookSelectedSchedul (state, payload) {
+    state.summarizeBookSelectedSchedule = payload
+    console.log( state.summarizeBookSelectedSchedule)
+  }
 }
 
 
@@ -134,7 +143,6 @@ export const actions = {
       }
     })
       .then((response) => {
-        console.log(response)
          let data = {
             id: response.id,
             name: response.name,

@@ -262,49 +262,7 @@
                       </v-list-item>
                     </v-card-text>
                     <!-- 登録した本を表示 -->
-                    <div class="selected_book">
-                      <div v-if="scheduleBook">
-                        <nuxt-link
-                          :to="`/book/${scheduleBook.id}`"
-                          class="link"
-                        >
-                          <v-row class="ma-5">
-                            <v-col>
-                              <img :src="scheduleBook.image">
-                            </v-col>
-                            <v-col cols="" class="pa-5">
-                              <v-card-text>{{ scheduleBook.title }}</v-card-text>
-                              <v-card-subtitle class="pa-5">
-                                {{ scheduleBook.author }}
-                              </v-card-subtitle>
-                            </v-col>
-                          </v-row>
-                        </nuxt-link>
-                      </div>
-                      <div v-else>
-                        <nuxt-link
-                          to="/registeredBook"
-                          class="link"
-                        >
-                          <v-row
-                            justify="center"
-                            class="ma-4"
-                            @click="getBook"
-                          >
-                            <v-chip
-                              class="ma-5 pa-8"
-                              x-large
-                              color="grey lighten-3"
-                            >
-                              <v-icon class="ma-1">
-                                mdi-plus
-                              </v-icon>
-                              本を登録する
-                            </v-chip>
-                          </v-row>
-                        </nuxt-link>
-                      </div>
-                    </div>
+                    <ScheduleBook />
                   </v-container>
                   <v-card-actions>
                     <v-btn
@@ -363,7 +321,7 @@ export default {
   },
 
   computed: {
-    ...mapState('schedule', ['events', 'selectedEvent', 'bookSelectedSchedule', 'backupEvent']),
+    ...mapState('schedule', ['events', 'selectedEvent', 'bookSelectedSchedule', 'backupEvent', 'summarizeBookSelectedSchedule']),
 
     createEvent () {
       return this.$store.state.schedule.createEvent
@@ -377,6 +335,7 @@ export default {
   },
 
   mounted () {
+    this.$store.commit('schedule/resetEvent')
     this.$axios.$get(url.SCHEDULE_API)
       .then((response) => {
         let data
@@ -553,7 +512,6 @@ export default {
         this.$store.commit('schedule/setSelectedEventName', this.eventName)
         this.$store.commit('schedule/setIdEvent', { post: this.scheduleBook.id, post_item: this.selectedTodo.id })
         this.$store.dispatch('schedule/updateEvent', this.selectedEvent)
-        console.log(this.selectedEvent)
       }
       this.$store.commit('schedule/cancelEvent')
       this.eventName = ''
@@ -575,7 +533,7 @@ export default {
       // if (this.backupEvent) { this.$store.commit('schedule/setSelectedEvent', this.backupEvent) }
       this.$store.commit('book/clearScheduleBook')
       this.$store.commit('schedule/deleteSelectedEvent')
-      this.$store.commit('schedule/switchBookSelectedSchedule')
+      this.$store.commit('schedule/switchBookSelectedSchedule', false)
       // this.$store.commit('schedule/setBackupEvent', {})
       // 一旦リロードしてリセットする
       // location.reload()
@@ -601,12 +559,6 @@ export default {
       //   })
 
       this.selectedOpen = false
-    },
-
-    getBook () {
-      this.$store.commit('schedule/cancelEvent')
-      this.$store.commit('schedule/switchBookSelectedSchedule')
-      this.$router.push('/registeredBook')
     }
   }
 }

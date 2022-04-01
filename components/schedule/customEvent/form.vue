@@ -17,6 +17,7 @@
             outlined
             v-bind="attrs"
             v-on="on"
+            @click="bookSelect"
           >
             <v-icon>mdi-fire</v-icon>
             アクションをまとめて入力する
@@ -178,6 +179,9 @@
                   />
                 </v-menu>
               </v-col>
+              <!-- 選択した本を表示 -->
+              <ScheduleBook />
+
               <!-- 日数選択 -->
               <v-col
                 class="d-flex"
@@ -303,8 +307,6 @@ export default {
     },
     // 開始時間選択「分」を制限
     timePickerStartMnites (value) {
-      // const today = new Date().toISOString().substr(0, 10)
-      // console.log(this.getStartTime)
       const todayHours = new Date().getHours()
       if (todayHours === this.getStartTime) {
         if (value >= new Date().getMinutes()) { return this.timeInterval(value) }
@@ -342,7 +344,6 @@ export default {
         // const selectDateIdMap = {1: 60, 2: 250}
         const selectDateIdMap = {1: 5, 2: 250}
         let arrayEvent = []
-        this.$store.commit('schedule/count')
         
           for (let i=0; i < selectDateIdMap[selectDate]; i++) {
             const date = moment(`${this.date}`).add(i, 'd').format('YYYY-MM-DD')
@@ -357,13 +358,10 @@ export default {
               long_time: true,
               long_term_id: this.index
             }
-            // arrayEventJson = JSON.stringify(data)
             arrayEvent.push(data)
-            // this.$store.dispatch('schedule/addEvent', JSON.stringify(data))
           }
         this.$store.dispatch('schedule/manyAdditionalEvents', arrayEvent)
         this.dialog = false
-        // console.log(arrayEvent)
       }
 
     },
@@ -376,6 +374,11 @@ export default {
       console.log(this.date)
       this.dialog = false
       this.$refs.date_form.reset()
+      this.$store.commit('switchSummarizeBookSelectedSchedul', false)
+    },
+
+    bookSelect () {
+      this.$store.commit('schedule/switchSummarizeBookSelectedSchedul', true)
     }
   }
 }
