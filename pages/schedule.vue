@@ -515,7 +515,7 @@ export default {
       const open = () => {
         // 登録済みの場合はDBからデータを取得する
         // this.selectedEvent.id ? this.$store.dispatch('schedule/showEvent', event) : this.$store.commit('schedule/setSelectedEvent', event)
-        if (this.selectedEvent.id) {
+        if (this.selectedEvent.id && this.max) {
           this.$store.commit('schedule/setSelectedEvent', event)
           this.$store.dispatch('schedule/showEvent', { event, min: this.min, max: this.max })
           this.min = null

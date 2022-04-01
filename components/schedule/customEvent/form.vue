@@ -258,6 +258,12 @@ export default {
     }
   },
 
+  computed: {
+    index () {
+     return this.$store.state.schedule.longTermIndex
+    }
+  },
+
   methods: {
 
     timeInterval (time) {
@@ -335,7 +341,8 @@ export default {
         const selectDate = this.selectDate
         // const selectDateIdMap = {1: 60, 2: 250}
         const selectDateIdMap = {1: 5, 2: 250}
-        let arrayEvent = [] 
+        let arrayEvent = []
+        this.$store.commit('schedule/count')
         
           for (let i=0; i < selectDateIdMap[selectDate]; i++) {
             const date = moment(`${this.date}`).add(i, 'd').format('YYYY-MM-DD')
@@ -347,16 +354,16 @@ export default {
               start: Date.parse(dateTimeStart), 
               end: Date.parse(dateTimeEnd),
               timed: true,
-              long_time: true
+              long_time: true,
+              long_term_id: this.index
             }
             // arrayEventJson = JSON.stringify(data)
             arrayEvent.push(data)
             // this.$store.dispatch('schedule/addEvent', JSON.stringify(data))
           }
-        this.$store.dispatch('schedule/addEvent', arrayEvent)
+        this.$store.dispatch('schedule/manyAdditionalEvents', arrayEvent)
         this.dialog = false
         // console.log(arrayEvent)
-
       }
 
     },

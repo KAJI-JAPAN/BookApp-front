@@ -107,18 +107,21 @@ export const mutations = {
 // bookSelectedSchedule
   switchBookSelectedSchedule (state) {
     state.bookSelectedSchedule = !state.bookSelectedSchedule
-  }
+  },
+
+// longTermIndex
+  count (state) {
+    state.longTermIndex = state.longTermIndex++
+  } 
 }
 
 
 export const actions = {
 
   // イベント追加
-  addEvent ({ commit }, event) {
+  addEvent ({rootState, commit }, event) {
     
-    this.$axios.$post(url.SCHEDULE_API,
-      // { post: event })
-    {
+    this.$axios.$post(url.SCHEDULE_API, {
       post: {
         name: event.name,
         start: event.start,
@@ -142,11 +145,12 @@ export const actions = {
             timed: response.timed,
             long_time: response.long_time,
             post_id: response.post_id,
-            post_item_id: response.post_item_id
+            post_item_id: response.post_item_id,
+            long_term_id: response.long_term_id
           }
         commit('setEvent', data)
         commit('deleteSelectedEvent')
-        commit('book/clearScheduleBook', { root: true })
+        if(rootState.book.scheduleBook) { commit('book/clearScheduleBook', {}, { root: true })}
         commit('alertSwitchSuccess', true, { root: true })
         setTimeout(() => {
           commit('alertSwitchSuccess', false, { root: true })
@@ -155,7 +159,7 @@ export const actions = {
   },
 
   // イベント編集
-  updateEvent ({ commit }, event ) {
+  updateEvent ({ rootState, commit }, event ) {
     console.log()
     this.$axios.$patch(`${url.SCHEDULE_API}/${event.id}`, {
       post:  {
@@ -186,7 +190,7 @@ export const actions = {
       commit('updateEvent', { payload: event, updateEvent: data })
       commit('deleteSelectedEvent')
       commit('alertSwitchSuccess', true, { root: true })
-      if (data.post_id)  { commit('book/clearScheduleBook', { root: true }) }
+      if(rootState.book.scheduleBook) { commit('book/clearScheduleBook', {}, { root: true })}
       setTimeout(() => {
         commit('alertSwitchSuccess', false, { root: true })
       }, 2000)
@@ -222,5 +226,35 @@ export const actions = {
           commit('alertSwitchDelete', false, { root: true })
         }, 2000)
       })
+  },
+
+  // まとめて追加用
+  manyAdditionalEvents ({rootState, commit }, event) {
+    this.$axios.$post(`${url.SCHEDULE_API}/create_many_schedule`, { post: event})
+    .then((response) => {
+       let data
+       response.forEach((response) => {
+        data = {
+          id: response.id,
+          name: response.name,
+          color: response.color,
+          start: response.start,
+          end: response.end,
+          updated_at: response.created_at,
+          timed: response.timed,
+          long_time: response.long_time,
+          post_id: response.post_id,
+          post_item_id: response.post_item_id,
+          long_term_id: response.long_term_id
+        }
+      commit('setEvent', data)
+    })
+      commit('deleteSelectedEvent')
+      if(rootState.book.scheduleBook) { commit('book/clearScheduleBook', {}, { root: true })}
+      commit('alertSwitchSuccess', true, { root: true })
+      setTimeout(() => {
+        commit('alertSwitchSuccess', false, { root: true })
+      }, 3000)
+    })
   }
 }

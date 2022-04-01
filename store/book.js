@@ -55,7 +55,7 @@ export const mutations = {
     state.scheduleBook = payload
   },
   // scheduleBook削除
-  clearScheduleBook () {
+  clearScheduleBook (state) {
     state.scheduleBook = null
   }
 }
