@@ -64,7 +64,7 @@
         </v-sheet>
         <v-divider class="ma-8" />
         <!-- 日付まとめて入力ボタン -->
-        <ScheduleCustomEventForm />
+        <ScheduleCustomEventForm ref="form" />
       </v-col>
 
       <!-- 週カレンダー -->
@@ -321,7 +321,7 @@ export default {
   },
 
   computed: {
-    ...mapState('schedule', ['events', 'selectedEvent', 'bookSelectedSchedule', 'backupEvent', 'summarizeBookSelectedSchedule']),
+    ...mapState('schedule', ['events', 'selectedEvent', 'bookSelectedSchedule', 'summarizeBookSelectedSchedule']),
 
     createEvent () {
       return this.$store.state.schedule.createEvent
@@ -354,9 +354,11 @@ export default {
           }
           this.$store.commit('schedule/setEvent', data)
         })
+        this.eventName ||= this.selectedTodo.content
         if (this.bookSelectedSchedule) {
-          this.eventName ||= this.selectedTodo.content
           this.selectedOpen = true
+        } else if (this.summarizeBookSelectedSchedule) {
+          this.$refs.form.dialogSwitch(this.eventName)
         }
       })
   },
@@ -525,39 +527,11 @@ export default {
 
     // DBに登録していない要素は削除する
     cancelEvent () {
-      // console.log(this.backupEvent)
-      // this.$store.commit('schedule/deleteEvent', this.selectedEvent)
-      // this.$store.commit('schedule/setEvent', this.backupEvent)
       if (!this.selectedEvent.id) { this.$store.commit('schedule/cancelEvent') }
       if (this.pendingColor) { this.$store.commit('schedule/setSelectedEventColor', this.pendingColor) }
-      // if (this.backupEvent) { this.$store.commit('schedule/setSelectedEvent', this.backupEvent) }
       this.$store.commit('book/clearScheduleBook')
       this.$store.commit('schedule/deleteSelectedEvent')
       this.$store.commit('schedule/switchBookSelectedSchedule', false)
-      // this.$store.commit('schedule/setBackupEvent', {})
-      // 一旦リロードしてリセットする
-      // location.reload()
-      // 全てを削除してデータを取ってくる
-      // this.$axios.$get(url.SCHEDULE_API)
-      //   .then((response) => {
-      //     let data
-      //     response.forEach((res) => {
-      //       data = {
-      //         id: res.id,
-      //         name: res.name,
-      //         color: res.color,
-      //         start: res.start,
-      //         end: res.end,
-      //         updated_at: res.created_at,
-      //         timed: res.timed,
-      //         long_time: res.long_time,
-      //         post_id: res.post_id,
-      //         post_item_id: res.post_item_id
-      //       }
-      //       this.$store.commit('schedule/setEvent', data)
-      //     })
-      //   })
-
       this.selectedOpen = false
     }
   }

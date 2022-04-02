@@ -50,13 +50,17 @@ export default {
   computed: {
     scheduleBook () {
       return this.$store.state.book.scheduleBook
+    },
+
+    summarizeBookSelectedSchedule () {
+      return this.$store.state.schedule.summarizeBookSelectedSchedule
     }
   },
 
   methods: {
     getBook () {
-      this.$store.commit('schedule/cancelEvent')
       if (!this.summarizeBookSelectedSchedule) { this.$store.commit('schedule/switchBookSelectedSchedule', true) }
+      this.$store.commit('schedule/cancelEvent')
       this.$router.push('/registeredBook')
     }
   }

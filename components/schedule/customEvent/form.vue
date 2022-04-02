@@ -18,6 +18,7 @@
             v-bind="attrs"
             v-on="on"
             @click="bookSelect"
+            :value="eventName"
           >
             <v-icon>mdi-fire</v-icon>
             アクションをまとめて入力する
@@ -129,7 +130,7 @@
                       v-bind="attrs"
                       v-on="on"
                       :rules="rulesTime"
-                    />
+                     />
                   </template>
                   <v-time-picker
                     v-if="timePickerMenuStart"
@@ -184,7 +185,7 @@
 
               <!-- 日数選択 -->
               <v-col
-                class="d-flex"
+                class="d-flex mt-3"
                 cols="3"
                 sm="6"
               >
@@ -256,6 +257,7 @@ export default {
         { id:2, state : '250日(約８ヶ月)' }, 
       ],
       selectDate: '',
+      // validation用
       rulesTime: [value => !!value || '時間を選択してください' ],
       rulesLongDate:[value => !!value || '日数を選択してください'],
       rulesDate:[value => !!value || '日付を選択してください']
@@ -361,6 +363,7 @@ export default {
             arrayEvent.push(data)
           }
         this.$store.dispatch('schedule/manyAdditionalEvents', arrayEvent)
+        this.$store.commit('schedule/switchSummarizeBookSelectedSchedul', false)
         this.dialog = false
       }
 
@@ -371,14 +374,18 @@ export default {
     },
 
     cancelForm () {
-      console.log(this.date)
       this.dialog = false
       this.$refs.date_form.reset()
-      this.$store.commit('switchSummarizeBookSelectedSchedul', false)
+      this.$store.commit('schedule/switchSummarizeBookSelectedSchedul', false)
     },
 
     bookSelect () {
       this.$store.commit('schedule/switchSummarizeBookSelectedSchedul', true)
+    },
+    // schedule.vueからdialogとeventNameを受け取り
+    dialogSwitch (value) {
+      this.eventName = value
+      this.dialog = true
     }
   }
 }

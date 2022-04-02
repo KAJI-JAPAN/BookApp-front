@@ -65,13 +65,6 @@ export const mutations = {
     state.selectedEvent.post_item_id = payload.post_id
   },
 
-  // backupEvent
-  // イベントのバックアップを保存
-  // setBackupEvent (state, payload) {
-  //   state.backupEvent = payload
-  //   console.log(state.backupEvent)
-  // },
-
 
   // events
   // イベント追加
@@ -102,13 +95,11 @@ export const mutations = {
   // イベントを指定削除
   deleteEvent(state, payload) {
     state.events.splice(state.events.indexOf(payload), 1)
-    console.log(state.events)
   },
 
   // イベント編集
   updateEvent(state, { payload, updateEvent }) {
     state.events.splice(state.events.indexOf(payload),1, updateEvent )
-    console.log(state.events)
   },
 
   // bookSelectedSchedule
@@ -120,7 +111,6 @@ export const mutations = {
   // summarizeBookSelectedSchedul
   switchSummarizeBookSelectedSchedul (state, payload) {
     state.summarizeBookSelectedSchedule = payload
-    console.log( state.summarizeBookSelectedSchedule)
   }
 }
 
@@ -168,7 +158,6 @@ export const actions = {
 
   // イベント編集
   updateEvent ({ rootState, commit }, event ) {
-    console.log()
     this.$axios.$patch(`${url.SCHEDULE_API}/${event.id}`, {
       post:  {
         id: event.id,
@@ -218,7 +207,6 @@ export const actions = {
         commit('updateSelectedEvent', { start: newStart, end: newEnd })
       }
       commit('book/setScheduleBook', response.post, { root: true })
-      console.log(response)
     })
   },
 
