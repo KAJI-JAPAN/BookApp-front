@@ -118,7 +118,7 @@ export const mutations = {
 export const actions = {
 
   // イベント追加
-  addEvent ({rootState, commit }, event) {
+  addEvent ({ rootState, commit }, event) {
     
     this.$axios.$post(url.SCHEDULE_API, {
       post: {
@@ -211,12 +211,12 @@ export const actions = {
   },
 
   // イベント削除
-  deleteEvent ({ commit }, event) {
+  deleteEvent ({ rootState, commit }, event) {
     this.$axios.$delete(`${url.SCHEDULE_API}/${event.id}`)
     .then(() => {
+      if(rootState.book.scheduleBook) { commit('book/clearScheduleBook', {}, { root: true })}
       commit('deleteEvent', event)
       commit('deleteSelectedEvent')
-      commit('book/clearScheduleBook', { root: true })
       commit('alertSwitchDelete', true, { root: true })
         setTimeout(() => {
           commit('alertSwitchDelete', false, { root: true })
@@ -225,7 +225,7 @@ export const actions = {
   },
 
   // まとめて追加用
-  manyAdditionalEvents ({rootState, commit }, event) {
+  manyAdditionalEvents ({ rootState, commit }, event) {
     this.$axios.$post(`${url.SCHEDULE_API}/create_many_schedule`, { post: event})
     .then((response) => {
        let data
@@ -245,12 +245,25 @@ export const actions = {
         }
       commit('setEvent', data)
     })
-      commit('deleteSelectedEvent')
       if(rootState.book.scheduleBook) { commit('book/clearScheduleBook', {}, { root: true })}
+      commit('deleteSelectedEvent')
       commit('alertSwitchSuccess', true, { root: true })
       setTimeout(() => {
         commit('alertSwitchSuccess', false, { root: true })
       }, 3000)
     })
+  },
+  manyDeletionEvents ({ rootState, commit }, event) {
+    this.$axios.$post(`${url.SCHEDULE_API}/${event.id}/delete_many_schedule`, event)
+    .then(() => {
+      if(rootState.book.scheduleBook) { commit('book/clearScheduleBook', {}, { root: true })}
+      commit('deleteEvent', event)
+      commit('deleteSelectedEvent')
+      commit('alertSwitchDelete', true, { root: true })
+        setTimeout(() => {
+          commit('alertSwitchDelete', false, { root: true })
+        }, 2000)
+      })
+
   }
 }

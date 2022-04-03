@@ -198,24 +198,30 @@
                                   mandatory
                                 >
                                   <v-radio
-                                    label="今回の予定を削除する"
-                                    value="delete"
+                                    v-for="(item, index) in daleteSelect"
+                                    :key="index"
+                                    :label="item.text"
+                                    :value="item.id"
                                     color="red"
-                                  />
-                                  <v-radio
-                                    label="全ての予定を削除する"
-                                    value="allDelete"
-                                    color="red"
+                                    class="pa-2"
                                   />
                                 </v-radio-group>
                               </v-container>
                               <v-card-actions>
                                 <v-spacer />
 
-                                <v-btn
+                                <!-- <v-btn
                                   color="grey darken-1"
                                   text
                                   @click="deleteDialog = false"
+                                >
+                                  キャンセル
+                                </v-btn> -->
+
+                                <v-btn
+                                  color="grey darken-1"
+                                  text
+                                  @click="test"
                                 >
                                   キャンセル
                                 </v-btn>
@@ -223,7 +229,7 @@
                                 <v-btn
                                   color="primary"
                                   text
-                                  @click="dialog = false"
+                                  @click="deleteGroup"
                                 >
                                   OK
                                 </v-btn>
@@ -316,7 +322,11 @@ export default {
       radios: null,
       deleteDialog: false,
       min: null,
-      max: null
+      max: null,
+      daleteSelect: [
+        { id: 1, text: '今回の予定を削除する' },
+        { id: 2, text: '全ての予定を削除する' }
+      ]
     }
   },
 
@@ -525,6 +535,17 @@ export default {
       this.$store.dispatch('schedule/deleteEvent', this.selectedEvent)
     },
 
+    // まとめて登録したイベントの削除
+    deleteGroup () {
+      if (this.radios === 1) {
+        this.deleteEvent()
+      } else if (this.radios === 2) {
+        this.$store.dispatch('schedule/manyDeletionEvents', this.selectedEvent)
+        location.reload()
+      }
+      this.selectedOpen = false
+    },
+
     // DBに登録していない要素は削除する
     cancelEvent () {
       if (!this.selectedEvent.id) { this.$store.commit('schedule/cancelEvent') }
@@ -533,6 +554,9 @@ export default {
       this.$store.commit('schedule/deleteSelectedEvent')
       this.$store.commit('schedule/switchBookSelectedSchedule', false)
       this.selectedOpen = false
+    },
+    test () {
+      // location.reload()
     }
   }
 }
