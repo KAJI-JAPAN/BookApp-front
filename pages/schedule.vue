@@ -308,7 +308,7 @@ export default {
     return {
       value: '',
       colors: ['#2196F3', '#3F51B5', '#673AB7', '#00BCD4', '#4CAF50', '#FF9800', '#757575'],
-      dragEvent: null,
+      // dragEvent: null,
       dragStart: null,
       createStart: null,
       extendOriginal: null,
@@ -331,7 +331,7 @@ export default {
   },
 
   computed: {
-    ...mapState('schedule', ['events', 'selectedEvent', 'bookSelectedSchedule', 'summarizeBookSelectedSchedule']),
+    ...mapState('schedule', ['events', 'selectedEvent', 'bookSelectedSchedule', 'summarizeBookSelectedSchedule', 'dragEvent']),
 
     createEvent () {
       return this.$store.state.schedule.createEvent
@@ -359,8 +359,7 @@ export default {
             updated_at: res.created_at,
             timed: res.timed,
             long_time: res.long_time,
-            post_id: res.post_id,
-            post_item_id: res.post_item_id
+            post_id: res.post_id
           }
           this.$store.commit('schedule/setEvent', data)
         })
@@ -379,10 +378,10 @@ export default {
     },
 
     startDrag ({ event, timed }) {
-      // this.$store.commit('schedule/setBackupEvent', event)
       if (this.events) {
         if (event && timed) {
-          this.dragEvent = event
+          // this.dragEvent = event
+          this.$store.commit('schedule/setDragEvent', event)
           this.dragTime = null
           this.extendOriginal = null
         }
@@ -403,8 +402,7 @@ export default {
           start: this.createStart,
           end: this.createStart,
           timed: true,
-          post_id: this.scheduleBook ? this.scheduleBook.id : null,
-          post_item_id: this.selectedTodo ? this.selectedTodo.id : null
+          post_id: this.scheduleBook ? this.scheduleBook.id : null
         }
         this.$store.commit('schedule/setCreateEvent', event)
         this.$store.commit('schedule/pushCreateEvent', this.createEvent)
@@ -425,13 +423,12 @@ export default {
         const newStartTime = mouse - this.dragTime
         const newStart = this.roundTime(newStartTime)
         const newEnd = newStart + duration
-        this.dragEvent.start = newStart
-        this.dragEvent.end = newEnd
+        this.$store.commit('schedule/setTimeDragEvent', { start: newStart, end: newEnd })
       } else if (this.createEvent && this.createStart !== null) {
         const mouseRounded = this.roundTime(mouse, false)
         const min = Math.min(mouseRounded, this.createStart)
         const max = Math.max(mouseRounded, this.createStart)
-        // バックアップ用
+        // バックアップ用 編集した時にselectedEventに時間を反映させたい
         this.min = min
         this.max = max
 
@@ -441,8 +438,8 @@ export default {
 
     endDrag ({ nativeEvent, event }) {
       this.$store.commit('schedule/setCreateEvent', null)
+      this.$store.commit('schedule/setDragEvent', null)
       this.dragTime = null
-      this.dragEvent = null
       this.createStart = null
       this.extendOriginal = null
       this.showEvent({ nativeEvent, event })
@@ -457,7 +454,7 @@ export default {
       this.$store.commit('schedule/setCreateEvent', null)
       this.createStart = null
       this.dragTime = null
-      this.dragEvent = null
+      this.$store.commit('schedule/setDragEvent', null)
     },
     roundTime (time, down = true) {
       const roundTo = 15 // minutes
@@ -486,14 +483,9 @@ export default {
       const open = () => {
         // 登録済みの場合はDBからデータを取得する
         // this.selectedEvent.id ? this.$store.dispatch('schedule/showEvent', event) : this.$store.commit('schedule/setSelectedEvent', event)
-        if (this.selectedEvent.id && this.max) {
-          this.$store.commit('schedule/setSelectedEvent', event)
-          this.$store.dispatch('schedule/showEvent', { event, min: this.min, max: this.max })
-          this.min = null
-          this.max = null
-        } else {
-          this.$store.commit('schedule/setSelectedEvent', event)
-        }
+        if (this.selectedEvent.id) { this.$store.dispatch('schedule/showEvent', { event, min: this.min, max: this.max }) }
+        this.$store.commit('schedule/setSelectedEvent', event)
+
         this.selectedElement = nativeEvent.target
         requestAnimationFrame(() => requestAnimationFrame(() => { this.selectedOpen = true }))
         this.eventName = this.selectedEvent.name || this.selectedTodo.content
@@ -522,7 +514,7 @@ export default {
         this.$store.dispatch('schedule/addEvent', this.selectedEvent)
       } else {
         this.$store.commit('schedule/setSelectedEventName', this.eventName)
-        this.$store.commit('schedule/setIdEvent', { post: this.scheduleBook.id, post_item: this.selectedTodo.id })
+        this.$store.commit('schedule/setIdEvent', { post: this.scheduleBook.id })
         this.$store.dispatch('schedule/updateEvent', this.selectedEvent)
       }
       this.$store.commit('schedule/cancelEvent')
@@ -548,7 +540,7 @@ export default {
 
     // DBに登録していない要素は削除する
     cancelEvent () {
-      if (!this.selectedEvent.id) { this.$store.commit('schedule/cancelEvent') }
+      !this.selectedEvent.id ? this.$store.commit('schedule/cancelEvent') : location.reload()
       if (this.pendingColor) { this.$store.commit('schedule/setSelectedEventColor', this.pendingColor) }
       this.$store.commit('book/clearScheduleBook')
       this.$store.commit('schedule/deleteSelectedEvent')

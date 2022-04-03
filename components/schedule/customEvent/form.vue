@@ -6,6 +6,7 @@
       v-model="dialog"
       persistent
       max-width="600px"
+      max-height="150px"
       @click:outside="cancelForm"
     >
       <template #activator="{ on, attrs }">
@@ -27,7 +28,7 @@
       </template>
       <v-card>
         <!-- タイトル -->
-        <v-card-title>
+        <v-card-title class="pb-0">
           <v-col cols="10">
             <v-text-field
               v-model="eventName"
@@ -78,7 +79,7 @@
           <v-container>
           <v-form ref="date_form">
             <v-row>
-              <v-col cols="5">
+              <v-col cols="5"  class="pt-0 mt-0">
                 <v-menu
                   v-model="inputMenu"
                   :close-on-content-click="false"
@@ -96,6 +97,7 @@
                       v-bind="attrs"
                       v-on="on"
                       :rules="rulesDate"
+                       class="pt-0 mt-0"
                     />
                   </template>
                   <v-date-picker
@@ -110,7 +112,7 @@
                 </v-menu>
               </v-col>
               <!-- 開始時間入力 -->
-              <v-col align-self="center" cols="3">
+              <v-col align-self="center" cols="3"  class="pt-0 mt-0">
                 <v-menu
                   ref="menu"
                   v-model="timePickerMenuStart"
@@ -120,6 +122,7 @@
                   offset-y
                   max-width="290px"
                   min-width="290px"
+                  class="pt-0 mt-0"
                 >
                   <template #activator="{ on, attrs }">
                     <v-text-field
@@ -130,6 +133,7 @@
                       v-bind="attrs"
                       v-on="on"
                       :rules="rulesTime"
+                      class="pt-0 mt-0"
                      />
                   </template>
                   <v-time-picker
@@ -145,7 +149,7 @@
                 </v-menu>
               </v-col>
               <!-- 終了時間 -->
-              <v-col cols="3">
+              <v-col cols="3" class="pt-0 mt-0">
                 <v-menu
                   ref="menu"
                   v-model="timePickerMenuEnd"
@@ -165,6 +169,7 @@
                       v-bind="attrs"
                       v-on="on"
                       :rules="rulesTime"
+                      class="pt-0 mt-0"
                     />
                   </template>
                   <v-time-picker
@@ -267,7 +272,12 @@ export default {
   computed: {
     index () {
      return this.$store.state.schedule.longTermIndex
+    },
+
+    scheduleBook () {
+      return this.$store.state.book.scheduleBook
     }
+
   },
 
   methods: {
@@ -357,6 +367,7 @@ export default {
               start: Date.parse(dateTimeStart), 
               end: Date.parse(dateTimeEnd),
               timed: true,
+              post_id: this.scheduleBook ? this.scheduleBook.id : null,
               long_time: true,
               long_term_id: this.index
             }

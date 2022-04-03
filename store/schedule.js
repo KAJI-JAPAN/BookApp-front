@@ -17,7 +17,10 @@ export const state = () => ({
   summarizeBookSelectedSchedule: false,
 
   // イベントバックアップ
-  backupEvent: {}
+  backupEvent: {},
+
+  // マウスダウン時の処理
+  dragEvent: null
 })
 
 export const mutations = {
@@ -62,7 +65,6 @@ export const mutations = {
 
   setIdEvent (state, payload) {
     state.selectedEvent.post_id = payload.post
-    state.selectedEvent.post_item_id = payload.post_id
   },
 
 
@@ -111,6 +113,16 @@ export const mutations = {
   // summarizeBookSelectedSchedul
   switchSummarizeBookSelectedSchedul (state, payload) {
     state.summarizeBookSelectedSchedule = payload
+  },
+
+  // dragEvent
+  setDragEvent (state, payload) {
+    state.dragEvent = payload
+  },
+
+  setTimeDragEvent (state, payload) {
+    state.dragEvent.start = payload.start
+    state.dragEvent.end = payload.end
   }
 }
 
@@ -129,7 +141,6 @@ export const actions = {
         timed: event.timed,
         long_time:  event.long_time ? true : false,
         post_id: event.post_id,
-        post_item_id: event.post_item_id
       }
     })
       .then((response) => {
@@ -143,7 +154,6 @@ export const actions = {
             timed: response.timed,
             long_time: response.long_time,
             post_id: response.post_id,
-            post_item_id: response.post_item_id,
             long_term_id: response.long_term_id
           }
         commit('setEvent', data)
@@ -168,7 +178,6 @@ export const actions = {
         timed: true,
         long_time: event.long_time,
         post_id: event.post_id,
-        post_item_id: event.post_item_id
       }
     })
     .then((response) => {
@@ -181,8 +190,6 @@ export const actions = {
         timed: true,
         long_time: response.long_time,
         post_id: response.post_id,
-        post_item_id: response.post_item_id
-
       }
       commit('updateEvent', { payload: event, updateEvent: data })
       commit('deleteSelectedEvent')
@@ -197,7 +204,7 @@ export const actions = {
   showEvent ({ commit }, value) {
     this.$axios.$get(`${url.SCHEDULE_API}/${value.event.id}`)
     .then((response) => {
-      // commit('setBackupEvent', value.event)
+      console.log(response)
       const newStart = value.min
       const newEnd = value.max
       if (newStart === null &&  newEnd === null) {
@@ -240,7 +247,6 @@ export const actions = {
           timed: response.timed,
           long_time: response.long_time,
           post_id: response.post_id,
-          post_item_id: response.post_item_id,
           long_term_id: response.long_term_id
         }
       commit('setEvent', data)
