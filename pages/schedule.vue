@@ -7,6 +7,9 @@
     <AlertDeleteText>
       行動を削除しました
     </AlertDeleteText>
+    <AlertError>
+      エラー： しばらくしてからお試しください
+    </AlertError>
 
     <!-- ヘッダー -->
     <v-col cols="12">
@@ -210,18 +213,10 @@
                               <v-card-actions>
                                 <v-spacer />
 
-                                <!-- <v-btn
-                                  color="grey darken-1"
-                                  text
-                                  @click="deleteDialog = false"
-                                >
-                                  キャンセル
-                                </v-btn> -->
-
                                 <v-btn
                                   color="grey darken-1"
                                   text
-                                  @click="test"
+                                  @click="deleteDialog = false"
                                 >
                                   キャンセル
                                 </v-btn>

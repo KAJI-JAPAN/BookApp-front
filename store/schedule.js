@@ -164,6 +164,13 @@ export const actions = {
           commit('alertSwitchSuccess', false, { root: true })
         }, 3000)
       })
+      .catch(() => {
+        commit('alertSwitchError', true, { root: true })
+        setTimeout(() => {
+          commit('alertSwitchError', false, { root: true })
+        }, 3000)
+      })
+
   },
 
   // イベント編集
@@ -199,9 +206,17 @@ export const actions = {
         commit('alertSwitchSuccess', false, { root: true })
       }, 2000)
     })
+    .catch(() => {
+      commit('alertSwitchError', true, { root: true })
+      setTimeout(() => {
+        commit('alertSwitchError', false, { root: true })
+      }, 3000)
+    })
+
   },
 
   showEvent ({ commit }, value) {
+    console.log(value)
     this.$axios.$get(`${url.SCHEDULE_API}/${value.event.id}`)
     .then((response) => {
       console.log(response)
@@ -229,6 +244,13 @@ export const actions = {
           commit('alertSwitchDelete', false, { root: true })
         }, 2000)
       })
+      .catch(() => {
+        commit('alertSwitchError', true, { root: true })
+        setTimeout(() => {
+          commit('alertSwitchError', false, { root: true })
+        }, 3000)
+      })
+
   },
 
   // まとめて追加用
@@ -258,6 +280,13 @@ export const actions = {
         commit('alertSwitchSuccess', false, { root: true })
       }, 3000)
     })
+    .catch(() => {
+      commit('alertSwitchError', true, { root: true })
+      setTimeout(() => {
+        commit('alertSwitchError', false, { root: true })
+      }, 3000)
+    })
+
   },
   manyDeletionEvents ({ rootState, commit }, event) {
     this.$axios.$post(`${url.SCHEDULE_API}/${event.id}/delete_many_schedule`, event)
@@ -269,6 +298,12 @@ export const actions = {
         setTimeout(() => {
           commit('alertSwitchDelete', false, { root: true })
         }, 2000)
+      })
+      .catch(() => {
+        commit('alertSwitchError', true, { root: true })
+        setTimeout(() => {
+          commit('alertSwitchError', false, { root: true })
+        }, 3000)
       })
 
   }

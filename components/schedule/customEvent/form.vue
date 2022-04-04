@@ -353,8 +353,8 @@ export default {
     addEvent () {
       if(this.$refs.date_form.validate()) {
         const selectDate = this.selectDate
-        // const selectDateIdMap = {1: 60, 2: 250}
-        const selectDateIdMap = {1: 5, 2: 250}
+        const selectDateIdMap = {1: 60, 2: 250  }
+        // const selectDateIdMap = {1: 5, 2: 250}
         let arrayEvent = []
         
           for (let i=0; i < selectDateIdMap[selectDate]; i++) {
