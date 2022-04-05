@@ -9,8 +9,10 @@
 <script>
 import logoImg from '~/assets/images/book-app.png'
 export default {
-  data: () => ({
-    logoImg
-  })
+  data () {
+    return {
+      logoImg
+    }
+  }
 }
 </script>

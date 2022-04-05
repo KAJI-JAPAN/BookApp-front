@@ -71,7 +71,7 @@ export default {
     strategines: {
       local: {
         endpoints: {
-          login: { url: '/api/v1/auth/login', method: 'post', propertyName: 'false' },
+          login: { url: '/api/v1/login', method: 'post', propertyName: 'false' },
           logout: false,
           user: false
         }
@@ -80,5 +80,9 @@ export default {
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+  },
+
+  router: {
+    middleware: ['auth']
   }
 }
