@@ -10,7 +10,7 @@
       <v-form ref="form" v-model="valid" lazy-validation>
         <v-container>
           <UserFormTitle>
-            KOUDOKUをはじめよう！
+            アカウント編集
           </UserFormTitle>
 
           <UserFormTextFieldUserName :name.sync="userInfo.name" />
@@ -24,7 +24,7 @@
                 class="mr-4 blue white--text"
                 @click="registerUser"
               >
-                登録する
+                保村する
               </v-btn>
             </v-col>
           </v-row>
@@ -42,7 +42,6 @@ export default {
   data () {
     return {
       logoImg,
-      show: false,
       userInfo: {
         name: '',
         email: '',
@@ -52,10 +51,22 @@ export default {
     }
   },
   methods: {
-    registerUser () {
-      this.$axios.$post('/api/v1/auth', this.userInfo).then((response) => {
-        window.location.href = '/users/comfirmation'
-      })
+    editEmail () {
+      this.$axios
+        .put('api/v1/auth', this.userInfo, {
+          headers: {
+            'access-token': localStorage.getItem('access-token'),
+            uid: localStorage.getItem('uid'),
+            client: localStorage.getItem('client')
+          }
+        })
+        .then((response) => {
+          localStorage.setItem('access-token', response.headers['access-token'])
+          localStorage.setItem('client', response.headers.client)
+          localStorage.setItem('uid', response.headers.uid)
+          localStorage.setItem('token-type', response.headers['token-type'])
+          window.location.href = '/'
+        })
     }
   }
 }

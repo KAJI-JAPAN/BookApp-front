@@ -9,13 +9,12 @@
       </div>
       <v-form ref="form" v-model="valid" lazy-validation>
         <v-container>
-          <v-row justify="center">
-            <p cols="12" class="ma-8 display-1 grey--text">
-              KOUDOKUにログイン
-            </p>
-          </v-row>
-          <UserFormTextFieledEmail />
-          <UserFormTextFieledPassword />
+          <UserFormTitle>
+            KOUDOKUにログイン
+          </UserFormTitle>
+
+          <UserFormTextFieldEmail :email.sync="userInfo.email" />
+          <UserFormTextFieldPassword :password.sync="userInfo.password" />
           <v-row justify="center">
             <v-col cols="12" md="10" sm="10">
               <v-btn
@@ -39,28 +38,35 @@ export default {
   data () {
     return {
       logoImg,
-      password: 'password',
-      email: 'momoko@test.xom',
-      show: false
+      userInfo: {
+        password: '',
+        email: ''
+      }
     }
   },
 
-  computed: {
-  },
   methods: {
     async loginWithAuthModule () {
       await this.$auth.loginWith('local', {
+        // emailとpasswordの情報を送信
         data: {
           email: this.email,
           password: this.password
         }
       })
-        .then((response) => {
-          return response
-        },
-        (error) => {
-          return error
-        })
+        .then(
+          (response) => {
+            // レスポンスで返ってきた、認証に必要な情報をlocalStorageに保存
+            localStorage.setItem('access-token', response.headers['access-token'])
+            localStorage.setItem('client', response.headers.client)
+            localStorage.setItem('uid', response.headers.uid)
+            localStorage.setItem('token-type', response.headers['token-type'])
+            return response
+          },
+          (error) => {
+            return error
+          }
+        )
     }
   }
 }

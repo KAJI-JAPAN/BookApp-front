@@ -56,14 +56,13 @@ export default {
   auth: false,
   methods: {
     deleteUser () {
-      this.$axios
-        .delete('api/v1/auth', {
-          headers: {
-            'access-token': localStorage.getItem('access-token'),
-            uid: localStorage.getItem('uid'),
-            client: localStorage.getItem('client')
-          }
-        })
+      this.$axios.$delete('api/v1/auth', {
+        headers: {
+          'access-token': localStorage.getItem('access-token'),
+          uid: localStorage.getItem('uid'),
+          client: localStorage.getItem('client')
+        }
+      })
         .then((response) => {
           this.$auth.logout()
           window.location.href = '/'

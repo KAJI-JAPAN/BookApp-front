@@ -2,7 +2,8 @@
   <v-row justify="center">
     <v-col cols="12" md="10" sm="10">
       <v-text-field
-        v-model="email"
+        v-model="setEmail"
+        type="text"
         label="Eメールアドレス"
         prepend-icon="mdi-email"
       />
@@ -12,9 +13,12 @@
 </template>
 <script>
 export default {
-  data () {
-    return {
-      email: 'momoko@test.xom'
+  props: ['email'],
+
+  computed: {
+    setEmail: {
+      get () { return this.email },
+      set (newVal) { return this.$emit('update:email', newVal) }
     }
   }
 }
