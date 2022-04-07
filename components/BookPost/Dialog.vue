@@ -100,7 +100,7 @@ export default {
 
     get () {
       if (this.keyword.length !== 0) {
-        this.$axios.get(this.BOOK_URL + this.keyword + '&maxResults=15')
+        this.$axios.get(`${this.BOOK_URL}${this.keyword}&maxResults=15`)
           .then((response) => {
             this.$store.commit('book/getBooks', response)
           })

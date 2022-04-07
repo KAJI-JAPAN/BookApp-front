@@ -7,6 +7,7 @@
         :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
         label="パスワード"
         :type="show ? 'text' : 'password'"
+        :rules="rules"
         @click:append="show= !show"
       />
     </v-col>
@@ -17,12 +18,13 @@ export default {
   props: ['password'],
   data () {
     return {
-      show: false
+      show: false,
+      rules: []
     }
   },
   computed: {
     setPassword: {
-      get () { return this.email },
+      get () { return this.password },
       set (newVal) { return this.$emit('update:password', newVal) }
     }
   }

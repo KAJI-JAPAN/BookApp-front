@@ -7,7 +7,7 @@
           width="70px"
         >
       </div>
-      <v-form ref="form" v-model="valid" lazy-validation>
+      <v-form ref="form">
         <v-container>
           <UserFormTitle>
             KOUDOKUをはじめよう！
@@ -16,7 +16,7 @@
           <UserFormTextFieldUserName :name.sync="userInfo.name" />
           <UserFormTextFieldEmail :email.sync="userInfo.email" />
           <UserFormTextFieldPassword :password.sync="userInfo.password" />
-          <UserFormTextFieldPsaaeordConfirmation :password-confirmation.sync="userInfo.passwordConfirmation" />
+          <UserFormTextFieldPasswordConfirmation :password-confirmation.sync="userInfo.passwordConfirmation" />
           <v-row justify="center">
             <v-col cols="12" md="10" sm="10">
               <v-btn
@@ -54,7 +54,7 @@ export default {
   methods: {
     registerUser () {
       this.$axios.$post('/api/v1/auth', this.userInfo).then((response) => {
-        window.location.href = '/users/comfirmation'
+        console.log(response)
       })
     }
   }

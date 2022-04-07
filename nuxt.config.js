@@ -71,8 +71,8 @@ export default {
     strategines: {
       local: {
         endpoints: {
-          login: { url: '/api/v1/login', method: 'post', propertyName: 'false' },
-          logout: false,
+          login: { url: '/api/v1/auth/login', method: 'post', propertyName: 'token' },
+          logout: { url: '/api/v1/auth/logout', method: 'post' },
           user: false
         }
       }
