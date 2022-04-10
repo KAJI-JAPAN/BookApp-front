@@ -7,7 +7,7 @@
           width="70px"
         >
       </div>
-      <v-form ref="form" v-model="valid" lazy-validation>
+      <v-form ref="form">
         <v-container>
           <UserFormTitle>
             KOUDOKUにログイン
@@ -20,7 +20,7 @@
               <v-btn
                 block
                 class="mr-4 blue white--text"
-                @click="loginWithAuthModule"
+                @click="login"
               >
                 ログイン
               </v-btn>
@@ -39,19 +39,18 @@ export default {
     return {
       logoImg,
       userInfo: {
-        password: '',
-        email: ''
+        email: '',
+        password: ''
       }
     }
   },
 
   methods: {
-    async loginWithAuthModule () {
+    async login () {
       await this.$auth.loginWith('local', {
-        // emailとpasswordの情報を送信
         data: {
-          email: this.email,
-          password: this.password
+          email: this.userInfo.email,
+          password: this.userInfo.password
         }
       })
         .then(

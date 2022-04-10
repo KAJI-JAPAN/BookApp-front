@@ -58,7 +58,7 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: 'http:localhost:3000'
+    baseURL: 'http://localhost:3000'
   },
 
   auth: {
@@ -68,12 +68,12 @@ export default {
       callback: false,
       home: '/'
     },
-    strategines: {
+    strategies: {
       local: {
         endpoints: {
-          login: { url: '/api/v1/auth/login', method: 'post', propertyName: 'token' },
-          logout: { url: '/api/v1/auth/logout', method: 'post' },
-          user: false
+          login: { url: '/api/v1/auth/sign_in', method: 'post', propertyName: 'token' },
+          logout: { url: '/api/v1/auth/sign_out', method: 'delete' },
+          user: { url: '/api/v1/auth', method: 'get' }
         }
       }
     }

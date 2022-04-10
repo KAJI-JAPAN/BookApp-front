@@ -33,7 +33,7 @@
 <script>
 import * as url from '@/store/constants/url'
 export default {
-
+  auth: false,
   // 取得した本と習慣化テキストデータはRegisteredBookディレクトリ内のcomponentsで表示設定
   fetch ({ store, $axios, route }) {
     return $axios.$get(`${url.POST_API}posts/${route.params.id}`)

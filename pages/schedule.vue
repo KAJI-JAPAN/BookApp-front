@@ -162,7 +162,7 @@
                         icon
                         small
                         class="mr-1"
-                        @click="deleteEvent"
+                        @click="deleteEvent(event)"
                       >
                         <v-icon>mdi-delete</v-icon>
                       </v-btn>
@@ -298,6 +298,7 @@ import moment from 'moment'
 import { mapState } from 'vuex'
 
 export default {
+  auth: false,
 
   data () {
     return {
@@ -358,6 +359,7 @@ export default {
           }
           this.$store.commit('schedule/setEvent', data)
         })
+        console.log(this.events)
         this.eventName ||= this.selectedTodo.content
         if (this.bookSelectedSchedule) {
           this.selectedOpen = true
@@ -384,7 +386,6 @@ export default {
     },
     startTime (tms) {
       const mouse = this.toTime(tms)
-
       if (this.dragEvent && this.dragTime === null) {
         const start = this.dragEvent.start
 
@@ -517,7 +518,7 @@ export default {
       this.selectedOpen = false
     },
     // 既存のイベントを削除
-    deleteEvent () {
+    deleteEvent (event) {
       this.selectedOpen = false
       this.$store.dispatch('schedule/deleteEvent', this.selectedEvent)
     },
@@ -535,15 +536,12 @@ export default {
 
     // DBに登録していない要素は削除する
     cancelEvent () {
-      !this.selectedEvent.id ? this.$store.commit('schedule/cancelEvent') : location.reload()
+      !this.selectedEvent.id ? this.$store.commit('schedule/cancelEvent') : this.$store.commit('schedule/revertingEvents', this.selectedEvent)
       if (this.pendingColor) { this.$store.commit('schedule/setSelectedEventColor', this.pendingColor) }
       this.$store.commit('book/clearScheduleBook')
       this.$store.commit('schedule/deleteSelectedEvent')
       this.$store.commit('schedule/switchBookSelectedSchedule', false)
       this.selectedOpen = false
-    },
-    test () {
-      // location.reload()
     }
   }
 }

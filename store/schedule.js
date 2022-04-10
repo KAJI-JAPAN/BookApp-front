@@ -16,7 +16,7 @@ export const state = () => ({
   // まとめて入力画面から本を選択する時
   summarizeBookSelectedSchedule: false,
 
-  // イベントバックアップ
+  // 編集キャンセル時のバックアップ用イベント
   backupEvent: {},
 
   // マウスダウン時の処理
@@ -96,7 +96,10 @@ export const mutations = {
 
   // イベントを指定削除
   deleteEvent(state, payload) {
-    state.events.splice(state.events.indexOf(payload), 1)
+    const index = state.events.findIndex(event => payload.id === event.id)
+    if (index > -1) {
+      state.events.splice(index, 1)
+    }
   },
 
   // イベント編集
@@ -123,7 +126,19 @@ export const mutations = {
   setTimeDragEvent (state, payload) {
     state.dragEvent.start = payload.start
     state.dragEvent.end = payload.end
-  }
+  },
+
+  // backupEvent
+  setBackupEvent (state, payload) {
+    state.backupEvent.start = payload.start
+    state.backupEvent.end = payload.end
+  },
+
+  revertingEvents (state, payload) {
+    state.selectedEvent.start = state.backupEvent.start
+    state.selectedEvent.end = state.backupEvent.end
+    state.events.splice(state.events.indexOf(payload),1, state.selectedEvent )
+  }  
 }
 
 
@@ -216,10 +231,9 @@ export const actions = {
   },
 
   showEvent ({ commit }, value) {
-    console.log(value)
     this.$axios.$get(`${url.SCHEDULE_API}/${value.event.id}`)
     .then((response) => {
-      console.log(response)
+      commit('setBackupEvent', response.schedule)
       const newStart = value.min
       const newEnd = value.max
       if (newStart === null &&  newEnd === null) {
