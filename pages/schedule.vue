@@ -355,11 +355,11 @@ export default {
             updated_at: res.created_at,
             timed: res.timed,
             long_time: res.long_time,
-            post_id: res.post_id
+            post_id: res.post_id,
+            long_term_id: res.long_term_id
           }
           this.$store.commit('schedule/setEvent', data)
         })
-        console.log(this.events)
         this.eventName ||= this.selectedTodo.content
         if (this.bookSelectedSchedule) {
           this.selectedOpen = true
@@ -377,7 +377,6 @@ export default {
     startDrag ({ event, timed }) {
       if (this.events) {
         if (event && timed) {
-          // this.dragEvent = event
           this.$store.commit('schedule/setDragEvent', event)
           this.dragTime = null
           this.extendOriginal = null
@@ -529,14 +528,17 @@ export default {
         this.deleteEvent()
       } else if (this.radios === 2) {
         this.$store.dispatch('schedule/manyDeletionEvents', this.selectedEvent)
-        location.reload()
       }
       this.selectedOpen = false
     },
 
     // DBに登録していない要素は削除する
     cancelEvent () {
-      !this.selectedEvent.id ? this.$store.commit('schedule/cancelEvent') : this.$store.commit('schedule/revertingEvents', this.selectedEvent)
+      if (!this.selectedEvent.id) {
+        this.$store.commit('schedule/cancelEvent')
+      } else {
+        this.$store.commit('schedule/revertingEvents', this.selectedEvent)
+      }
       if (this.pendingColor) { this.$store.commit('schedule/setSelectedEventColor', this.pendingColor) }
       this.$store.commit('book/clearScheduleBook')
       this.$store.commit('schedule/deleteSelectedEvent')

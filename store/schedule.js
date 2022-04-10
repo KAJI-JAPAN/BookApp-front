@@ -51,6 +51,7 @@ export const mutations = {
     state.selectedEvent.start= payload.start
     state.selectedEvent.end= payload.end
   },
+
   
   //  createEvent
   // 保存済みイベントの時間変更
@@ -90,6 +91,7 @@ export const mutations = {
     state.events.pop()
   },
 
+  // イベントを全て空にする
   resetEvent (state) {
     state.events = []
   },
@@ -107,16 +109,25 @@ export const mutations = {
     state.events.splice(state.events.indexOf(payload),1, updateEvent )
   },
 
+  //イベントをまとめて削除
+  deleteManyEvents(state, payload) {
+    const newEvents = state.events.filter(event => event.long_term_id !== payload.long_term_id)
+    state.events = newEvents
+  },
+
+
   // bookSelectedSchedule
   switchBookSelectedSchedule (state, payload) {
     state.bookSelectedSchedule = payload
     state.bookSelectedSchedule
   },
 
+
   // summarizeBookSelectedSchedul
   switchSummarizeBookSelectedSchedul (state, payload) {
     state.summarizeBookSelectedSchedule = payload
   },
+
 
   // dragEvent
   setDragEvent (state, payload) {
@@ -128,6 +139,7 @@ export const mutations = {
     state.dragEvent.end = payload.end
   },
 
+
   // backupEvent
   setBackupEvent (state, payload) {
     state.backupEvent.start = payload.start
@@ -135,10 +147,14 @@ export const mutations = {
   },
 
   revertingEvents (state, payload) {
+    console.log(state.selectedEvent.end)
     state.selectedEvent.start = state.backupEvent.start
     state.selectedEvent.end = state.backupEvent.end
-    state.events.splice(state.events.indexOf(payload),1, state.selectedEvent )
-  }  
+    const index = state.events.findIndex(event => payload.id === event.id)
+    if (index > -1) {
+      state.events.splice(index, 1, state.selectedEvent)
+    }
+  } 
 }
 
 
@@ -306,7 +322,7 @@ export const actions = {
     this.$axios.$post(`${url.SCHEDULE_API}/${event.id}/delete_many_schedule`, event)
     .then(() => {
       if(rootState.book.scheduleBook) { commit('book/clearScheduleBook', {}, { root: true })}
-      commit('deleteEvent', event)
+      commit('deleteManyEvents', event)
       commit('deleteSelectedEvent')
       commit('alertSwitchDelete', true, { root: true })
         setTimeout(() => {
