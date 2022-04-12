@@ -9,13 +9,15 @@
       </div>
       <v-divider />
       <v-col class="pl-0 mt-10">
-        <v-btn
-          class="mr-5"
-          x-large
-          rounded
-        >
-          新規登録
-        </v-btn>
+        <nuxt-link to="/user/signup" class="link">
+          <v-btn
+            class="mr-5"
+            x-large
+            rounded
+          >
+            新規登録
+          </v-btn>
+        </nuxt-link>
         <v-btn
           x-large
           rounded
@@ -52,7 +54,10 @@ export default {
   *{
     text-transform: none !important;
   }
-
+  .link:link, .link:visited, .link:active {
+  text-decoration: none;
+  color: rgb(56, 55, 55);
+}
   .koudoku-app {
     color: white;
   }

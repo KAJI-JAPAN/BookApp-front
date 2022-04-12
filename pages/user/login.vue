@@ -35,6 +35,7 @@
 <script>
 import logoImg from '~/assets/images/login_logo.png'
 export default {
+  auth: false,
   data () {
     return {
       logoImg,

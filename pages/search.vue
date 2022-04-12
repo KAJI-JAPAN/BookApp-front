@@ -31,6 +31,7 @@
 </template>
 <script>
 export default {
+  auth: false,
   computed: {
     responseBook () {
       return this.$store.state.book.responseBook

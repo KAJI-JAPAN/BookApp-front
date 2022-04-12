@@ -62,6 +62,9 @@ export default {
   },
 
   auth: {
+    token: {
+      global: true
+    },
     redirect: {
       login: '/user/login',
       logout: '/user/login',
@@ -73,7 +76,8 @@ export default {
         endpoints: {
           login: { url: '/api/v1/auth/sign_in', method: 'post', propertyName: 'token' },
           logout: { url: '/api/v1/auth/sign_out', method: 'delete' },
-          user: { url: '/api/v1/auth', method: 'get' }
+          user: false
+          // user: { url: '/api/v1/auth/sessions', method: 'get', propertyName: false }
         }
       }
     }
