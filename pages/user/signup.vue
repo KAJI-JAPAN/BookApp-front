@@ -7,7 +7,10 @@
           width="70px"
         >
       </div>
-      <v-form ref="form">
+      <v-form
+        ref="form"
+        v-model="isValid"
+      >
         <v-container>
           <UserFormTitle>
             KOUDOKUをはじめよう！
@@ -20,9 +23,12 @@
           <v-row justify="center">
             <v-col cols="12" md="10" sm="10">
               <v-btn
+                :disabled="!isValid || loading"
+                :loading="loading"
                 block
-                class="mr-4 blue white--text"
-                @click="registerUser"
+                color="myblue"
+                class="white--text"
+                @click="signup"
               >
                 登録する
               </v-btn>
@@ -41,6 +47,8 @@ export default {
   auth: false,
   data () {
     return {
+      isValid: false,
+      loading: false,
       logoImg,
       show: false,
       userInfo: {
@@ -52,10 +60,16 @@ export default {
     }
   },
   methods: {
-    registerUser () {
-      this.$axios.$post('/api/v1/auth', this.userInfo).then((response) => {
-        console.log(response)
-      })
+    signup () {
+      this.loading = true
+      setTimeout(() => {
+        this.formReset()
+        this.loading = false
+      }, 1500)
+    },
+    formReset () {
+      this.$refs.form.reset()
+      this.params = { user: { name: '', email: '', password: '' } }
     }
   }
 }

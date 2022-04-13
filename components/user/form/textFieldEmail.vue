@@ -6,6 +6,7 @@
         type="text"
         label="Eメールアドレス"
         prepend-icon="mdi-email"
+        :rules="rules"
       />
       <p class="caption mb-0" />
     </v-col>
@@ -14,6 +15,15 @@
 <script>
 export default {
   props: ['email'],
+
+  data () {
+    return {
+      rules: [
+        v => !!v || '',
+        v => /.+@.+\..+/.test(v) || ''
+      ]
+    }
+  },
 
   computed: {
     setEmail: {

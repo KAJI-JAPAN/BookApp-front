@@ -7,7 +7,10 @@
           width="70px"
         >
       </div>
-      <v-form ref="form">
+      <v-form
+        ref="form"
+        v-model="isValid"
+      >
         <v-container>
           <UserFormTitle>
             KOUDOKUにログイン
@@ -38,6 +41,8 @@ export default {
   auth: false,
   data () {
     return {
+      isValid: false,
+      loading: false,
       logoImg,
       userInfo: {
         email: '',
