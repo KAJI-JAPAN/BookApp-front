@@ -48,7 +48,9 @@ export default {
       items: [
         { title: 'KODOKUとは', icon: 'mdi-home', color: 'green', link: '/description' },
         { title: 'Twitterで連携する', icon: 'mdi-twitter', color: 'cyan darken-2', link: '' },
-        { title: 'アプリの使い方', icon: 'mdi-help-circle', color: 'amber accent-4', link: '/help' }
+        { title: 'アプリの使い方', icon: 'mdi-help-circle', color: 'amber accent-4', link: '/help' },
+        { title: 'アカウント設定', icon: 'mdi-help-circle', color: 'amber accent-4', link: '/help' },
+        { title: 'ログアウト', icon: 'mdi-help-circle', color: 'amber accent-4', link: '/help' }
       ]
     }
   },

@@ -54,20 +54,24 @@
 <script>
 export default {
   auth: false,
+  async middleware ({ store, redirect }) {
+    await store.dispatch('logout')
+    return redirect('/')
+  },
   methods: {
-    deleteUser () {
-      this.$axios.$delete('api/v1/auth', {
-        headers: {
-          'access-token': localStorage.getItem('access-token'),
-          uid: localStorage.getItem('uid'),
-          client: localStorage.getItem('client')
-        }
-      })
-        .then((response) => {
-          this.$auth.logout()
-          window.location.href = '/'
-        })
-    }
+    // deleteUser () {
+    //   this.$axios.$delete('api/v1/auth', {
+    //     headers: {
+    //       'access-token': localStorage.getItem('access-token'),
+    //       uid: localStorage.getItem('uid'),
+    //       client: localStorage.getItem('client')
+    //     }
+    //   })
+    //     .then((response) => {
+    //       this.$auth.logout()
+    //       window.location.href = '/'
+    //     })
+    // }
   }
 }
 </script>
