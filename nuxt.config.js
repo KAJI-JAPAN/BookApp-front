@@ -61,27 +61,27 @@ export default {
     baseURL: 'http://localhost:3000'
   },
 
-  auth: {
-    token: {
-      global: true
-    },
-    redirect: {
-      login: '/user/login',
-      logout: '/user/login',
-      callback: false,
-      home: '/'
-    },
-    strategies: {
-      local: {
-        endpoints: {
-          login: { url: '/api/v1/auth/sign_in', method: 'post', propertyName: 'token' },
-          logout: { url: '/api/v1/auth/sign_out', method: 'delete' },
-          // user: false
-          user: { url: '/api/v1/auth/sessions', method: 'get', propertyName: false }
-        }
-      }
-    }
-  },
+  // auth: {
+  //   token: {
+  //     global: true
+  //   },
+  //   redirect: {
+  //     login: '/user/login',
+  //     logout: '/user/login',
+  //     callback: false,
+  //     home: '/'
+  //   },
+  //   strategies: {
+  //     local: {
+  //       endpoints: {
+  //         login: { url: '/api/v1/auth/sign_in', method: 'post', propertyName: 'token' },
+  //         logout: { url: '/api/v1/auth/sign_out', method: 'delete' },
+  //         // user: false
+  //         user: { url: '/api/v1/auth/sessions', method: 'get', propertyName: false }
+  //       }
+  //     }
+  //   }
+  // },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   },

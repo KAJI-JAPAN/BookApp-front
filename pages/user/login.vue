@@ -52,26 +52,13 @@ export default {
   },
 
   methods: {
-    async login () {
-      await this.$auth.loginWith('local', {
-        data: {
-          email: this.userInfo.email,
-          password: this.userInfo.password
-        }
-      })
-        .then(
-          (response) => {
-            // レスポンスで返ってきた、認証に必要な情報をlocalStorageに保存
-            localStorage.setItem('access-token', response.headers['access-token'])
-            localStorage.setItem('client', response.headers.client)
-            localStorage.setItem('uid', response.headers.uid)
-            localStorage.setItem('token-type', response.headers['token-type'])
-            return response
-          },
-          (error) => {
-            return error
-          }
-        )
+    login () {
+      this.loading = true
+      setTimeout(() => {
+        this.$store.dispatch('login')
+        this.$router.replace('/')
+        this.loading = false
+      }, 1500)
     }
   }
 }

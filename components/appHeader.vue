@@ -8,9 +8,16 @@
         />
       </template>
     </AppBar>
-    <AppTitleDrawer
-      :drawer.sync="drawer"
-    />
+    <div v-if="loggedIn">
+      <AppTitleAfterLoginDrawer
+        :drawer.sync="drawer"
+      />
+    </div>
+    <div v-else>
+      <AppTitleBeforeLoginDrawer
+        :drawer.sync="drawer"
+      />
+    </div>
   </div>
 </template>
 <script>
@@ -18,6 +25,12 @@ export default {
   data () {
     return {
       drawer: false
+    }
+  },
+
+  computed: {
+    loggedIn () {
+      return this.$store.state.user.loggedIn
     }
   }
 }
