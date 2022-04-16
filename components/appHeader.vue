@@ -30,7 +30,7 @@ export default {
 
   computed: {
     loggedIn () {
-      return this.$store.state.user.loggedIn
+      return this.$auth.loggedIn
     }
   }
 }

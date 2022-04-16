@@ -38,6 +38,7 @@
 <script>
 import logoImg from '~/assets/images/login_logo.png'
 export default {
+  middleware: 'loginPageControl',
   auth: false,
   data () {
     return {
@@ -48,17 +49,36 @@ export default {
         email: '',
         password: ''
       }
+      // email: '',
+      // password: ''
     }
   },
 
   methods: {
-    login () {
-      this.loading = true
-      setTimeout(() => {
-        this.$store.dispatch('login')
-        this.$router.replace('/')
-        this.loading = false
-      }, 1500)
+    // login () {
+    //   this.loading = true
+    //   setTimeout(() => {
+    //     this.$store.dispatch('login')
+    //     this.$router.replace('/')
+    //     this.loading = false
+    //   }, 1500)
+    // }
+
+    async login () {
+      await this.$auth.loginWith('local', {
+        data: {
+          email: this.userInfo.email,
+          password: this.userInfo.password
+        }
+      })
+        .then((response) => {
+          this.$store.commit('user/setLoggedIn', true)
+          this.$router.replace(`/user/${response.data.data.id}`)  
+          return response
+        },
+        (error) => {
+          return error
+        })
     }
   }
 }

@@ -44,6 +44,7 @@
 import '@/assets/css/user-form.scss'
 import logoImg from '~/assets/images/login_logo.png'
 export default {
+  middleware: 'loginPageControl',
   auth: false,
   data () {
     return {

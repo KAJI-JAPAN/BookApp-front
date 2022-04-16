@@ -35,7 +35,7 @@
               <a
                 href="#"
                 class="red--text text--darken-3 mb-1"
-                @click="deleteUser"
+                @click="logoutUser"
               >
                 退会
               </a>
@@ -54,24 +54,24 @@
 <script>
 export default {
   auth: false,
-  async middleware ({ store, redirect }) {
-    await store.dispatch('logout')
-    return redirect('/')
-  },
+  // async middleware ({ store, redirect }) {
+  //   await store.dispatch('logout')
+  //   return redirect('/')
+  // },
   methods: {
-    // deleteUser () {
-    //   this.$axios.$delete('api/v1/auth', {
-    //     headers: {
-    //       'access-token': localStorage.getItem('access-token'),
-    //       uid: localStorage.getItem('uid'),
-    //       client: localStorage.getItem('client')
-    //     }
-    //   })
-    //     .then((response) => {
-    //       this.$auth.logout()
-    //       window.location.href = '/'
-    //     })
-    // }
+    logout () {
+      this.$axios.$delete('api/v1/auth', {
+        headers: {
+          'access-token': localStorage.getItem('access-token'),
+          uid: localStorage.getItem('uid'),
+          client: localStorage.getItem('client')
+        }
+      })
+        .then((response) => {
+          this.$auth.logout()
+          window.location.href = '/'
+        })
+    }
   }
 }
 </script>
