@@ -55,15 +55,6 @@ export default {
   },
 
   methods: {
-    // login () {
-    //   this.loading = true
-    //   setTimeout(() => {
-    //     this.$store.dispatch('login')
-    //     this.$router.replace('/')
-    //     this.loading = false
-    //   }, 1500)
-    // }
-
     async login () {
       await this.$auth.loginWith('local', {
         data: {
@@ -72,8 +63,7 @@ export default {
         }
       })
         .then((response) => {
-          this.$store.commit('user/setLoggedIn', true)
-          this.$router.replace(`/user/${response.data.data.id}`)  
+          this.$router.replace(`/user/${response.data.data.id}`)
           return response
         },
         (error) => {
