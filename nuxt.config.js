@@ -77,7 +77,6 @@ export default {
           login: { url: '/api/v1/auth/sign_in', method: 'post', propertyName: 'token' },
           logout: { url: '/api/v1/auth/sign_out', method: 'delete' },
           user: false
-        //   user: { url: '/api/v1/auth/sessions', method: 'get', propertyName: false }
         }
       }
     }

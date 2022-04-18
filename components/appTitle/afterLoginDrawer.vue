@@ -77,7 +77,8 @@ export default {
   methods: {
     logout () {
       this.$auth.logout()
-      // this.$router.replace(`/user/login`)
+      const logoutFlag = { logout: true }
+      localStorage.setItem('logoutFlag', JSON.stringify(logoutFlag))
     }
   }
 }

@@ -1,5 +1,11 @@
 <template>
   <div class="mt-3">
+    <AlertError>
+      ログインに失敗しました
+    </AlertError>
+    <AlertLogout>
+      ログアウトしました
+    </AlertLogout>
     <v-card class="pa-7 ma-10 mx-auto" max-width="600">
       <div class="login-logo">
         <img
@@ -15,12 +21,13 @@
           <UserFormTitle>
             KOUDOKUにログイン
           </UserFormTitle>
-
-          <UserFormTextFieldEmail :email.sync="userInfo.email" />
+          <UserFormTextFieldEmail :email.sync="userInfo.email"  />
           <UserFormTextFieldPassword :password.sync="userInfo.password" />
           <v-row justify="center">
             <v-col cols="12" md="10" sm="10">
               <v-btn
+                :disabled="!isValid || loading"
+                :loading="loading"
                 block
                 class="mr-4 blue white--text"
                 @click="login"
@@ -42,18 +49,25 @@ export default {
   auth: false,
   data () {
     return {
-      isValid: false,
       loading: false,
+      isValid: false,
       logoImg,
       userInfo: {
         email: '',
         password: ''
       }
-      // email: '',
-      // password: ''
     }
   },
-
+  mounted () {
+    const logoutFlag = JSON.parse(localStorage.getItem('logoutFlag'))
+    if (logoutFlag) {
+      this.$store.commit('alertSwitchLogout', true)
+      setTimeout(() => {
+        this.$store.commit('alertSwitchLogout', false)
+        localStorage.removeItem('logoutFlag')
+      }, 2000)
+    }
+  },
   methods: {
     async login () {
       await this.$auth.loginWith('local', {
@@ -63,12 +77,23 @@ export default {
         }
       })
         .then((response) => {
-          this.$router.replace(`/user/${response.data.data.id}`)
-          return response
-        },
-        (error) => {
-          return error
+          let loginFlag = { loginFlag: true }
+          localStorage.setItem('loginFlag', JSON.stringify(loginFlag))
+          this.loading = true
+          this.$store.commit('alertSwitchSuccess', true)
+          setTimeout (() => {
+            this.loading = false
+            this.$router.replace(`/user/${response.data.data.id}`)
+          }, 2000)
         })
+        .catch((e) => {
+        this.loading = true
+        this.$store.commit('alertSwitchError', true)
+        setTimeout(() => {
+          this.loading = false
+          this.$store.commit('alertSwitchError', false)
+        }, 2000)
+      })
     }
   }
 }

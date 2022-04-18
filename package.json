@@ -21,7 +21,8 @@
     "jest": "^27.4.7",
     "moment": "^2.29.1",
     "nuxt": "^2.15.3",
-    "vue-jest": "^3.0.7"
+    "vue-jest": "^3.0.7",
+    "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.12",

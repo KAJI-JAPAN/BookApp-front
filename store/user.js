@@ -1,11 +1,9 @@
 export const state = () => ({
+  loginFlag: false
 })
 
 export const actions = {
-  login ({ commit }) {
-    commit('setLoggedIn', true)
-  },
-  logout ({ commit }) {
-    commit('setLoggedIn', false)
+  setLoginFlag (state, payload) {
+    state.loginFlag = payload
   }
 }

@@ -1,6 +1,9 @@
 <template>
   <v-app>
     <div class="back">
+      <AlertSuccess>
+        ログインしました
+      </AlertSuccess>
       <div class="user-image-read">
         <v-img
           :src="require('@/assets/images/user-home.png')"
@@ -61,6 +64,17 @@ export default {
         { title: 'スケジュールを確認', icon: 'mdi-calendar', color: 'blue-grey', url: '/schedule' },
         { title: '書籍一覧', icon: 'mdi-bookshelf', color: 'green darken-2', url: '/registeredBook' }
       ]
+    }
+  },
+
+  mounted () {
+    const loginFlag = JSON.parse(localStorage.getItem('loginFlag'))
+    if (loginFlag) {
+      this.$store.commit('alertSwitchSuccess', true)
+      setTimeout(() => {
+        this.$store.commit('alertSwitchSuccess', false)
+        localStorage.removeItem('loginFlag')
+      }, 2000)
     }
   }
 }
