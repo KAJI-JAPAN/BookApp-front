@@ -1,5 +1,9 @@
-export const POST_API = '/api/v1/'
+const commonUrl = '/api/v1/'
 
-export const POST_ITEMS_API = '/api/v1/post_items/'
+export const POST_API = commonUrl
 
-export const SCHEDULE_API = '/api/v1/schedules'
+export const POST_ITEMS_API = `${commonUrl}post_items/`
+
+export const SCHEDULE_API = `${commonUrl}schedules`
+
+export const SEARCH_BOOKS = `${commonUrl}get_books/search_books`

@@ -21,7 +21,8 @@ export const mutations = {
   // books
   // 本情報
   getBooks (state, payload) {
-    state.books = payload.data.items
+    state.books = payload.items
+    console.log(payload)
   },
 
   // selectedBook
@@ -61,6 +62,14 @@ export const mutations = {
 }
 
 export const actions = {
+  serchBooks ({ commit}, payload) {
+    this.$axios.$post(`${url.SEARCH_BOOKS}`, {
+      keyword: payload
+    })
+    .then((response) => {
+      commit('getBooks', response)
+    })
+  },
   // 本を削除
   delete ({ state }) {
     const bookId = state.selectedBook.id
