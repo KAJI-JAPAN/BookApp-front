@@ -14,6 +14,7 @@
             class="mr-5"
             x-large
             rounded
+            to="/user/signup"
           >
             新規登録
           </v-btn>
@@ -22,6 +23,7 @@
           x-large
           rounded
           class="pa-2"
+          @click="gest"
         >
           ゲストで使う
         </v-btn>
@@ -45,6 +47,12 @@ export default {
   data ({ $config: { APP_NAME } }) {
     return {
       APP_NAME
+    }
+  },
+
+  methods: {
+    gest () {
+      this.$store.dispatch('user/gestLogin')
     }
   }
 }
