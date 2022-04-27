@@ -14,13 +14,13 @@
         <v-card-text>
           検索ボックスから読んだ本を検索しましょう。
         </v-card-text>
-        <!-- <v-img src=""> -->
       </v-card>
     </v-row>
   </v-container>
 </template>
 <script>
 export default {
+  auth: false,
   data ({ $config: { APP_NAME } }) {
     return {
       APP_NAME

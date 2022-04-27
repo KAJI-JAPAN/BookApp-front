@@ -54,10 +54,6 @@
 <script>
 export default {
   auth: false,
-  // async middleware ({ store, redirect }) {
-  //   await store.dispatch('logout')
-  //   return redirect('/')
-  // },
   methods: {
     logout () {
       this.$axios.$delete('api/v1/auth', {

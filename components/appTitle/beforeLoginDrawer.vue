@@ -47,6 +47,7 @@ export default {
     return {
       items: [
         { title: 'KODOKUとは', icon: 'mdi-home', color: 'green', link: '/description' },
+        { title: 'アカウント登録', icon: 'mdi-account-plus', color: 'deep-purple darken-1', link: 'user/signup' },
         { title: 'ログイン', icon: 'mdi-login', color: 'blue', link: '/user/login' },
         { title: 'Twitterでログイン', icon: 'mdi-twitter', color: 'cyan darken-2', link: '' },
         { title: 'アプリの使い方', icon: 'mdi-help-circle', color: 'amber accent-4', link: '/help' }

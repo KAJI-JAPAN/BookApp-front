@@ -21,7 +21,7 @@
           <UserFormTitle>
             KOUDOKUにログイン
           </UserFormTitle>
-          <UserFormTextFieldEmail :email.sync="userInfo.email"  />
+          <UserFormTextFieldEmail :email.sync="userInfo.email" />
           <UserFormTextFieldPassword :password.sync="userInfo.password" />
           <v-row justify="center">
             <v-col cols="12" md="10" sm="10">
@@ -45,7 +45,6 @@
 <script>
 import logoImg from '~/assets/images/login_logo.png'
 export default {
-  middleware: 'loginPageControl',
   auth: false,
   data () {
     return {
@@ -59,13 +58,13 @@ export default {
     }
   },
   mounted () {
-    const logoutFlag = JSON.parse(localStorage.getItem('logoutFlag'))
-    if (logoutFlag) {
+    const logoutAlert = JSON.parse(localStorage.getItem('logoutAlert'))
+    if (logoutAlert) {
       this.$store.commit('alertSwitchLogout', true)
       setTimeout(() => {
         this.$store.commit('alertSwitchLogout', false)
-        localStorage.removeItem('logoutFlag')
-      }, 2000)
+        localStorage.removeItem('logoutAlert')
+      }, 3000)
     }
   },
   methods: {
@@ -77,23 +76,23 @@ export default {
         }
       })
         .then((response) => {
-          let loginFlag = { loginFlag: true }
-          localStorage.setItem('loginFlag', JSON.stringify(loginFlag))
+          let loginAlert = { loginFlag: true }
+          localStorage.setItem('loginAlert', JSON.stringify(loginAlert))
           this.loading = true
           this.$store.commit('alertSwitchSuccess', true)
           setTimeout (() => {
             this.loading = false
-            this.$router.replace(`/user/${response.data.data.id}`)
-          }, 2000)
+            this.$router.replace(`/user/${response.data.data.id}`
+          )}, 2000)
         })
         .catch((e) => {
-        this.loading = true
-        this.$store.commit('alertSwitchError', true)
-        setTimeout(() => {
-          this.loading = false
-          this.$store.commit('alertSwitchError', false)
-        }, 2000)
-      })
+          this.loading = true
+          this.$store.commit('alertSwitchError', true)
+          setTimeout(() => {
+            this.loading = false
+            this.$store.commit('alertSwitchError', false)
+          }, 2000)
+        })
     }
   }
 }

@@ -4,13 +4,16 @@
       class="teal lighten-1 background pa-10"
     >
       <div class="alert-success">
+        <AlertGuest>
+          ゲストでログインしました
+        </AlertGuest>
         <AlertSuccess>
           登録しました
         </AlertSuccess>
       </div>
       <div class="alert-error">
         <AlertError>
-          登録に失敗しました。再度時間を置いてからお試しください
+          登録に失敗しました。時間を置いてからお試しください
           <AlertError />
         </alerterror>
       </div>
@@ -31,9 +34,26 @@
 </template>
 <script>
 export default {
+  // middleware: 'authenticated',
+  data () {
+    return {
+      login: JSON.parse(localStorage.getItem('loginFlag'))
+    }
+  },
   computed: {
     responseBook () {
       return this.$store.state.book.responseBook
+    }
+  },
+
+  mounted () {
+    const loginAlert = JSON.parse(localStorage.getItem('loginAlert'))
+    if (loginAlert) {
+      this.$store.commit('alertSwitchGuest', true)
+      setTimeout(() => {
+        this.$store.commit('alertSwitchGuest', false)
+        localStorage.removeItem('loginAlert')
+      }, 2000)
     }
   }
 }

@@ -62,14 +62,11 @@ export default {
   },
 
   auth: {
-    token: {
-      global: true
-    },
     redirect: {
       login: '/user/login',
       logout: '/user/login',
       callback: false,
-      home: '/'
+      home: false
     },
     strategies: {
       local: {

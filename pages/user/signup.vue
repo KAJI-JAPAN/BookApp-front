@@ -83,7 +83,7 @@ export default {
         setTimeout(() => {
           this.$store.commit('alertSwitchError', false)
           this.loading = false
-        }, 2000)
+        }, 3000)
       })
     }
   }

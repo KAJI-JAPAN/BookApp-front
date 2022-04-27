@@ -68,12 +68,12 @@ export default {
   },
 
   mounted () {
-    const loginFlag = JSON.parse(localStorage.getItem('loginFlag'))
-    if (loginFlag) {
+    const loginAlert = JSON.parse(localStorage.getItem('loginAlert'))
+    if (loginAlert) {
       this.$store.commit('alertSwitchSuccess', true)
       setTimeout(() => {
         this.$store.commit('alertSwitchSuccess', false)
-        localStorage.removeItem('loginFlag')
+        localStorage.removeItem('loginAlert')
       }, 2000)
     }
   }

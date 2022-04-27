@@ -23,7 +23,7 @@
           x-large
           rounded
           class="pa-2"
-          @click="gest"
+          @click="guest"
         >
           ゲストで使う
         </v-btn>
@@ -43,16 +43,25 @@
 </template>
 
 <script>
+import * as url from '@/store/constants/url'
 export default {
   data ({ $config: { APP_NAME } }) {
     return {
-      APP_NAME
+      APP_NAME,
     }
   },
 
   methods: {
-    gest () {
-      this.$store.dispatch('user/gestLogin')
+   async guest () {
+    await this.$axios.$post(`${url.POST_API}auth/guest_sign_in`)
+      .then(() => {
+        let loginAlert = { loginAlert: true }
+        this.$auth.loggedIn = true
+        let loginFlag = { loginFlag: true }
+        localStorage.setItem('loginAlert', JSON.stringify(loginAlert))
+        localStorage.setItem('loginFlag', JSON.stringify(loginFlag))
+        this.$router.replace('/search') 
+      })
     }
   }
 }
