@@ -298,7 +298,8 @@ import moment from 'moment'
 import { mapState } from 'vuex'
 
 export default {
-
+  auth: false,
+  middleware: 'authenticated',
   data () {
     return {
       value: '',

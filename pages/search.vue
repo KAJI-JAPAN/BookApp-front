@@ -34,7 +34,8 @@
 </template>
 <script>
 export default {
-  // middleware: 'authenticated',
+  middleware: 'authenticated',
+  auth: false,
   data () {
     return {
       login: JSON.parse(localStorage.getItem('loginFlag'))

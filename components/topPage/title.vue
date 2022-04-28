@@ -47,21 +47,31 @@ import * as url from '@/store/constants/url'
 export default {
   data ({ $config: { APP_NAME } }) {
     return {
-      APP_NAME,
+      APP_NAME
     }
   },
 
   methods: {
-   async guest () {
-    await this.$axios.$post(`${url.POST_API}auth/guest_sign_in`)
-      .then(() => {
-        let loginAlert = { loginAlert: true }
-        this.$auth.loggedIn = true
-        let loginFlag = { loginFlag: true }
-        localStorage.setItem('loginAlert', JSON.stringify(loginAlert))
-        localStorage.setItem('loginFlag', JSON.stringify(loginFlag))
-        this.$router.replace('/search') 
-      })
+    async guest () {
+    // await this.$axios.$post(`${url.POST_API}auth/guest_sign_in`)
+    //   .then(() => {
+    //     let loginAlert = { loginAlert: true }
+    //     let loginFlag = { loginFlag: true }
+    //     localStorage.setItem('loginAlert', JSON.stringify(loginAlert))
+    //     localStorage.setItem('loginFlag', JSON.stringify(loginFlag))
+    //   })
+      await this.$axios.$post(`${url.POST_API}guests`)
+        .then((res) => {
+          let loginAlert = { loginAlert: true }
+          localStorage.setItem('loginAlert', JSON.stringify(loginAlert))
+          this.$auth.loginWith('local', { 
+            data:  {
+              email: res.email,
+              password: res.password
+            }
+          })
+          this.$router.replace('/search')
+        })
     }
   }
 }

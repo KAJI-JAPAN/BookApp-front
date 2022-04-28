@@ -8,7 +8,7 @@
         />
       </template>
     </AppBar>
-    <div v-if="loggedIn">
+    <div v-if="loggedIn || guestLoggedIn">
       <AppTitleAfterLoginDrawer
         :drawer.sync="drawer"
       />
@@ -31,6 +31,10 @@ export default {
   computed: {
     loggedIn () {
       return this.$auth.loggedIn
+    },
+
+    guestLoggedIn () {
+      return JSON.parse(localStorage.getItem('loginFlag'))
     }
   }
 }

@@ -62,12 +62,13 @@ export default {
   },
 
   auth: {
-    redirect: {
-      login: '/user/login',
-      logout: '/user/login',
-      callback: false,
-      home: false
-    },
+    redirect: false,
+    // {
+    //   login: '/user/login',
+    //   logout: '/user/login',
+    //   callback: false,
+    //   home: false
+    // },
     strategies: {
       local: {
         endpoints: {
