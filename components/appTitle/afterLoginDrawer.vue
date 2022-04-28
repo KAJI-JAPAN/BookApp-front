@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import * as url from '@/store/constants/url'
 export default {
   props: {
     drawer: {
@@ -80,6 +81,12 @@ export default {
       this.$router.replace('/user/login')
       const logoutAlert = { logout: true }
       localStorage.setItem('logoutAlert', JSON.stringify(logoutAlert))
+      const guestLoginFlag = JSON.parse(localStorage.getItem('guestLoginFlag'))
+      console.log(guestLoginFlag)
+      if (guestLoginFlag) {
+        this.$axios.$delete(`${url.POST_API}auth`)
+        console.log("削除リクエスト")
+      }
     }
   }
 }

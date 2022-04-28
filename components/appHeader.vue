@@ -8,7 +8,7 @@
         />
       </template>
     </AppBar>
-    <div v-if="loggedIn || guestLoggedIn">
+    <div v-if="loggedIn">
       <AppTitleAfterLoginDrawer
         :drawer.sync="drawer"
       />
