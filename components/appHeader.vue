@@ -8,7 +8,10 @@
         />
       </template>
     </AppBar>
-    <div v-if="loggedIn">
+    <AlertLogout>
+      アカウントを削除しました
+    </AlertLogout>
+    <div v-if="loggedIn || guestLoggedIn">
       <AppTitleAfterLoginDrawer
         :drawer.sync="drawer"
       />
@@ -34,7 +37,7 @@ export default {
     },
 
     guestLoggedIn () {
-      return JSON.parse(localStorage.getItem('loginFlag'))
+      return JSON.parse(sessionStorage.getItem('guestLoginFlag'))
     }
   }
 }

@@ -53,19 +53,12 @@ export default {
 
   methods: {
     async guest () {
-    // await this.$axios.$post(`${url.POST_API}auth/guest_sign_in`)
-    //   .then(() => {
-    //     let loginAlert = { loginAlert: true }
-    //     let loginFlag = { loginFlag: true }
-    //     localStorage.setItem('loginAlert', JSON.stringify(loginAlert))
-    //     localStorage.setItem('loginFlag', JSON.stringify(loginFlag))
-    //   })
       await this.$axios.$post(`${url.POST_API}guests`)
         .then((res) => {
           let loginAlert = { loginAlert: true }
           let guestLoginFlag = { guestLoginFlag: true }
           localStorage.setItem('loginAlert', JSON.stringify(loginAlert))
-          localStorage.setItem('guestLoginFlag', JSON.stringify(guestLoginFlag))
+          sessionStorage.setItem('guestLoginFlag', JSON.stringify(guestLoginFlag))
           this.$auth.loginWith('local', { 
             data:  {
               email: res.email,

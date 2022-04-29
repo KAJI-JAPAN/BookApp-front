@@ -22,7 +22,7 @@
             KOUDOKUをはじめよう！
           </UserFormTitle>
 
-          <UserFormTextFieldUserName :name.sync="userInfo.name" />
+          <!-- <UserFormTextFieldUserName :name.sync="userInfo.name" /> -->
           <UserFormTextFieldEmail :email.sync="userInfo.email" :error.sync="errorMessage" />
           <p class="error-message">{{ errorMessage }}</p>
           <UserFormTextFieldPassword :password.sync="userInfo.password" />

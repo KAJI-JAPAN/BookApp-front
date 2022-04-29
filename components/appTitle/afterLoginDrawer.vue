@@ -62,7 +62,7 @@ export default {
         { title: 'KODOKUとは', icon: 'mdi-home', color: 'green', link: '/description' },
         { title: 'Twitterで連携する', icon: 'mdi-twitter', color: 'cyan darken-2', link: '' },
         { title: 'アプリの使い方', icon: 'mdi-help-circle', color: 'amber accent-4', link: '/help' },
-        { title: 'アカウント設定', icon: 'mdi-account-cog', color: '', link: 'user/setting' }
+        { title: 'アカウント設定', icon: 'mdi-account-cog', color: '', link: '/user/edit/setting' }
       ]
     }
   },
@@ -81,11 +81,10 @@ export default {
       this.$router.replace('/user/login')
       const logoutAlert = { logout: true }
       localStorage.setItem('logoutAlert', JSON.stringify(logoutAlert))
-      const guestLoginFlag = JSON.parse(localStorage.getItem('guestLoginFlag'))
-      console.log(guestLoginFlag)
+      const guestLoginFlag = JSON.parse(sessionStorage.getItem('guestLoginFlag'))
       if (guestLoginFlag) {
         this.$axios.$delete(`${url.POST_API}auth`)
-        console.log("削除リクエスト")
+        sessionStorage.removeItem('guestLoginFlag')
       }
     }
   }

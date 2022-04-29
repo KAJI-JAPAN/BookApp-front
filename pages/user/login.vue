@@ -45,7 +45,6 @@
 <script>
 import logoImg from '~/assets/images/login_logo.png'
 export default {
-  auth: false,
   data () {
     return {
       loading: false,
@@ -80,6 +79,11 @@ export default {
           localStorage.setItem('loginAlert', JSON.stringify(loginAlert))
           this.loading = true
           this.$store.commit('alertSwitchSuccess', true)
+          const guestLoginFlag = JSON.parse(sessionStorage.getItem('guestLoginFlag'))
+          if (guestLoginFlag) {
+            sessionStorage.removeItem('guestLoginFlag')
+          }
+
           setTimeout (() => {
             this.loading = false
             this.$router.replace(`/user/${response.data.data.id}`
