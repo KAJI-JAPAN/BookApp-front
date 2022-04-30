@@ -83,7 +83,7 @@ export default {
       dialog: false,
       items: [
         { icon: 'mdi-email-edit', title: 'メールアドレスを変更する', link: '/user/edit/email' },
-        { icon: 'mdi-key-variant', title: 'パスワードを変更する', link: '/user/edit/editPassowrd' }
+        { icon: 'mdi-key-variant', title: 'パスワードを変更する', link: '/user/edit/password' }
       ]
     }
   },

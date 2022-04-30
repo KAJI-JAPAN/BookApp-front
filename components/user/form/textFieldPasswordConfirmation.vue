@@ -5,7 +5,8 @@
         v-model="setPasswordConfirmation"
         prepend-icon="mdi-lock"
         :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-        label="パスワード"
+        label="パスワードを再入力"
+        :rules="form.rules"
         :type="show ? 'text' : 'password'"
         @click:append="show= !show"
       />
@@ -17,7 +18,8 @@ export default {
   props: ['passwordConfirmation'],
   data () {
     return {
-      show: false
+      show: false,
+      getPassword: ''
     }
   },
   computed: {
