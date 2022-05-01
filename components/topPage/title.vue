@@ -62,7 +62,8 @@ export default {
           this.$auth.loginWith('local', { 
             data:  {
               email: res.email,
-              password: res.password
+              password: res.password,
+              guest: true
             }
           })
           this.$router.replace('/search')
