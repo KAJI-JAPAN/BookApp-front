@@ -4,7 +4,7 @@
       登録に成功しました
     </AlertSuccess>
     <AlertError>
-      登録に失敗しました
+      登録に失敗しました {{ errorMessage }}
     </AlertError>
     <v-card class="pa-7 ma-10 mx-auto" max-width="600">
       <div class="login-logo">
@@ -58,7 +58,6 @@ export default {
       logoImg,
       show: false,
       userInfo: {
-        name: '',
         email: '',
         password: ''
       },

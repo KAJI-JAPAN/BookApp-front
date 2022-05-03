@@ -38,9 +38,9 @@ export default {
     return {
       APP_NAME,
       helpItem: [
-        { title: '読んだ本を探す', text: '検索ボックスから読んだ本を検索しましょう。', image: '//' },
-        { title: '読んだ本を管理する', text: '読んだ本は一覧で管理することができます。', image: 'book-list.png' },
-        { title: '読んだ本から得た知識を習慣化する', text: '本から得た知識を習慣化するためのサポートをします。', image: '//' }
+        // { title: '読んだ本を探す', text: '検索ボックスから読んだ本を検索しましょう。', image: '//' },
+        { title: '読んだ本を管理する', text: '読んだ本は一覧で管理することができます。', image: 'book-list.png' }
+        // { title: '読んだ本から得た知識を習慣化する', text: '本から得た知識を習慣化するためのサポートをします。', image: '//' }
 
       ]
     }

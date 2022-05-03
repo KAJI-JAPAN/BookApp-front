@@ -6,7 +6,6 @@
         prepend-icon="mdi-lock"
         :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
         label="パスワードを再入力"
-        :rules="form.rules"
         :type="show ? 'text' : 'password'"
         @click:append="show= !show"
       />

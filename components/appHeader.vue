@@ -8,9 +8,6 @@
         />
       </template>
     </AppBar>
-    <AlertLogout>
-      アカウントを削除しました
-    </AlertLogout>
     <div v-if="loggedIn || guestLoggedIn">
       <AppTitleAfterLoginDrawer
         :drawer.sync="drawer"

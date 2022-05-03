@@ -18,6 +18,7 @@
       >
         <v-container>
           <UserFormTextFieldPassword :password.sync="userInfo.password" />
+          <UserFormTextFieldPasswordConfirmation :password-confirmation.sync="userInfo.passwordConfirmation" />
           <v-row justify="center">
             <v-col cols="12" md="10" sm="10">
               <v-btn
@@ -45,20 +46,22 @@ export default {
       isValid: false,
       loading: false,
       userInfo: {
-        password: ''
+        password: '',
+        passwordConfirmation: ''
       }
     }
   },
   methods: {
     updatePassword () {
       this.$axios
-        .$patch('/api/v1/auth/password', this.userInfo, {
-          headers: {
-            'access-token': localStorage.getItem('access-token'),
-            uid: localStorage.getItem('uid'),
-            client: localStorage.getItem('client')
-          }
-        })
+        .$put('/api/v1/auth/password', { user: this.userInfo },
+          {
+            headers: {
+              'access-token': localStorage.getItem('access-token'),
+              uid: localStorage.getItem('uid'),
+              client: localStorage.getItem('client')
+            }
+          })
         .then(() => {
           this.$store.commit('alertSwitchSuccess', true)
           this.loading = true
