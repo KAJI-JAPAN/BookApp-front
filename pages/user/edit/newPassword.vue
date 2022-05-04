@@ -17,7 +17,10 @@
       >
         <v-container>
           <UserFormTextFieldPassword :password.sync="userInfo.password" />
-          <UserFormTextFieldPasswordConfirmation :password-confirmation.sync="userInfo.passwordConfirmation" />
+          <UserFormTextFieldPasswordConfirmation
+            :password-confirmation.sync="userInfo.passwordConfirmation"
+            :password="userInfo.password"
+          />
           <v-row justify="center">
             <v-col cols="12" md="10" sm="10">
               <v-btn

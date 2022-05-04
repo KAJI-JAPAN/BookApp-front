@@ -7,6 +7,7 @@
         :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
         label="パスワードを再入力"
         :type="show ? 'text' : 'password'"
+        :rules="rules"
         @click:append="show= !show"
       />
     </v-col>
@@ -14,16 +15,18 @@
 </template>
 <script>
 export default {
-  props: ['passwordConfirmation'],
+  props: ['passwordConfirmation', 'password'],
   data () {
     return {
       show: false,
-      getPassword: ''
+      rules: [
+        v => (v === this.password) || 'パスワードが一致していません'
+      ]
     }
   },
   computed: {
     setPasswordConfirmation: {
-      get () { return this.email },
+      get () { return this.passwordConfirmation },
       set (newVal) { return this.$emit('update:password-confirmation', newVal) }
     }
   }
