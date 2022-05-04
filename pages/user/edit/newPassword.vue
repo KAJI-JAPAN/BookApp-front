@@ -54,14 +54,20 @@ export default {
   methods: {
     updatePassword () {
       this.$axios
-        .$put('/api/v1/auth/password', { user: this.userInfo },
-          {
-            headers: {
-              'access-token': localStorage.getItem('access-token'),
-              uid: localStorage.getItem('uid'),
-              client: localStorage.getItem('client')
-            }
-          })
+        .$put('/api/v1/auth/passwords', {
+          user: {
+            password: this.userInfo.password,
+            password_confirmation: this.userInfo.passwordConfirmation,
+            reset_password_token: this.$route.query.token
+          }
+        },
+        {
+          headers: {
+            'access-token': localStorage.getItem('access-token'),
+            uid: localStorage.getItem('uid'),
+            client: localStorage.getItem('client')
+          }
+        })
         .then(() => {
           this.$store.commit('alertSwitchSuccess', true)
           this.loading = true
