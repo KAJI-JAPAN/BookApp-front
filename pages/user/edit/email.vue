@@ -3,13 +3,14 @@
     <AlertSuccess>
       変更を保存しました
     </AlertSuccess>
-    <v-card class="pa-7 ma-10 mx-auto" max-width="600">
-      <div class="login-logo">
-        <img
-          :src="logoImg"
-          width="70px"
-        >
-      </div>
+    <v-card class="ma-10 mx-auto" max-width="600">
+      <v-toolbar
+        color="deep-purple accent-4"
+        dark
+        class="mb-3"
+      >
+        <v-toolbar-title>新しいメールアドレスをを入力</v-toolbar-title>
+      </v-toolbar>
       <v-form
         ref="form"
         v-model="isValid"
@@ -41,14 +42,11 @@
 </template>
 
 <script>
-import '@/assets/css/user-form.scss'
-import logoImg from '~/assets/images/login_logo.png'
 export default {
   data () {
     return {
       isValid: false,
       loading: false,
-      logoImg,
       userInfo: {
         email: '',
         password: ''

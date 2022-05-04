@@ -11,7 +11,6 @@
       >
         <v-toolbar-title>新しいパスワードを入力</v-toolbar-title>
       </v-toolbar>
-      <div class="login-logo" />
       <v-form
         ref="form"
         v-model="isValid"
