@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import * as url from '@/store/constants/url'
 import '@/assets/css/user-form.scss'
 export default {
   data () {
@@ -50,7 +51,7 @@ export default {
   methods: {
     editEmail () {
       this.$axios
-        .$post('/api/v1/auth/passwords', {
+        .$post(`${url.POST_API}auth/passwords`, {
           user: {
             email: this.email
           }

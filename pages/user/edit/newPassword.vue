@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import * as url from '@/store/constants/url'
 import '@/assets/css/user-form.scss'
 export default {
   data () {
@@ -56,7 +57,7 @@ export default {
   methods: {
     updatePassword () {
       this.$axios
-        .$put('/api/v1/auth/passwords', {
+        .$put(`${url.POST_API}auth/passwords`, {
           user: {
             password: this.userInfo.password,
             password_confirmation: this.userInfo.passwordConfirmation,

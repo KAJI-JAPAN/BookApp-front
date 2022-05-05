@@ -82,6 +82,7 @@
 </template>
 
 <script>
+import * as url from '@/store/constants/url'
 export default {
   data () {
     return {
@@ -95,7 +96,7 @@ export default {
 
   methods: {
    deleteAccount () {
-      this.$axios.$delete(`/api/v1/auth`, {
+      this.$axios.$delete(`${url.POST_API}auth`, {
          headers: {
             'access-token': localStorage.getItem('access-token'),
             uid: localStorage.getItem('uid'),

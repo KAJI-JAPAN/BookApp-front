@@ -42,6 +42,8 @@
 </template>
 
 <script>
+import * as url from '@/store/constants/url'
+
 export default {
   data () {
     return {
@@ -56,7 +58,7 @@ export default {
   methods: {
     editEmail () {
       this.$axios
-        .$patch('api/v1/auth', this.userInfo, {
+        .$patch(`${url.POST_API}auth`, this.userInfo, {
           headers: {
             'access-token': localStorage.getItem('access-token'),
             uid: localStorage.getItem('uid'),
