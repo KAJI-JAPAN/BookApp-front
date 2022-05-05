@@ -7,15 +7,14 @@
     clipped
     clipped-right
   >
-    <v-app-bar-title>
-      <nuxt-link
-        to="/"
-        class="text-decoration-none"
-      >
-        <AppTitleLogo />
-      </nuxt-link>
-    </v-app-bar-title>
+    <nuxt-link
+      to="/"
+      class="text-decoration-none"
+    >
+      <AppTitleLogo />
+    </nuxt-link>
     <v-spacer />
+    <AppTitleMenu />
     <slot name="drawer-menu" />
   </v-app-bar>
 </template>
