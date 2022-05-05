@@ -3,6 +3,9 @@
     <AlertSuccess>
       変更を保存しました
     </AlertSuccess>
+    <AlertError>
+      そのメールアドレスには変更できません
+    </AlertError>
     <v-card class="ma-10 mx-auto" max-width="600">
       <v-toolbar
         color="deep-purple accent-4"
@@ -43,7 +46,6 @@
 
 <script>
 import * as url from '@/store/constants/url'
-
 export default {
   data () {
     return {
@@ -72,6 +74,14 @@ export default {
             this.loading = false
             this.$store.commit('alertSwitchSuccess', false)
             this.$router.push('/user/edit/setting')
+          }, 2000)
+        })
+        .catch(() => {
+          this.$store.commit('alertSwitchError', true)
+          this.loading = true
+          setTimeout(() => {
+            this.loading = false
+            this.$store.commit('alertSwitchError', false)
           }, 2000)
         })
     }
