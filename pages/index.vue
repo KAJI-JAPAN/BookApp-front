@@ -19,7 +19,7 @@
 </template>
 <script>
 export default {
-  auth: false
+  middleware: 'logo'
 }
 
 </script>
