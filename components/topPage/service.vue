@@ -33,6 +33,7 @@
         width="50%"
         x-large
         elevation="2"
+        @click="guest"
       >
         さっそく使う
       </v-btn>
@@ -41,6 +42,8 @@
 </template>
 
 <script>
+import * as url from '@/store/constants/url'
+
 export default {
   data ({ $config: { APP_NAME } }) {
     return {
@@ -52,6 +55,26 @@ export default {
         { title: '行動を登録', text: '本を読んでからのアクションを登録することができます', image: 'home-action.png' },
         { title: 'シェア機能', text: '本の内容のまとめやアクションをフォロワーにシェアすることができます', image: 'home-share.png' }
       ]
+    }
+  },
+
+  methods: {
+    async guest () {
+      await this.$axios.$post(`${url.POST_API}guests`)
+        .then((res) => {
+          let loginAlert = { loginAlert: true }
+          let guestLoginFlag = { guestLoginFlag: true }
+          localStorage.setItem('loginAlert', JSON.stringify(loginAlert))
+          sessionStorage.setItem('guestLoginFlag', JSON.stringify(guestLoginFlag))
+          this.$auth.loginWith('local', { 
+            data:  {
+              email: res.email,
+              password: res.password,
+              guest: true
+            }
+          })
+          this.$router.replace('/search')
+        })
     }
   }
 }
