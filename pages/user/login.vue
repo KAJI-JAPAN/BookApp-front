@@ -74,22 +74,22 @@ export default {
           password: this.userInfo.password
         }
       })
-        .then((response) => {
-          let loginAlert = { loginFlag: true }
+        .then(() => {
+          const loginAlert = { loginFlag: true }
           localStorage.setItem('loginAlert', JSON.stringify(loginAlert))
           this.loading = true
-          this.$store.commit('alertSwitchSuccess', true)
+          // ゲストログインフラグ削除
           const guestLoginFlag = JSON.parse(sessionStorage.getItem('guestLoginFlag'))
           if (guestLoginFlag) {
             sessionStorage.removeItem('guestLoginFlag')
           }
 
-          setTimeout (() => {
+          setTimeout(() => {
             this.loading = false
-            this.$router.replace(`/user/${response.data.data.id}`
-          )}, 2000)
+            this.$router.replace('/search')
+          }, 2000)
         })
-        .catch((e) => {
+        .catch(() => {
           this.loading = true
           this.$store.commit('alertSwitchError', true)
           setTimeout(() => {

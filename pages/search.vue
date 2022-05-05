@@ -7,6 +7,9 @@
         <AlertGuest>
           ゲストでログインしました
         </AlertGuest>
+        <AlertLogin>
+          ログインしました
+        </AlertLogin>
         <AlertSuccess>
           登録しました
         </AlertSuccess>
@@ -34,7 +37,7 @@
 </template>
 <script>
 export default {
-  // middleware: 'authenticated',
+  middleware: 'authenticated',
   auth: false,
   data () {
     return {
@@ -49,10 +52,19 @@ export default {
 
   mounted () {
     const loginAlert = JSON.parse(localStorage.getItem('loginAlert'))
-    if (loginAlert) {
+    const guestLoginAlert = JSON.parse(localStorage.getItem('guestLoginAlert'))
+    // ゲストログイン時のアラート
+    if (guestLoginAlert) {
       this.$store.commit('alertSwitchGuest', true)
       setTimeout(() => {
         this.$store.commit('alertSwitchGuest', false)
+        localStorage.removeItem('guestLoginAlert')
+      }, 2000)
+      // ログイン時のアラート
+    } else if (loginAlert) {
+      this.$store.commit('alertSwitchLogin', true)
+      setTimeout(() => {
+        this.$store.commit('alertSwitchLogin', false)
         localStorage.removeItem('loginAlert')
       }, 2000)
     }
