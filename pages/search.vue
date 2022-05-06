@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <div
-      class="teal lighten-1 background pa-10"
+      class="teal lighten-1 background py-5"
     >
       <div class="alert-success">
         <AlertGuest>
@@ -21,10 +21,10 @@
         </alerterror>
       </div>
       <v-sheet
-        width="1100px"
+        max-width="1100px"
         class="mx-auto pa-5 rounded-xl"
         color="grey lighten-5"
-        min-height="500px"
+        min-height="600px"
       >
         <!-- 書籍検索、表示 -->
         <BookPostDialog />
@@ -76,5 +76,9 @@ export default {
   .background {
     background-image: url('~/assets/images/tree.png');
     background-repeat: space repeat;
+  }
+
+  @media only screen and (min-width:500px) {
+
   }
 </style>

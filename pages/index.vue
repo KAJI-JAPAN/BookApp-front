@@ -8,6 +8,7 @@
         <v-sheet
           class="rounded-xl pa-15 ma-auto"
           max-width="1200px"
+          min-width="440px"
         >
           <!-- サービス紹介シート -->
           <TopPageService />

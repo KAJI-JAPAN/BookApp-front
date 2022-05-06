@@ -4,6 +4,7 @@
       small
       color="primary"
       outlined
+      class="mt-10"
       @click="hiddenAction"
     >
       <v-icon dark>

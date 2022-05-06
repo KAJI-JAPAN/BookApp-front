@@ -14,7 +14,7 @@
           <p>普段の生活をほんの少しだけ変えるぐらいがおすすめです。</p>
         </v-card-text>
         <div align="center">
-          <video controls width="800">
+          <video controls>
 
             <source
               src="~/assets/images/search.mp4"
@@ -45,7 +45,7 @@
         <v-divider class="pa-3" />
         <v-card-text>本から得た知識を習慣化するためのサポートをします。いつ行うかカレンダーに記載して習慣化を目指しましょう！</v-card-text>
         <div align="center">
-          <video controls width="800">
+          <video controls>
 
             <source
               src="~/assets/images/schedule.mp4"
@@ -74,3 +74,8 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+  video {
+    max-width: 90%;
+  }
+</style>

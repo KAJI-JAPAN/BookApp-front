@@ -8,7 +8,9 @@
         読んだ本の内容と、その後のアクションをみんなにシェアして知識を行動に移しましょう！
       </div>
       <v-divider />
-      <v-col class="pl-0 mt-10">
+      <v-col
+        class="pl-0 mt-10"
+      >
         <nuxt-link to="/user/signup" class="link">
           <v-btn
             class="mr-5"
@@ -29,16 +31,12 @@
         </v-btn>
       </v-col>
     </v-col>
-    <v-col
-      align-center
-      cols="5"
-      class="mt-15"
-    >
+    <div class="img">
       <v-img
         :src="require('@/assets/images/home.png')"
         contain
       />
-    </v-col>
+    </div>
   </v-row>
 </template>
 
@@ -61,7 +59,7 @@ export default {
           localStorage.setItem('loginAlert', JSON.stringify(loginAlert))
           localStorage.setItem('guestLoginAlert', JSON.stringify(guestLoginAlert))
           sessionStorage.setItem('guestLoginFlag', JSON.stringify(guestLoginFlag))
-          this.$auth.loginWith('local', { 
+          this.$auth.loginWith('local', {
             data:  {
               email: res.email,
               password: res.password,
@@ -75,7 +73,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss"  scoped>
   *{
     text-transform: none !important;
   }
@@ -86,4 +84,14 @@ export default {
   .koudoku-app {
     color: white;
   }
+
+  .img {
+    min-width: 200px;
+    max-width: 40%;
+  }
+  @media screen and (max-width: 600px) {
+    .img {
+      display: none;
+    }
+}
 </style>

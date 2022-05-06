@@ -1,14 +1,21 @@
 <template>
   <v-container>
-    <v-row class="pa-5 pb-7">
+    <v-row class=" pa-5 pb-7">
       <h1>{{ APP_NAME }}では以下のサービスが利用できます</h1>
     </v-row>
     <v-row>
       <v-col
         v-for="(card,i) in serviceCards"
         :key="`card-${i}`"
+        :xs="tabletSize"
+        :sm="tabletSize"
+        :md="desktopSize"
+        :lg="desktopSize"
       >
-        <v-card :height="cardHeight">
+        <v-card
+          :height="cardHeight"
+          min-width="320px"
+        >
           <v-layout justify-center>
             <v-avatar
               :size="avatarSize"
@@ -23,17 +30,17 @@
           <v-card-text> {{ card.text }} </v-card-text>
         </v-card>
       </v-col>
-        <TopPageShare />
     </v-row>
 
     <!-- ボタン -->
-    <div class="text-center ma-10 pa-5">
+    <div class="text-center ma-5 ml-0 pa-5">
       <v-btn
         color="primary"
-        class="pa-7"
+        class="guest-btn pa-7"
         width="50%"
         x-large
         elevation="2"
+        min-width="180px"
         @click="guest"
       >
         さっそく使う
@@ -43,12 +50,14 @@
 </template>
 
 <script>
-import * as url from '@/store/constants/url'
+// import * as url from '@/store/constants/url'
 
 export default {
   data ({ $config: { APP_NAME } }) {
     return {
       APP_NAME,
+      tabletSize: '12',
+      desktopSize: '4',
       avatarSize: '200px',
       cardHeight: '350px',
       serviceCards: [
@@ -68,7 +77,7 @@ export default {
           let guestLoginFlag = { guestLoginFlag: true }
           localStorage.setItem('loginAlert', JSON.stringify(loginAlert))
           sessionStorage.setItem('guestLoginFlag', JSON.stringify(guestLoginFlag))
-          this.$auth.loginWith('local', { 
+          this.$auth.loginWith('local', {
             data:  {
               email: res.email,
               password: res.password,
@@ -81,3 +90,15 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+  @media screen and (max-width: 500px) {
+    .box {
+      padding: 0;
+      margin: 0;
+      .guest-btn {
+        width: 500px;
+        padding: 100%;
+      }
+    }
+}
+</style>

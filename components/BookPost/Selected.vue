@@ -6,7 +6,7 @@
       min-height="400px"
       class="mx-auto my-8 pa-3 rounded-xl"
     >
-      <div style="height:100px;">
+      <div style="height:100%;">
         <v-card-subtitle v-if="selectedBook == null">
           登録したい書籍を検索してください
         </v-card-subtitle>

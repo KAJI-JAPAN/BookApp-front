@@ -6,6 +6,7 @@
     color="blue-grey darken-4"
     clipped
     clipped-right
+    max-width0="100%"
   >
     <nuxt-link
       to="/"

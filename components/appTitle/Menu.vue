@@ -9,6 +9,7 @@
       v-for="(item, i) in service"
       :key="i"
       :to="item.link"
+      fixed-tabs
     >
       <v-icon>{{ item.icon }}</v-icon>
     </v-tab>
@@ -37,3 +38,10 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+  @media only screen and (max-width:550px) {
+    .v-tab {
+      margin: 0!important;
+    }
+  }
+</style>
