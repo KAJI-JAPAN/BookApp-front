@@ -23,6 +23,7 @@
           <v-card-text> {{ card.text }} </v-card-text>
         </v-card>
       </v-col>
+        <TopPageShare />
     </v-row>
 
     <!-- ボタン -->
@@ -53,7 +54,8 @@ export default {
       serviceCards: [
         { title: '書籍管理機能', text: '自分が読んだ本を管理することができます', image: 'home-book.png' },
         { title: '行動を登録', text: '本を読んでからのアクションを登録することができます', image: 'home-action.png' },
-        { title: 'シェア機能', text: '本の内容のまとめやアクションをフォロワーにシェアすることができます', image: 'home-share.png' }
+        { title: '行動を管理', text: '本を読んでからのアクションをカレンダー機能を利用して管理できます', image: 'home-calendar.png' }
+        // { title: 'シェア機能', text: '本の内容のまとめやアクションをフォロワーにシェアすることができます', image: 'home-share.png' }
       ]
     }
   },
