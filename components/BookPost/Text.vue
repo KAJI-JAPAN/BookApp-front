@@ -68,7 +68,7 @@
         </v-col>
         <v-col class="d-flex justify-end">
           <v-btn
-            :disabled="disabled"
+            :disabled="todoValid"
             @click="addTodo"
           >
             保存
@@ -94,7 +94,11 @@ export default {
     }
   },
   computed: {
-    ...mapState('todos', ['list', 'disabled', 'hidden'])
+    ...mapState('todos', ['list', 'hidden']),
+
+    todoValid () {
+      return this.itemText === '' || this.list.length >= 3
+    }
   },
 
   methods: {

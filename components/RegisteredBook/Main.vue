@@ -26,19 +26,23 @@
           <v-card
             :to="`/book/${book.id}`"
             hover
-            class="ma-1"
           >
-            <v-row>
-              <v-col class="ml-2">
+            <v-row class="content">
+              <v-col class="ml-2 pr-0" md="8" sm="5" lg="8">
                 <img :src="book.image">
               </v-col>
-              <div
-                class="ma-3 mt-13"
-                align="end"
-              >
-                <v-card-title>{{ book.title }}</v-card-title>
-                <v-card-subtitle>{{ book.author }}</v-card-subtitle>
-              </div>
+              <v-col>
+                <div
+                  class="ma-3 mt-13 book-info"
+                  align="end"
+                  width="100%"
+                >
+                  <h3>{{ book.title }}</h3>
+                  <v-card-subtitle class="mr-9">
+                    {{ book.author }}
+                  </v-card-subtitle>
+                </div>
+              </v-col>
             </v-row>
           </v-card>
         </v-col>
@@ -85,3 +89,17 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+
+  @media only screen and (max-width:500px) {
+    .content {
+      text-align: center;
+    }
+
+    h3 {
+    width: 200px;
+    word-wrap: break-word;
+    }
+
+  }
+</style>

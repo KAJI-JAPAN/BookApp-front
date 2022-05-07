@@ -17,22 +17,20 @@
         max-width="650px"
       >
         <template #activator="{ on, attrs }">
-          <v-cols>
-            <v-btn
-              v-bind="attrs"
-              icon
-              x-large
-              class="mt-12"
-              :disabled="disabled"
-              :valid="disabled"
-              v-on="on"
-              @click="get"
-            >
-              <v-icon x-large>
-                mdi-magnify
-              </v-icon>
-            </v-btn>
-          </v-cols>
+          <v-btn
+            v-bind="attrs"
+            icon
+            x-large
+            class="mt-12"
+            :disabled="disabled"
+            :valid="disabled"
+            v-on="on"
+            @click="get"
+          >
+            <v-icon x-large>
+              mdi-magnify
+            </v-icon>
+          </v-btn>
         </template>
         <v-container>
           <v-card>

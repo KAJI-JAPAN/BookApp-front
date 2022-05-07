@@ -3,7 +3,7 @@
     class="back ma-3"
   >
     <v-sheet
-      width="1100px"
+      max-width="1100px"
       min-height="200px"
       class="mx-auto"
       tile

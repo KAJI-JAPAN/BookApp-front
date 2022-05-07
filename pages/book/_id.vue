@@ -19,7 +19,7 @@
         </AlertDeleteText>
       </div>
       <v-sheet
-        width="1100px"
+        max-width="1100px"
         class="mx-auto pa-5 rounded-xl"
         color="grey lighten-5"
         min-height="500px"
