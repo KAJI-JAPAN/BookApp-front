@@ -4,6 +4,7 @@
     :value="alert"
     dense
     class="alert"
+    min-width="200px"
   >
     <slot />
   </v-alert>

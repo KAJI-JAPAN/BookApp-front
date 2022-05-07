@@ -6,6 +6,7 @@
     color="blue-grey"
     dark
     type="success"
+    min-width="200px"
   >
     <slot />
   </v-alert>

@@ -6,17 +6,19 @@
       min-height="400px"
       class="mx-auto my-8 pa-3 rounded-xl"
     >
-      <div style="height:100%;">
+      <div style="height:100%;" class="text-center">
         <v-card-subtitle v-if="selectedBook == null">
           登録したい書籍を検索してください
         </v-card-subtitle>
         <template v-if="selectedBook != null">
-          <v-row style="text-align:center;">
-            <v-col cols="6" class="pa-5">
+          <v-row>
+            <v-col md="6" sm="6" class="pa-5">
               <img :src="image(selectedBook)">
             </v-col>
-            <v-col cols="4" class="pa-5">
-              <v-card-title>{{ title(selectedBook) }}</v-card-title>
+            <v-col class="pa-5" md="6" sm="6">
+              <h3 class="pa-5 mt-3">
+                {{ title(selectedBook) }}
+              </h3>
               <v-card-subtitle class="pa-3">
                 {{ author(selectedBook) }}
               </v-card-subtitle>

@@ -58,7 +58,7 @@
         color="pink lighten-3"
         auto-grow
         label="入力してみよう！"
-        placeholder="(例) 朝の運動は１日の集中力を上げる効果があるので毎朝10分早起きしてランニングをする"
+        placeholder="毎朝10分早起きしてランニングをする"
       />
       <v-row>
         <v-col>

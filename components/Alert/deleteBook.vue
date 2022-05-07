@@ -4,6 +4,7 @@
     :value="alert"
     dense
     class="alert"
+    min-width="200px"
   >
     削除しました。
   </v-alert>
