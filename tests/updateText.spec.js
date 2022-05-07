@@ -2,7 +2,6 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import Vuetify from 'vuetify'
 import updateText from '@/components/RegisteredBook/updateText.vue'
-// import todos from '@/store/todos'
 
 const localVue = createLocalVue()
 

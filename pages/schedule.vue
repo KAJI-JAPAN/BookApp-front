@@ -237,7 +237,6 @@
                   </v-toolbar>
                   <v-container>
                     <v-card-text>
-                      <!-- <span v-html="selectedEvent.details" /> -->
                       <!-- 登録した日付と時間を表示 -->
                       <v-list-item>
                         <v-row align="center">
@@ -283,7 +282,6 @@
                   </v-card-actions>
                 </v-card>
               </v-dialog>
-            <!--  -->
             </template>
           </v-calendar>
         </v-sheet>
@@ -304,7 +302,6 @@ export default {
     return {
       value: '',
       colors: ['#2196F3', '#3F51B5', '#673AB7', '#00BCD4', '#4CAF50', '#FF9800', '#757575'],
-      // dragEvent: null,
       dragStart: null,
       createStart: null,
       extendOriginal: null,
@@ -423,7 +420,7 @@ export default {
         const mouseRounded = this.roundTime(mouse, false)
         const min = Math.min(mouseRounded, this.createStart)
         const max = Math.max(mouseRounded, this.createStart)
-        // バックアップ用 編集した時にselectedEventに時間を反映させたい
+        // バックアップ用 編集した時にselectedEventに時間を反映
         this.min = min
         this.max = max
 
@@ -477,7 +474,6 @@ export default {
     showEvent ({ nativeEvent, event }) {
       const open = () => {
         // 登録済みの場合はDBからデータを取得する
-        // this.selectedEvent.id ? this.$store.dispatch('schedule/showEvent', event) : this.$store.commit('schedule/setSelectedEvent', event)
         if (this.selectedEvent.id) { this.$store.dispatch('schedule/showEvent', { event, min: this.min, max: this.max }) }
         this.$store.commit('schedule/setSelectedEvent', event)
 

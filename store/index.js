@@ -35,7 +35,7 @@ export const mutations = {
 }
 
 export const actions = {
-  // 本と行動リストの登録/////////////////////////////////
+  // 本と行動リストの登録
   post ({ state, commit }) {
     const list = state.todos.list
     const selectedBook = state.book.selectedBook

@@ -126,7 +126,6 @@ export const actions = {
       })
   },
   // 習慣化リストを削除
-  // catchは編集用のエラーメッセージを流用
   delete ({ commit }, todo) {
     this.$axios.$delete(`${url.POST_ITEMS_API}${todo.id}`)
       .then(() => {

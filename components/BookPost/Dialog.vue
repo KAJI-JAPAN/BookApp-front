@@ -85,7 +85,7 @@ export default {
   },
 
   methods: {
-    // plugin/bookInfo  title,author,image
+    // plugin/bookInfoでtitle,author,imageを記載
     title (value) {
       return this.$title(value)
     },

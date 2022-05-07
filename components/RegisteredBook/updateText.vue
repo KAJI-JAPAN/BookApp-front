@@ -117,13 +117,13 @@ export default {
       }
     },
 
-    // 編集
+    // アクション編集
     toEdit (todo) {
       this.$store.commit('todos/setSelectedTodo', todo)
       this.itemText = todo.content
       this.$store.commit('todos/toggle', todo)
     },
-    // 削除
+    // アクション削除
     removeTodo (todo) {
       this.$store.dispatch('todos/delete', todo)
     },
@@ -136,6 +136,7 @@ export default {
       this.$store.commit('todos/cancel', this.selectedTodo)
       this.itemText = ''
     },
+    // カレンダーに移動、選択した書籍とアクションを保存
     moveSchedule (todo) {
       this.$router.push('/schedule')
       this.$store.commit('todos/setSelectedTodo', todo)

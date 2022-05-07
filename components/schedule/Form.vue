@@ -225,7 +225,6 @@
             text
             @click="addEvent"
           >
-          <!-- addEvent追加 -->
             保存する
           </v-btn>
         </v-card-actions>
@@ -256,13 +255,11 @@ export default {
       getStartTime: null,
       getEndtime: null,
       disabled: true,
-      // 日数選択
       selectDateItems: [
         { id:1, state: '60日(約２ヶ月)'}, 
         { id:2, state : '250日(約８ヶ月)' }, 
       ],
       selectDate: '',
-      // validation用
       rulesTime: [value => !!value || '時間を選択してください' ],
       rulesLongDate:[value => !!value || '日数を選択してください'],
       rulesDate:[value => !!value || '日付を選択してください']
@@ -304,7 +301,6 @@ export default {
 
     // 開始時間選択「時間」を制限
     timePickerStartHours (value) {
-    // return value !== new Date().getHours()
       const today = moment().format('YYYY-MM-DD')
       if (this.date === today) {
         return value >= new Date().getHours()
@@ -354,7 +350,6 @@ export default {
       if(this.$refs.date_form.validate()) {
         const selectDate = this.selectDate
         const selectDateIdMap = {1: 60, 2: 250  }
-        // const selectDateIdMap = {1: 5, 2: 250}
         let arrayEvent = []
         
           for (let i=0; i < selectDateIdMap[selectDate]; i++) {

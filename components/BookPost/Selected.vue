@@ -48,7 +48,7 @@ export default {
       return this.$store.state.book.selectedBook
     }
   },
-  // plugin/bookInfo  title,author,image
+  // plugin/bookInfoでtitle,author,imageを記載
   methods: {
     title (value) {
       return this.$title(value)

@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  // 追加
+  // アクション追加
   methods: {
     addTodo () {
       // selectedTodoが空、もしくはselected.statusがtrueの場合は追加、どちらかがfalseの場合は編集で追加

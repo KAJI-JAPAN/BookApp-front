@@ -103,7 +103,7 @@ export default {
 
   methods: {
 
-    // 追加
+    // アクション追加
     addTodo () {
       // selectedTodoが空、もしくはselectedTodo.statusがtrueの場合は追加、どちらかがfalseの場合は編集で追加
       if (this.selectedTodo.length === 0 || this.selectedTodo.status !== true) {
@@ -116,13 +116,13 @@ export default {
       }
     },
 
-    // 編集
+    // アクション編集
     toEdit (todo) {
       this.selectedTodo = todo
       this.itemText = todo.content
       this.$store.commit('todos/toggle', todo)
     },
-    // 削除
+    // アクション削除
     removeTodo (todo) {
       this.$store.commit('todos/remove', todo)
     },

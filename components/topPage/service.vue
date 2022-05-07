@@ -32,7 +32,6 @@
       </v-col>
     </v-row>
 
-    <!-- ボタン -->
     <div class="text-center ma-5 ml-0 pa-5">
       <v-btn
         color="primary"
@@ -50,7 +49,7 @@
 </template>
 
 <script>
-// import * as url from '@/store/constants/url'
+import * as url from '@/store/constants/url'
 
 export default {
   data ({ $config: { APP_NAME } }) {

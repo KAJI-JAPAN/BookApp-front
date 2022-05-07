@@ -77,8 +77,4 @@ export default {
     background-image: url('~/assets/images/tree.png');
     background-repeat: space repeat;
   }
-
-  @media only screen and (min-width:500px) {
-
-  }
 </style>

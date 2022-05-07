@@ -27,7 +27,6 @@
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-      <!-- ナビメニュー -->
       <v-list-item
         target="_blank"
       />
