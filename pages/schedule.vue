@@ -67,7 +67,7 @@
         </v-sheet>
         <v-divider class="ma-8" />
         <!-- 日付まとめて入力ボタン -->
-        <ScheduleCustomEventForm ref="form" />
+        <ScheduleForm ref="form" />
       </v-col>
 
       <!-- 週カレンダー -->

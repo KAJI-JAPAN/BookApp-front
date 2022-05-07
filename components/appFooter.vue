@@ -34,7 +34,7 @@ export default {
 
   computed: {
     copyRightYear () {
-      const beginningYear = 2020
+      const beginningYear = 2021
       const thisYear = new Date().getFullYear()
       return (beginningYear < thisYear) ? `${beginningYear} - ${thisYear}` : beginningYear
     }
