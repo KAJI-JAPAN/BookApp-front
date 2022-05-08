@@ -69,6 +69,7 @@ export default {
         this.loading = true
         this.$store.commit('alertSwitchSuccess', true)
         setTimeout(() => {
+          this.loading = false
           this.$store.commit('alertSwitchSuccess', false)
           this.$router.replace(`/user/login`)
         }, 2000)

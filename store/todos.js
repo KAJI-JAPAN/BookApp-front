@@ -71,6 +71,7 @@ export const mutations = {
 }
 
 //  編集画面用TODO追加、編集
+// plugin/responsePocessing $successHandling
 export const actions = {
   // 編集画面取得時にselectedBookは取得済みなのでIDは問題なし
   // $axios.$postで送るとパスパラメーターにIDを含むためエラーになる。$patchで送って編集追加
@@ -88,16 +89,10 @@ export const actions = {
         // alertを追加。alertは共通処理なのでindex/jsで管理。第３引数にroot: trueでindex/jsのMutationsを利用
         // レスポンスの値をeditAddで反映
         commit('editAdd', response)
-        commit('alertSwitchSuccess', true, { root: true })
-        setTimeout(() => {
-          commit('alertSwitchSuccess', false, { root: true })
-        }, 3000)
+        this.$successHandling()
       })
       .catch(() => {
-        commit(' alertSwitchError', true, { root: true })
-        setTimeout(() => {
-          commit(' alertSwitchError', false, { root: true })
-        }, 3000)
+        this.$errorHandling()
       })
   },
   // 更新ようなので、selectedTodoで編集対象のIDを取得
@@ -113,16 +108,10 @@ export const actions = {
     })
       .then((response) => {
         commit('edit', { todo: this.selectedTodo, content: response.content })
-        commit('alertSwitchSuccess', true, { root: true })
-        setTimeout(() => {
-          commit('alertSwitchSuccess', false, { root: true })
-        }, 3000)
+        this.$successHandling()
       })
       .catch(() => {
-        commit('alertSwitchError', true, { root: true })
-        setTimeout(() => {
-          commit('alertSwitchError', false, { root: true })
-        }, 3000)
+        this.$errorHandling()
       })
   },
   // 習慣化リストを削除
@@ -130,16 +119,10 @@ export const actions = {
     this.$axios.$delete(`${url.POST_ITEMS_API}${todo.id}`)
       .then(() => {
         commit('remove', todo)
-        commit('alertSwitchDelete', true, { root: true })
-        setTimeout(() => {
-          commit('alertSwitchDelete', false, { root: true })
-        }, 3000)
+        this.$deleteHandling()
       })
       .catch(() => {
-        commit('alertSwitchError', true, { root: true })
-        setTimeout(() => {
-          commit('alertSwitchError', false, { root: true })
-        }, 3000)
+        this.$errorHandling()
       })
   }
 }

@@ -30,8 +30,9 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    'plugins/axios',
-    'plugins/bookInfo'
+    'plugins/axios.js',
+    'plugins/bookInfo.js',
+    'plugins/responsePocessing'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -63,12 +64,6 @@ export default {
 
   auth: {
     redirect: false,
-    // {
-    //   login: '/user/login',
-    //   logout: '/user/login',
-    //   callback: false,
-    //   home: false
-    // },
     strategies: {
       local: {
         endpoints: {

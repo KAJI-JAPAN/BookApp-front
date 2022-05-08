@@ -51,7 +51,6 @@ export default {
     deleteBook () {
       this.$store.dispatch('book/delete')
       this.dialog = false
-      this.$router.push('/registeredBook')
     }
   }
 }

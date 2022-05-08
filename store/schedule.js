@@ -157,12 +157,11 @@ export const mutations = {
   } 
 }
 
-
+  // plugin/responsePocessing $successHandling
 export const actions = {
 
   // イベント追加
   addEvent ({ rootState, commit }, event) {
-    
     this.$axios.$post(url.SCHEDULE_API, {
       post: {
         name: event.name,
@@ -190,16 +189,10 @@ export const actions = {
         commit('setEvent', data)
         commit('deleteSelectedEvent')
         if(rootState.book.scheduleBook) { commit('book/clearScheduleBook', {}, { root: true })}
-        commit('alertSwitchSuccess', true, { root: true })
-        setTimeout(() => {
-          commit('alertSwitchSuccess', false, { root: true })
-        }, 3000)
+          this.$successHandling()
       })
       .catch(() => {
-        commit('alertSwitchError', true, { root: true })
-        setTimeout(() => {
-          commit('alertSwitchError', false, { root: true })
-        }, 3000)
+        this.$errorHandling()
       })
 
   },
@@ -231,17 +224,11 @@ export const actions = {
       }
       commit('updateEvent', { payload: event, updateEvent: data })
       commit('deleteSelectedEvent')
-      commit('alertSwitchSuccess', true, { root: true })
+      this.$successHandling()
       if(rootState.book.scheduleBook) { commit('book/clearScheduleBook', {}, { root: true })}
-      setTimeout(() => {
-        commit('alertSwitchSuccess', false, { root: true })
-      }, 2000)
     })
     .catch(() => {
-      commit('alertSwitchError', true, { root: true })
-      setTimeout(() => {
-        commit('alertSwitchError', false, { root: true })
-      }, 3000)
+      this.$errorHandling()
     })
 
   },
@@ -269,16 +256,10 @@ export const actions = {
       if(rootState.book.scheduleBook) { commit('book/clearScheduleBook', {}, { root: true })}
       commit('deleteEvent', event)
       commit('deleteSelectedEvent')
-      commit('alertSwitchDelete', true, { root: true })
-        setTimeout(() => {
-          commit('alertSwitchDelete', false, { root: true })
-        }, 2000)
+      this.$deleteHandling()
       })
       .catch(() => {
-        commit('alertSwitchError', true, { root: true })
-        setTimeout(() => {
-          commit('alertSwitchError', false, { root: true })
-        }, 3000)
+        this.$errorHandling()
       })
 
   },
@@ -305,35 +286,24 @@ export const actions = {
     })
       if(rootState.book.scheduleBook) { commit('book/clearScheduleBook', {}, { root: true })}
       commit('deleteSelectedEvent')
-      commit('alertSwitchSuccess', true, { root: true })
-      setTimeout(() => {
-        commit('alertSwitchSuccess', false, { root: true })
-      }, 3000)
+      this.$successHandling()
     })
     .catch(() => {
-      commit('alertSwitchError', true, { root: true })
-      setTimeout(() => {
-        commit('alertSwitchError', false, { root: true })
-      }, 3000)
+      this.$errorHandling()
     })
 
   },
+  // まとめて削除
   manyDeletionEvents ({ rootState, commit }, event) {
     this.$axios.$post(`${url.SCHEDULE_API}/${event.id}/delete_many_schedule`, event)
     .then(() => {
       if(rootState.book.scheduleBook) { commit('book/clearScheduleBook', {}, { root: true })}
       commit('deleteManyEvents', event)
       commit('deleteSelectedEvent')
-      commit('alertSwitchDelete', true, { root: true })
-        setTimeout(() => {
-          commit('alertSwitchDelete', false, { root: true })
-        }, 2000)
+        this.$deleteHandling()
       })
       .catch(() => {
-        commit('alertSwitchError', true, { root: true })
-        setTimeout(() => {
-          commit('alertSwitchError', false, { root: true })
-        }, 3000)
+        this.$errorHandling()
       })
 
   }

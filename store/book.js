@@ -71,8 +71,12 @@ export const actions = {
     })
   },
   // 本を削除
-  delete ({ state }) {
+  delete ({ state, commit }) {
     const bookId = state.selectedBook.id
     this.$axios.$delete(`${url.POST_API}posts/${bookId}`)
+    .then(() => {
+      $nuxt.$router.push('/registeredBook')
+      commit('clearScheduleBook')
+    })
   }
 }

@@ -49,7 +49,7 @@ export const actions = {
         }
       })
 
-    // plugin/bookInfo  $title,$author,$image
+    // plugin/bookInfo $title,$author,$image
     this.$axios.$post(`${url.POST_API}posts`, {
       post: {
         title: this.$title(selectedBook),
@@ -58,20 +58,15 @@ export const actions = {
         post_items_attributes: postItemsAttributes
       }
     })
+    // plugin/responsePocessing $successHandling
       .then((response) => {
-        commit('alertSwitchSuccess', true)
-        setTimeout(() => {
-          commit('alertSwitchSuccess', false)
-        }, 3000)
+        this.$successHandling()
         commit('book/responseBook', response)
         commit('book/clearBook')
         commit('todos/clear')
       })
       .catch(() => {
-        commit('alertSwitchError', true)
-        setTimeout(() => {
-          commit('alertSwitchError', false)
-        }, 3000)
+        this.$errorHandling()
       })
   }
 }

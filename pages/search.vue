@@ -17,8 +17,7 @@
       <div class="alert-error">
         <AlertError>
           登録に失敗しました。時間を置いてからお試しください
-          <AlertError />
-        </alerterror>
+        </AlertError>
       </div>
       <v-sheet
         max-width="1100px"
