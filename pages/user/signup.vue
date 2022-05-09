@@ -65,7 +65,7 @@ export default {
   methods: {
     signup () {
       this.$axios.post('/api/v1/auth', this.userInfo)
-      .then((response) => {
+      .then(() => {
         this.loading = true
         this.$store.commit('alertSwitchSuccess', true)
         setTimeout(() => {

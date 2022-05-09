@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row class=" pa-5 pb-7">
-      <h1>{{ APP_NAME }}では以下のサービスが利用できます</h1>
+      <h1>KOUDOKUでは以下のサービスが利用できます</h1>
     </v-row>
     <v-row>
       <v-col
@@ -49,12 +49,9 @@
 </template>
 
 <script>
-import * as url from '@/store/constants/url'
-
 export default {
-  data ({ $config: { APP_NAME } }) {
+  data () {
     return {
-      APP_NAME,
       tabletSize: '12',
       desktopSize: '4',
       avatarSize: '200px',
@@ -69,22 +66,8 @@ export default {
   },
 
   methods: {
-    async guest () {
-      await this.$axios.$post(`${url.POST_API}guests`)
-        .then((res) => {
-          let loginAlert = { loginAlert: true }
-          let guestLoginFlag = { guestLoginFlag: true }
-          localStorage.setItem('loginAlert', JSON.stringify(loginAlert))
-          sessionStorage.setItem('guestLoginFlag', JSON.stringify(guestLoginFlag))
-          this.$auth.loginWith('local', {
-            data:  {
-              email: res.email,
-              password: res.password,
-              guest: true
-            }
-          })
-          this.$router.replace('/search')
-        })
+    guest () {
+      this.$store.dispatch('guest/guestLogin')
     }
   }
 }

@@ -20,18 +20,12 @@
         </v-chip>
       </v-card-text>
       &copy;{{ copyRightYear }}
-      {{ APP_NAME }}
+      KOUDOKU
     </div>
   </v-footer>
 </template>
 <script>
 export default {
-  data ({ $config: { APP_NAME } }) {
-    return {
-      APP_NAME
-    }
-  },
-
   computed: {
     copyRightYear () {
       const beginningYear = 2021

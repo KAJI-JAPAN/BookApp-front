@@ -64,16 +64,6 @@
     </v-card>
   </v-container>
 </template>
-<script>
-export default {
-  auth: false,
-  data ({ $config: { APP_NAME } }) {
-    return {
-      APP_NAME
-    }
-  }
-}
-</script>
 <style lang="scss" scoped>
   video {
     max-width: 90%;
