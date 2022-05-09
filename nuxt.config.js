@@ -26,6 +26,9 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+    '~/assets/css/alert.scss',
+    '~/assets/css/schedule.scss',
+    '~/assets/css/user-form.scss'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -76,27 +79,6 @@ export default {
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    extractCSS: true,
-    optimization: {
-      splitChunks: {
-        cacheGroups: {
-          // globalスタイル
-          styles: {
-            name: 'styles',
-            test: /\.(css|scss)$/,
-            chunks: 'initial',
-            enforce: true
-          },
-          // components配下のスタイル
-          components: {
-            name: 'components',
-            test: /app\/components/,
-            chunks: 'all',
-            enforce: true
-          }
-        }
-      }
-    }
   },
 
   router: {

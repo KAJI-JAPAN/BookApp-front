@@ -37,12 +37,6 @@
 <script>
 export default {
   middleware: 'authenticated',
-  auth: false,
-  data () {
-    return {
-      login: JSON.parse(localStorage.getItem('loginFlag'))
-    }
-  },
   computed: {
     responseBook () {
       return this.$store.state.book.responseBook

@@ -20,3 +20,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .v-alert {
+    max-width: 200px;
+  }
+</style>
