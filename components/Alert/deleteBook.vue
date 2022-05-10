@@ -4,7 +4,6 @@
     :value="alert"
     dense
     class="alert"
-    min-width="200px"
   >
     削除しました。
   </v-alert>
@@ -21,12 +20,7 @@ export default {
   created () {
     setTimeout(() => {
       this.alert = false
-    }, 4000)
+    }, 2000)
   }
 }
 </script>
-<style lang="scss" scoped>
-    .v-alert {
-    max-width: 200px;
-  }
-</style>

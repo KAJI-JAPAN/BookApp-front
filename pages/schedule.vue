@@ -1,7 +1,7 @@
 <template>
   <v-row class="fill-height">
     <!-- アラート -->
-    <!-- <AlertSuccess>
+    <AlertSuccess>
       行動を保存しました
     </AlertSuccess>
     <AlertDeleteText>
@@ -9,7 +9,7 @@
     </AlertDeleteText>
     <AlertError>
       エラー： しばらくしてからお試しください
-    </AlertError> -->
+    </AlertError>
 
     <!-- ヘッダー -->
     <v-col cols="12">

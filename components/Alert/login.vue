@@ -4,7 +4,6 @@
     :value="alert"
     dense
     class="alert"
-    min-width="200px"
   >
     <slot />
   </v-alert>
@@ -20,8 +19,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-  .v-alert {
-    max-width: 200px;
-  }
-</style>

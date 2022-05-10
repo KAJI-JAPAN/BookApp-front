@@ -6,7 +6,6 @@
     color="blue-grey"
     dark
     type="success"
-    min-width="200px"
   >
     <slot />
   </v-alert>
@@ -22,8 +21,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-    .v-alert {
-    max-width: 200px;
-  }
-</style>

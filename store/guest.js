@@ -18,4 +18,4 @@ export const actions = {
         $nuxt.$router.replace('/search')
       })
   }
-} 
+}
