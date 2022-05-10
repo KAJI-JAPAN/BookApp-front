@@ -50,11 +50,16 @@ export default {
   data () {
     return {
       isValid: false,
-      loading: false,
       userInfo: {
         email: '',
         password: ''
       }
+    }
+  },
+
+  computed: {
+    loading () {
+      return this.$store.state.loading
     }
   },
   methods: {
@@ -68,21 +73,10 @@ export default {
           }
         })
         .then(() => {
-          this.$store.commit('alertSwitchSuccess', true)
-          this.loading = true
-          setTimeout(() => {
-            this.loading = false
-            this.$store.commit('alertSwitchSuccess', false)
-            this.$router.push('/user/edit/setting')
-          }, 2000)
+          this.$formSuccessHandling('/user/edit/setting')
         })
         .catch(() => {
-          this.$store.commit('alertSwitchError', true)
-          this.loading = true
-          setTimeout(() => {
-            this.loading = false
-            this.$store.commit('alertSwitchError', false)
-          }, 2000)
+          this.$formErrorHandling()
         })
     }
   }

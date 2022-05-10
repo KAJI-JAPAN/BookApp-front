@@ -22,7 +22,6 @@
             KOUDOKUをはじめよう！
           </UserFormTitle>
           <UserFormTextFieldEmail :email.sync="userInfo.email" :error.sync="errorMessage" />
-          <p class="error-message">{{ errorMessage }}</p>
           <UserFormTextFieldPassword :password.sync="userInfo.password" />
           <v-row justify="center">
             <v-col cols="12" md="10" sm="10">
@@ -51,7 +50,7 @@ export default {
   auth: false,
   data () {
     return {
-      loading: false,
+      // loading: false,
       isValid: false,
       logoImg,
       show: false,
@@ -59,30 +58,24 @@ export default {
         email: '',
         password: ''
       },
-      errorMessage:''
+      errorMessage: ''
+    }
+  },
+  computed: {
+    loading () {
+      return this.$store.state.loading
     }
   },
   methods: {
     signup () {
       this.$axios.post('/api/v1/auth', this.userInfo)
-      .then(() => {
-        this.loading = true
-        this.$store.commit('alertSwitchSuccess', true)
-        setTimeout(() => {
-          this.loading = false
-          this.$store.commit('alertSwitchSuccess', false)
-          this.$router.replace(`/user/login`)
-        }, 2000)
-      })
-      .catch((e) => {
-        this.loading = true
-        this.$store.commit('alertSwitchError', true)
-        this.errorMessage = e.response.data.errors.full_messages.toString()
-        setTimeout(() => {
-          this.$store.commit('alertSwitchError', false)
-          this.loading = false
-        }, 3000)
-      })
+        .then(() => {
+          this.$formSuccessHandling('/user/login')
+        })
+        .catch((e) => {
+          this.errorMessage = e.response.data.errors.full_messages.toString()
+          this.$formErrorHandling()
+        })
     }
   }
 }

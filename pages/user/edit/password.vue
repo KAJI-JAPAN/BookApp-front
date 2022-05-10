@@ -44,10 +44,16 @@ export default {
   data () {
     return {
       isValid: false,
-      loading: false,
       email: ''
     }
   },
+
+  computed: {
+    loading () {
+      return this.$store.state.loading
+    }
+  },
+
   methods: {
     editEmail () {
       this.$axios
@@ -64,13 +70,7 @@ export default {
           }
         })
         .then(() => {
-          this.$store.commit('alertSwitchSuccess', true)
-          this.loading = true
-          setTimeout(() => {
-            this.loading = false
-            this.$store.commit('alertSwitchSuccess', false)
-            this.$router.push('/user/edit/setting')
-          }, 2000)
+          this.$formSuccessHandling('/user/edit/setting')
         })
     }
   }

@@ -7,7 +7,8 @@ export const state = () => ({
   alertSuccess: false,
   alertLogout: false,
   alertGuest: false,
-  alertLogin: false
+  alertLogin: false,
+  loading: false
 })
 
 export const mutations = {
@@ -31,6 +32,9 @@ export const mutations = {
   },
   alertSwitchLogin (state, boolean) {
     state.alertLogin = boolean
+  },
+  setLoading (state, payload) {
+    state.loading = payload
   }
 }
 

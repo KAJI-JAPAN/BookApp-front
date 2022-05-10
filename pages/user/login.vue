@@ -47,13 +47,19 @@ import logoImg from '~/assets/images/login_logo.png'
 export default {
   data () {
     return {
-      loading: false,
+      // loading: false,
       isValid: false,
       logoImg,
       userInfo: {
         email: '',
         password: ''
       }
+    }
+  },
+
+  computed: {
+    loading () {
+      return this.$store.state.loading
     }
   },
   mounted () {
@@ -66,6 +72,7 @@ export default {
       }, 3000)
     }
   },
+
   methods: {
     async login () {
       await this.$auth.loginWith('local', {
@@ -77,25 +84,15 @@ export default {
         .then(() => {
           const loginAlert = { loginFlag: true }
           localStorage.setItem('loginAlert', JSON.stringify(loginAlert))
-          this.loading = true
           // ゲストログインフラグ削除
           const guestLoginFlag = JSON.parse(sessionStorage.getItem('guestLoginFlag'))
           if (guestLoginFlag) {
             sessionStorage.removeItem('guestLoginFlag')
           }
-
-          setTimeout(() => {
-            this.loading = false
-            this.$router.replace('/search')
-          }, 2000)
+          this.$formSuccessHandling('/search')
         })
         .catch(() => {
-          this.loading = true
-          this.$store.commit('alertSwitchError', true)
-          setTimeout(() => {
-            this.loading = false
-            this.$store.commit('alertSwitchError', false)
-          }, 2000)
+          this.$formErrorHandling()
         })
     }
   }

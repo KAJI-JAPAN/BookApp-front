@@ -8,7 +8,6 @@
         prepend-icon="mdi-email"
         :rules="rules"
       />
-      <p class="caption mb-0" />
     </v-col>
   </v-row>
 </template>
