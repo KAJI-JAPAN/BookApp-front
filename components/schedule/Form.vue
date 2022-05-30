@@ -20,6 +20,7 @@
             v-on="on"
             @click="bookSelect"
             :value="eventName"
+            class="mb-5"
           >
             <v-icon>mdi-fire</v-icon>
             アクションをまとめて入力する

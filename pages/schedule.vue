@@ -54,15 +54,17 @@
     </v-col>
 
     <!-- 月カレンダー -->
-    <v-row>
-      <v-col class="pr-0 ml-5">
+    <v-row class="ma-1">
+      <v-col class="pr-0 month">
         <v-sheet height="300">
           <v-calendar
             ref="calendar"
             v-model="value"
+            :type="type"
             :day-format="(timestamp) => new Date(timestamp.date).getDate()"
             :month-format="(timestamp) => (new Date(timestamp.date).getMonth() + 1) + ' /'"
             locale="ja-jp"
+            @click:date="viewDay"
           />
         </v-sheet>
         <v-divider class="ma-8" />
@@ -71,7 +73,7 @@
       </v-col>
 
       <!-- 週カレンダー -->
-      <v-col cols="9" class="pl-0">
+      <v-col lg="9" md="9" sm="12" class="pl-0 week">
         <v-sheet height="600">
           <v-calendar
             ref="calendar"
@@ -300,6 +302,7 @@ export default {
   middleware: 'authenticated',
   data () {
     return {
+      focus: '',
       value: '',
       colors: ['#2196F3', '#3F51B5', '#673AB7', '#00BCD4', '#4CAF50', '#FF9800', '#757575'],
       dragStart: null,
@@ -319,7 +322,9 @@ export default {
       daleteSelect: [
         { id: 1, text: '今回の予定を削除する' },
         { id: 2, text: '全ての予定を削除する' }
-      ]
+      ],
+      day: 'Day',
+      '4day': '4 Days'
     }
   },
 
@@ -367,6 +372,10 @@ export default {
   },
 
   methods: {
+    viewDay ({ date }) {
+      this.focus = date
+      this.type = 'category'
+    },
     setToday () {
       this.value = moment().format('yyyy-MM-DD')
     },
@@ -544,3 +553,15 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+  @media screen and (max-width: 1100px) {
+    // .month {
+    //   display: none;
+    // }
+    .week {
+      display: none;
+      margin: 0!important;
+    }
+  }
+
+</style>
